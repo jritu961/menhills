@@ -3,10 +3,10 @@ import styled, { keyframes } from "styled-components";
 // Define the scrolling animation
 const scrollAnimation = keyframes`
   0% {
-    transform: translateX(100%); /* Start off-screen to the right */
+    transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100%); /* Move off-screen to the left */
+    transform: translateX(-100%);
   }
 `;
 
@@ -16,21 +16,42 @@ export const HeaderMainContainer = styled.strong`
   width: 100%;
   height: 50px;
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
-  overflow: hidden; /* Hide overflowing text */
+  overflow: hidden; 
   position: relative;
   color: #e4dfd8;
 `;
 
 // Wrapper for scrolling text
 export const ScrollingTextWrapper = styled.div`
-  display: flex;
   white-space: nowrap; /* Prevent text wrapping */
-  animation: none; /* No animation by default */
+  justify-content:center;
+`;
 
-  /* Apply scrolling animation only when screen width is between 0px and 800px */
+// Scrolling text styles
+export const ScrollingText = styled.div`
+  animation: ${scrollAnimation} 15s linear infinite; /* Smooth scrolling animation */
+  display: inline-block; /* Allow text to flow inline */
+  padding-right: 50px; /* Add space between duplicates */
+  font-size: 1rem;
+  visibility: hidden;
+
   @media (max-width: 800px) {
-    animation: ${scrollAnimation} 15s linear infinite; /* Smooth scrolling animation */
+    visibility: visible; /* Show only on smaller screens */
+    animation-duration: 10s; /* Faster animation for smaller screens */
+  }
+`;
+
+// Static text styles
+export const StaticText = styled.div`
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top:8px;
+  position:relative;
+  @media (max-width: 800px) {
+    display: none; /* Hide on smaller screens */
   }
 `;
