@@ -1,26 +1,30 @@
 import React from "react";
-import { 
-  FooterContainer, 
-  FooterSection, 
-  FooterTitle, 
-  FooterLink, 
-  FooterData, 
-  FooterSocialIcons, 
-  FooterCopyright 
+import {
+  FooterContainer,
+  FooterSection,
+  FooterTitle,
+  FooterLink,
+  FooterData,
+  FooterSocialIcons,
+  FooterCopyright,
+  NewsletterForm,
+  NewsletterInput,
+  NewsletterButton,
 } from "../styles/footer";
 
 export const Footer = () => {
   return (
     <FooterContainer>
-      {/* Section 1: About Us */}
       <FooterSection>
         <FooterTitle>About Us</FooterTitle>
         <FooterData>
-          <p>Discover premium men’s fashion with a blend of style and quality. Shop the latest trends here.</p>
+          <p>
+            Discover premium men’s fashion with a blend of style and quality.
+            Shop the latest trends here.
+          </p>
         </FooterData>
       </FooterSection>
 
-      {/* Section 2: Customer Service */}
       <FooterSection>
         <FooterTitle>Customer Service</FooterTitle>
         <FooterLink href="#">Contact Us</FooterLink>
@@ -29,7 +33,6 @@ export const Footer = () => {
         <FooterLink href="#">Size Guide</FooterLink>
       </FooterSection>
 
-      {/* Section 3: Quick Links */}
       <FooterSection>
         <FooterTitle>Quick Links</FooterTitle>
         <FooterLink href="#">New Arrivals</FooterLink>
@@ -38,7 +41,6 @@ export const Footer = () => {
         <FooterLink href="#">Gift Cards</FooterLink>
       </FooterSection>
 
-      {/* Section 4: Follow Us */}
       <FooterSection>
         <FooterTitle>Follow Us</FooterTitle>
         <FooterSocialIcons>
@@ -48,7 +50,14 @@ export const Footer = () => {
         </FooterSocialIcons>
       </FooterSection>
 
-      {/* Section 5: Copyright */}
+      <FooterSection>
+        <FooterTitle>Newsletter</FooterTitle>
+        <NewsletterForm>
+          <NewsletterInput type="email" placeholder="Enter your email" />
+          <NewsletterButton type="submit">Subscribe</NewsletterButton>
+        </NewsletterForm>
+      </FooterSection>
+
       <FooterCopyright>
         &copy; {new Date().getFullYear()} Men’s Fashion. All rights reserved.
       </FooterCopyright>

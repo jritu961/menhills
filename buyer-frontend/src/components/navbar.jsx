@@ -1,29 +1,18 @@
-import { NavbarMainContainer,NavbarMiddle,NavbarRight } from "../styles/navbar";
+import React from "react";
+import { NavbarMainContainer, NavbarLogo, NavbarRight, Navbar } from "../styles/navbar";
 import { UserAddOutlined, ShoppingCartOutlined, SearchOutlined } from '@ant-design/icons';
 
-export const NavbarComponent=()=>{
-    return(<>
-    <NavbarMainContainer>
-        <div></div>
-        {/* <NavbarMiddle>MENHILLS</NavbarMiddle> */}
+export const NavbarComponent = () => {
+  return (
+    <Navbar>
+      <NavbarMainContainer>
+        <NavbarLogo>MENHILLS</NavbarLogo>
         <NavbarRight>
-        <div>
-        <UserAddOutlined style={{ fontSize: '24px' }} />
-      </div>
-
-      <div >
-        <ShoppingCartOutlined style={{ fontSize: '24px' }} />
-      </div>
-
-      <div >
-        <SearchOutlined style={{ fontSize: '24px', marginRight: '10px' }} />
-      </div>
-
-      
+          <UserAddOutlined className="icon" />
+          <ShoppingCartOutlined className="icon" />
+          <SearchOutlined className="icon" />
         </NavbarRight>
-    </NavbarMainContainer>
-    </>)
-}
-
-
-
+      </NavbarMainContainer>
+    </Navbar>
+  );
+};

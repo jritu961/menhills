@@ -1,14 +1,12 @@
 import styled from "styled-components";
 
-export const FooterContainer = styled.div`
+export const FooterContainer = styled.footer`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 40px;
-  background-color:#dc6f00;
+  background-color: #111;
   color: #fff;
-
-  /* background-color: #111; */
 `;
 
 export const FooterSection = styled.div`
@@ -62,6 +60,31 @@ export const FooterSocialIcons = styled.div`
       width: 20px;
       height: 20px;
     }
+  }
+`;
+
+export const NewsletterForm = styled.form`
+  display: flex;
+  gap: 10px;
+`;
+
+export const NewsletterInput = styled.input`
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+`;
+
+export const NewsletterButton = styled.button`
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff5733;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #c0392b;
   }
 `;
 
