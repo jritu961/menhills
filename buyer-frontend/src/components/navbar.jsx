@@ -5,7 +5,7 @@ export const NavbarComponent=()=>{
     return(<>
     <NavbarMainContainer>
         <div></div>
-        <NavbarMiddle>MENHILLS</NavbarMiddle>
+        {/* <NavbarMiddle>MENHILLS</NavbarMiddle> */}
         <NavbarRight>
         <div>
         <UserAddOutlined style={{ fontSize: '24px' }} />
