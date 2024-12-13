@@ -92,6 +92,39 @@ export const DashboardSections = () => {
     <Dashboard>
       <SectionOne>
         <img src={images[currentImage]} alt="Men's Wear" />
+        <button
+          style={{
+            position: "absolute",
+            top: "600px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            padding: "12px 30px",
+            backgroundColor: "#ff5733",
+            color: "white",
+            fontSize: "18px",
+            fontWeight: "bold",
+            border: "none",
+            borderRadius: "50px",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#c0392b"; // Darker shade on hover
+            e.target.style.transform = "translateX(-50%) scale(1.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "#ff5733"; // Original color
+            e.target.style.transform = "translateX(-50%) scale(1)";
+          }}
+          onMouseDown={(e) => {
+            e.target.style.transform = "translateX(-50%) scale(1)"; // Reset scale when clicked
+          }}
+          onMouseUp={(e) => {
+            e.target.style.transform = "translateX(-50%) scale(1.1)"; // Return to enlarged state after click
+          }}
+        >
+          Shop Now
+        </button>
       </SectionOne>
       
       <div>
