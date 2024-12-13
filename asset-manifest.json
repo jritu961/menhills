@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/static/css/main.e6c13ad2.css",
-    "main.js": "/static/js/main.2a09c978.js",
-    "static/js/453.5331b17c.chunk.js": "/static/js/453.5331b17c.chunk.js",
-    "static/media/tie.jpg": "/static/media/tie.3d9c891efb277b7d6260.jpg",
-    "static/media/shoespose.jpg": "/static/media/shoespose.0f34f2c61b6ffd9bb0bf.jpg",
-    "static/media/sitingmen.jpg": "/static/media/sitingmen.8a6dcc6395e2a5fbb1cf.jpg",
-    "static/media/menpose.jpg": "/static/media/menpose.01599a296e33750d6652.jpg",
-    "static/media/watch.jpg": "/static/media/watch.5eae89e4105f602c76f5.jpg",
-    "static/media/sidemen.jpg": "/static/media/sidemen.a2ef4ac52319144fb636.jpg",
-    "static/media/mensiting.jpg": "/static/media/mensiting.c605297084868c38e11e.jpg",
-    "static/media/shoes.jpg": "/static/media/shoes.c5bf96d3d5be0267103c.jpg",
-    "static/media/lookmen.jpg": "/static/media/lookmen.6f0b1681fb9a3b191525.jpg",
-    "static/media/shoes2.jpg": "/static/media/shoes2.e3ae43999a3adaf25d07.jpg",
-    "static/media/men.jpg": "/static/media/men.60a7e06c2a81df970126.jpg",
-    "index.html": "/index.html",
-    "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
-    "main.2a09c978.js.map": "/static/js/main.2a09c978.js.map",
-    "453.5331b17c.chunk.js.map": "/static/js/453.5331b17c.chunk.js.map"
+    "main.css": "/menhills/buyer-frontend/static/css/main.e6c13ad2.css",
+    "main.js": "/menhills/buyer-frontend/static/js/main.966b4c0b.js",
+    "static/js/453.5331b17c.chunk.js": "/menhills/buyer-frontend/static/js/453.5331b17c.chunk.js",
+    "static/media/tie.jpg": "/menhills/buyer-frontend/static/media/tie.3d9c891efb277b7d6260.jpg",
+    "static/media/shoespose.jpg": "/menhills/buyer-frontend/static/media/shoespose.0f34f2c61b6ffd9bb0bf.jpg",
+    "static/media/sitingmen.jpg": "/menhills/buyer-frontend/static/media/sitingmen.8a6dcc6395e2a5fbb1cf.jpg",
+    "static/media/menpose.jpg": "/menhills/buyer-frontend/static/media/menpose.01599a296e33750d6652.jpg",
+    "static/media/watch.jpg": "/menhills/buyer-frontend/static/media/watch.5eae89e4105f602c76f5.jpg",
+    "static/media/sidemen.jpg": "/menhills/buyer-frontend/static/media/sidemen.a2ef4ac52319144fb636.jpg",
+    "static/media/mensiting.jpg": "/menhills/buyer-frontend/static/media/mensiting.c605297084868c38e11e.jpg",
+    "static/media/shoes.jpg": "/menhills/buyer-frontend/static/media/shoes.c5bf96d3d5be0267103c.jpg",
+    "static/media/lookmen.jpg": "/menhills/buyer-frontend/static/media/lookmen.6f0b1681fb9a3b191525.jpg",
+    "static/media/shoes2.jpg": "/menhills/buyer-frontend/static/media/shoes2.e3ae43999a3adaf25d07.jpg",
+    "static/media/men.jpg": "/menhills/buyer-frontend/static/media/men.60a7e06c2a81df970126.jpg",
+    "index.html": "/menhills/buyer-frontend/index.html",
+    "main.e6c13ad2.css.map": "/menhills/buyer-frontend/static/css/main.e6c13ad2.css.map",
+    "main.966b4c0b.js.map": "/menhills/buyer-frontend/static/js/main.966b4c0b.js.map",
+    "453.5331b17c.chunk.js.map": "/menhills/buyer-frontend/static/js/453.5331b17c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.2a09c978.js"
+    "static/js/main.966b4c0b.js"
   ]
 }
