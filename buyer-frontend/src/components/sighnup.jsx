@@ -34,9 +34,9 @@ const RegisterPage = () => {
         <Header/>
         <NavbarComponentData/>
         </div>
-        <div style={{display:"flex",justifyContent:"center"}}>
+        <div style={{display:"flex",justifyContent:"center",marginTop:"70px"}}>
       <FormWrapper onSubmit={handleSubmit}>
-        <Title>Register for MenHills</Title>
+        <Title>Register for Data</Title>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <Input
           type="text"

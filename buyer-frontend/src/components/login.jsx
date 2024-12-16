@@ -38,7 +38,7 @@ const LoginPage = () => {
 
         <Container>
           <FormWrapper onSubmit={handleLogin}>
-            <Title>Login for MenHills</Title>
+            <Title>Login for Data</Title>
             {error && <ErrorMessage>{error}</ErrorMessage>}
             <Input
               type="email"
