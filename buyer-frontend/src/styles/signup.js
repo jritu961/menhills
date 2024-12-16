@@ -17,7 +17,6 @@ const gradientMove = keyframes`
 export const Container = styled.div`
   display: flex;
   flex-direction:column;
-  
   height: 100vh;
   background: linear-gradient(45deg, #3a4d68, #4b6c7f); /* Dark Blue/Gray Gradient */
   background-size: 400% 400%;
@@ -48,7 +47,7 @@ export const Title = styled.h2`
   font-size: 2.5rem;
   font-family: 'Poppins', sans-serif;
   color: transparent;
-  background: linear-gradient(to left, #ff5733, #f1c40f); /* Orange to Yellow gradient */
+  background: linear-gradient(to left, rgb(220, 111, 0), #f1c40f); /* Orange to Yellow gradient */
   background-clip: text;
   -webkit-background-clip: text;
   font-weight: bold;
@@ -67,7 +66,7 @@ export const Input = styled.input`
   transition: all 0.3s ease;
 
   &:focus {
-    border-color: #ff5733;
+    border-color: rgb(220, 111, 0);
     box-shadow: 0 0 12px rgba(255, 87, 51, 0.5);
   }
 
@@ -80,7 +79,7 @@ export const Input = styled.input`
 export const Button = styled.button`
   padding: 1.2rem;
   border: none;
-  background: #ff5733; /* Bright orange */
+  background: rgb(220, 111, 0); /* Bright orange */
   color: #fff;
   font-size: 1.1rem;
   font-family: 'Poppins', sans-serif;
@@ -109,7 +108,7 @@ export const Terms = styled.p`
   font-family: 'Poppins', sans-serif;
 
   a {
-    color: #ff5733;
+    color: rgb(220, 111, 0);
     text-decoration: none;
     font-weight: bold;
 

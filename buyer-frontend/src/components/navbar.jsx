@@ -13,7 +13,7 @@ export const NavbarComponent = () => {
   return (
     <Navbar>
       <NavbarMainContainer>
-        <NavbarLogo>MENHILLS</NavbarLogo>
+        {/* <NavbarLogo>MENHILLS</NavbarLogo> */}
         <NavbarRight>
           <UserAddOutlined className="icon" onClick={handleUserClick} />
           <ShoppingCartOutlined className="icon" />
