@@ -135,7 +135,7 @@ const ItemDetails = () => {
           <WishlistButton onClick={handleWishlistToggle}>
             {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
           </WishlistButton>
-
+          <WishlistButton>Buy Now</WishlistButton>
           {/* Offers */}
           <SectionTitle>Best Offers</SectionTitle>
           {product.offers.map((offer, index) => (
