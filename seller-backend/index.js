@@ -1,7 +1,30 @@
-import express from "express"
+import express from "express";
+import dotenv from "dotenv";
+import connectDb from "./db/connect.js";  // Database connection file
+import productRoutes from "./routes/productRoutes.js";  // Product routes
 
-const app=express()
+dotenv.config();  // Load environment variables
 
-app.listen(4000,()=>{
-    console.log("seller service is running")
-})
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
+// Use the product routes
+app.use("/api", productRoutes);
+
+// Start server with DB connection
+const startServer = async () => {
+  try {
+    await connectDb();  // Connect to MongoDB
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error starting server:", error);
+    process.exit(1);  // Exit process if DB connection fails
+  }
+};
+
+startServer();
