@@ -1,4 +1,4 @@
-import Product from "../models/Product.js";  // Import Product model
+import Product from "../model/product.js";  // Import Product model
 
 // Add a new product
 export const addProduct = async (req, res) => {
@@ -7,7 +7,7 @@ export const addProduct = async (req, res) => {
     if (!name || !price || !category) {
       return res.status(400).json({ message: "Name, price, and category are required" });
     }
-
+    
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.status(201).json({ message: "Product added successfully", product: newProduct });
