@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./db/connect.js";  // Database connection file
 import productRoutes from "./routes/productRoutes.js";  // Product routes
-
+import cors from "cors"
 dotenv.config();  // Load environment variables
 
 const app = express();
@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 4000;
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
-
+app.use(cors());
 // Use the product routes
 app.use("/api", productRoutes);
 
