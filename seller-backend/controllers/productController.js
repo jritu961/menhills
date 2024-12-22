@@ -1,5 +1,4 @@
-import Product from "../model/product.js";  // Import Product model
-
+import Product from "../model/product.js";  
 // Add a new product
 export const addProduct = async (req, res) => {
   try {
@@ -96,3 +95,4 @@ export const getProductsByPriceRange = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch products", error: error.message });
   }
 };
+
