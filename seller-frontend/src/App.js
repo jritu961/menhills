@@ -1,16 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
-import {BrowserRouter,Router,Routes,Route} from "react-router-dom"
-import SignupPage from "./pages/register.jsx"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignupPage from "./pages/register.jsx";
+import LoginApp from "./pages/signin.jsx";
+import Dashboard from "./component/dashboard.jsx"
+import AddProduct from "./pages/product.jsx"
 function App() {
   return (
     <div className="App">
-      {/* <Router>
+      <BrowserRouter>
         <Routes>
-          <Route path='/' element={<SignupPage/>} />
+          <Route path='/' element={<LoginApp />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/add-product" element={<AddProduct />} />
+
         </Routes>
-      </Router> */}
-      <SignupPage/>       
+      </BrowserRouter>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Define the schema for the product
 const ProductSchema = new mongoose.Schema({
   // Basic Product Information
   name: {
@@ -131,6 +130,7 @@ const ProductSchema = new mongoose.Schema({
 });
 
 // Create the Product model
+
 const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;

@@ -2,7 +2,6 @@
 import styled from 'styled-components';
 
 export const MensWearContainer = styled.div`
-  padding: 40px 20px;
   background-color: #f9f9f9;
   text-align: center;
 `;

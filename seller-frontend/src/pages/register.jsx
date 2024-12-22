@@ -35,7 +35,7 @@ const SignupPage = () => {
 
     try {
       const base_url = process.env.REACT_APP_BASE_URL;
-      
+      console.log("base_url>>>>>>>>>",base_url)
       // Make API call to register the user
       const response = await axios.post(`${base_url}/api/signup`, { name, email, password, role });
 

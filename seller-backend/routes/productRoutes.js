@@ -9,10 +9,13 @@ import {
   getProductsByPriceRange
 } from "../controllers/productController.js"; // Import controller functions
 import {registerUser} from "../controllers/sighup.js"
+import {signInDAta} from "../controllers/signin.js"
 const router = express.Router();
 
 // Routes for product operations
-router.post("/sighup", registerUser);  // Add a new product
+router.post("/signup", registerUser);  // Add a new product
+router.post("/signin", signInDAta);  // Add a new product
+
 router.post("/products", addProduct);  // Add a new product
 router.get("/products", getAllProducts);  // Get all products
 router.get("/products/:id", getProductById);  // Get a single product by ID
