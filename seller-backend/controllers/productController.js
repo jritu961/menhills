@@ -3,19 +3,17 @@ import Product from "../model/product.js";
 export const addProduct = async (req, res) => {
   try {
     const { name, price, category} = req.body;
-    const { file } = req;  // Multer stores the file in req.file for single uploads
+    const { files } = req;  // Multer stores the file in req.file for single uploads
 
     console.log("🚀 ~ addProduct ~ req.body:", req.body);
-    console.log("🚀 ~ addProduct ~ req.file:", file);
-    if (!name || !price || !category || !file) {
+    console.log("🚀 ~ addProduct ~ req.file:", files);
+    if (!name || !price || !category || !files) {
       return res.status(400).json({ message: "Name, price,images and category are required" });
     }
-    
+    const filePath=files.map((el)=>(el.path))
     const newProduct = new Product({
-      name,
-      price,
-      category,
-      images: file.path,  // Save the file path (or URL) to your database
+      ...req.body,
+      images: filePath,  // Save the file path (or URL) to your database
     });
     console.log("🚀 ~ addProduct ~ newProduct:", newProduct)
     await newProduct.save();

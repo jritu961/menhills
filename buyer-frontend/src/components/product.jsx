@@ -37,7 +37,7 @@ const ProductSection = () => {
             <ProductImage
               src={imageSrc}
               alt={product.name}
-              onClick={() => handleClick(product.id)} // Trigger redirect on image click
+              onClick={() => handleClick(product._id)} // Trigger redirect on image click
             />
             <ProductName>{product.name}</ProductName>
             <ProductPrice>{product.price}</ProductPrice>

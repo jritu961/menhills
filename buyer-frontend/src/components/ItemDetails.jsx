@@ -16,125 +16,182 @@ import {
   Discount,
   Ratings,
   SizeSelect,
+  ColorSelect, // New color select
   Button,
   SectionTitle,
   Offer,
   Description,
-  WishlistButton,  // New button styling
-} from '../styles/itemDetails';  // Importing styled components
-import shoes from "../assets/shoes.jpg";
-import shoes2 from "../assets/shoes2.jpg";
-import shoes3 from "../assets/shoes3.jpg";  // Added this image
-import shoespose from "../assets/shoespose.jpg";  // Added this image
-import axios from "axios"
+  WishlistButton, // New button styling
+  StockStatus, // New stock status section
+  FitSelect, // New fit selection
+  ShippingDetails, // New shipping section
+} from '../styles/itemDetails'; // Importing styled components
+
+import axios from "axios";
+
 const ItemDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState('');
-  const [isInWishlist, setIsInWishlist] = useState(false);  // State for wishlist
+  const [isInWishlist, setIsInWishlist] = useState(false); // State for wishlist
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState(''); // Color state
 
   useEffect(() => {
-    const fetchData=async()=>{
-     const result=await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products/${id}`)
-     console.log("result>>>>>>>>>>>",result)
-    }
-    fetchData()
+    const fetchData = async () => {
+      try {
+        const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products/${id}`);
+        console.log("Fetched Product:", result.data.product);
+        setProduct(result.data.product);
+        if (result.data.product.images?.length) {
+          setMainImage(`${process.env.REACT_APP_BASE_Seller}/${result.data.product.images[0]}`); // Set the first image as the default main image
+        }
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
 
-    // const productData = products.find((product) => product.id === parseInt(id));
-
-    // if (productData) {
-    //   setProduct(productData);
-    //   setMainImage(productData.images[0]);  // Set the first image as the main image
-    // }
+    fetchData();
   }, [id]);
 
-  // useEffect(() => {
-  //   console.log('Main Image:51>>>>>>>>>>>>>>>>', mainImage);  // Debugging the main image state
-  // }, [mainImage]);  // Log the mainImage state whenever it changes
+  if (!product) {
+    return <div>Loading...</div>;
+  }
 
-  // if (!product) {
-  //   return <div>Loading...</div>;
-  // }
+  const handleImageClick = (image) => {
+    setMainImage(image); // Set the clicked image as the main image
+  };
 
-  // const handleImageClick = (image) => {
-  //   console.log('Clicked Image:', image);  // Log the clicked image to ensure it's the correct one
-  //   setMainImage(image);  // Set the clicked image as the main image
-  // };
+  const handleWishlistToggle = () => {
+    setIsInWishlist(!isInWishlist); // Toggle the wishlist status
+  };
 
-  // const handleWishlistToggle = () => {
-  //   setIsInWishlist(!isInWishlist);  // Toggle the wishlist status
-  // };
+  return (
+    <div>
+      <Header />
+      <NavbarComponent />
+      <NavbarComponentData />
 
-  // return (
-  //   <div>  
-  //     <Header />
-  //     <NavbarComponent />
-  //     <NavbarComponentData />
-      
-  //     <Container>
-  //       {/* Image Section */}
-  //       <ImageSection>
-  //         {/* <ProductImage src={mainImage} alt={product.name} /> */}
-  //         <ThumbnailSection>
-  //           {product.images.map((image, index) => (
-  //             <Thumbnail
-  //               key={index}
-  //               src={image}
-  //               alt={`Thumbnail ${index + 1}`}
-  //               onClick={() => handleImageClick(image)}
-  //             />
-  //           ))}
-  //         </ThumbnailSection>
-  //       </ImageSection>
+      <Container>
+        {/* Image Section */}
+        <ImageSection>
+          <ProductImage src={mainImage} alt={product.name} />
+          <ThumbnailSection>
+            {product.images?.map((image, index) => {
+              const imageUrl = `${process.env.REACT_APP_BASE_Seller}/${image}`;
+              return (
+                <Thumbnail
+                  key={index}
+                  src={imageUrl}
+                  alt={`Thumbnail ${index + 1}`}
+                  onClick={() => handleImageClick(imageUrl)} // Pass the imageUrl to handleImageClick
+                />
+              );
+            })}
+          </ThumbnailSection>
+        </ImageSection>
 
-  //       {/* Details Section */}
-  //       <DetailsSection>
-  //         {/* Title and Price */}
-  //         <Title>{product.name}</Title>
-  //         <Price>
-  //           {product.price} <MRP>{product.mrp}</MRP> <Discount>{product.discount}</Discount>
-  //         </Price>
+        {/* Details Section */}
+        <DetailsSection>
+          {/* Title and Price */}
+          <Title>{product.name}</Title>
+          <Price>
+            ₹{product.price} <MRP>₹{product.mrp}</MRP> <Discount>{product.discount}% Off</Discount>
+          </Price>
+          <Ratings>
+            {product.brand}
+          </Ratings>
 
-  //         {/* Ratings */}
-  //         <Ratings>
-  //           {product.ratings} | {product.ratingsCount} Ratings
-  //         </Ratings>
+          {/* Ratings */}
+          <Ratings>
+            {product.ratings} | {product.ratingsCount} Ratings
+          </Ratings>
 
-  //         {/* Size Selection */}
-  //         <SectionTitle>Select Size (UK Size)</SectionTitle>
-  //         <SizeSelect>
-  //           {product.sizes.map((size) => (
-  //             <option key={size} value={size}>
-  //               Size {size}
-  //             </option>
-  //           ))}
-  //         </SizeSelect>
+          {/* Size Selection */}
+          {product.sizes?.length > 0 && (
+            <>
+              <SectionTitle>Select Size (UK Size)</SectionTitle>
+              <SizeSelect
+                value={selectedSize}
+                onChange={(e) => setSelectedSize(e.target.value)}
+              >
+                {product.sizes.map((size) => (
+                  <option key={size} value={size}>
+                    Size {size}
+                  </option>
+                ))}
+              </SizeSelect>
+            </>
+          )}
 
-  //         {/* Add to Bag Button */}
-  //         <Button>Add to Bag</Button>
+          {/* Color Selection */}
+          {product.colors?.length > 0 && (
+            <>
+              <SectionTitle>Select Color</SectionTitle>
+              <ColorSelect
+                value={selectedColor}
+                onChange={(e) => setSelectedColor(e.target.value)}
+              >
+                {product.colors.map((color, index) => (
+                  <option key={index} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </ColorSelect>
+            </>
+          )}
 
-  //         {/* Add to Wishlist Button */}
-  //         <WishlistButton onClick={handleWishlistToggle}>
-  //           {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-  //         </WishlistButton>
-  //         <WishlistButton>Buy Now</WishlistButton>
-  //         {/* Offers */}
-  //         <SectionTitle>Best Offers</SectionTitle>
-  //         {product.offers.map((offer, index) => (
-  //           <Offer key={index}>{offer}</Offer>
-  //         ))}
+          {/* Fit Selection */}
+          {product.fit && (
+            <>
+              <SectionTitle>Fit</SectionTitle>
+              <FitSelect>
+                <option value="">{product.fit}</option>
+              </FitSelect>
+            </>
+          )}
 
-  //         {/* Warranty */}
-  //         <SectionTitle>Warranty</SectionTitle>
-  //         <p>{product.warranty}</p>
+          {/* Stock Status */}
+          <StockStatus>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</StockStatus>
 
-  //         {/* Product Description */}
-  //         <SectionTitle>Product Details</SectionTitle>
-  //         <Description>{product.description}</Description>
-  //       </DetailsSection>
-  //     </Container>
-  //   </div>
-  // );
+          {/* Add to Bag Button */}
+          <Button>Add to Bag</Button>
+
+          {/* Add to Wishlist Button */}
+          <WishlistButton onClick={handleWishlistToggle}>
+            {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+          </WishlistButton>
+
+          {/* Buy Now Button */}
+          <Button>Buy Now</Button>
+
+          {/* Offers */}
+          <SectionTitle>Best Offers</SectionTitle>
+          {product.offers?.map((offer, index) => (
+            <Offer key={index}>{offer}</Offer>
+          ))}
+
+          {/* Shipping Details */}
+          <ShippingDetails>
+            {product.shippingDuration && <p>Shipping Duration: {product.shippingDuration}</p>}
+            {product.shippingWeight && <p>Shipping Weight: {product.shippingWeight} kg</p>}
+          </ShippingDetails>
+
+          {/* Warranty */}
+          {product.warranty && (
+            <>
+              <SectionTitle>Warranty</SectionTitle>
+              <p>{product.warranty}</p>
+            </>
+          )}
+
+          {/* Product Description */}
+          <SectionTitle>Product Details</SectionTitle>
+          <Description>{product.description}</Description>
+        </DetailsSection>
+      </Container>
+    </div>
+  );
 };
 
 export default ItemDetails;

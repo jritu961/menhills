@@ -14,7 +14,7 @@ import multer from "multer";
 import { upload } from "../utils/multer.js";
 const router = express.Router();
 
-router.post("/products",upload.single('images'), addProduct);  // Add a new product
+router.post("/products",upload.array('images', 5), addProduct);  // Add a new product
 
 // Routes for product operations
 router.post("/signup", registerUser);  // Add a new product
