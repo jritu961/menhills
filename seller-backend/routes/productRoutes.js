@@ -10,13 +10,16 @@ import {
 } from "../controllers/productController.js"; // Import controller functions
 import {registerUser} from "../controllers/sighup.js"
 import {signInDAta} from "../controllers/signin.js"
+import multer from "multer";
+import { upload } from "../utils/multer.js";
 const router = express.Router();
+
+router.post("/products",upload.single('images'), addProduct);  // Add a new product
 
 // Routes for product operations
 router.post("/signup", registerUser);  // Add a new product
 router.post("/signin", signInDAta);  // Add a new product
 
-router.post("/products", addProduct);  // Add a new product
 router.get("/products", getAllProducts);  // Get all products
 router.get("/products/:id", getProductById);  // Get a single product by ID
 router.put("/products/:id", updateProduct);  // Update a product by ID
