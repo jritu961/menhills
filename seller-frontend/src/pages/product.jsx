@@ -1,63 +1,97 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
+import axios from 'axios';
 const AddProductContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #f9fafb;
   min-height: 100vh;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
   width: 100%;
 `;
 
-const Title = styled.h3`
+const Title = styled.h2`
   margin-bottom: 20px;
   text-align: center;
   color: #333;
+  font-size: 1.8rem;
+  font-weight: bold;
+`;
+
+const FieldGroup = styled.div`
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
 `;
 
 const Input = styled.input`
-  width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
 `;
 
 const Textarea = styled.textarea`
-  width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+`;
+
+const Select = styled.select`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+`;
+
+const FileUpload = styled.div`
+  border: 2px dashed #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #f1f5f9;
+  color: #555;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e2e8f0;
+  }
+`;
+
+const CheckboxGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 const Button = styled.button`
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+  margin-top: 15px;
 
   &:hover {
     background-color: #0056b3;
@@ -68,22 +102,9 @@ const AddProduct = () => {
   const [product, setProduct] = useState({
     name: '',
     description: '',
-    brand: '',
-    category: '',
     price: '',
-    discount: 0,
-    sizes: '',
-    fit: '',
-    colors: '',
-    material: '',
-    careInstructions: '',
-    stock: '',
-    available: true,
-    weight: '',
-    dimensions: '',
-    shippingWeight: '',
-    shippingDuration: '',
-    images: '',
+    category: '',
+    images: [],
     sale: false,
     salePrice: '',
   });
@@ -96,172 +117,140 @@ const AddProduct = () => {
     });
   };
 
-  const handleAddProduct = () => {
-    console.log('Product Details:', product);
-    alert('Product added successfully!');
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
     setProduct({
-      name: '',
-      description: '',
-      brand: '',
-      category: '',
-      price: '',
-      discount: 0,
-      sizes: '',
-      fit: '',
-      colors: '',
-      material: '',
-      careInstructions: '',
-      stock: '',
-      available: true,
-      weight: '',
-      dimensions: '',
-      shippingWeight: '',
-      shippingDuration: '',
-      images: '',
-      sale: false,
-      salePrice: '',
+      ...product,
+      images: files,
     });
   };
 
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
+    if (!product.name || !product.price || !product.category || product.images.length === 0) {
+      alert('Please fill all required fields and upload images.');
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('name', product.name);
+    formData.append('description', product.description);
+    formData.append('price', product.price);
+    formData.append('category', product.category);
+    formData.append('sale', product.sale);
+    formData.append('salePrice', product.salePrice);
+  
+    // Append images to the formData
+    product.images.forEach(image => {
+      formData.append('images', image); // 'images' is the key you want to use on the backend
+    });
+  
+    try {
+      console.log("🚀 ~ handleAddProduct ~ process.env.REACT_APP_BASE_URL_Seller:", process.env)
+
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Seller}/products`, formData, {
+        headers: {
+          "Content-Type": 'multipart/form-data',
+        },
+      });
+      console.log("🚀 ~ handleAddProduct ~ response:", response);
+  
+      alert('Product added successfully!');
+      setProduct({
+        name: '',
+        description: '',
+        price: '',
+        category: '',
+        images: [],
+        sale: false,
+        salePrice: '',
+      });
+    } catch (error) {
+      console.error("🚀 ~ handleAddProduct ~ error:", error);
+      alert('Failed to add product!');
+    }
+  };
+  
+
   return (
     <AddProductContainer>
-      <Form>
+      <Form onSubmit={handleAddProduct}>
         <Title>Add New Product</Title>
-        <Input
-          type="text"
-          name="name"
-          placeholder="Product Name"
-          value={product.name}
-          onChange={handleChange}
-        />
-        <Textarea
-          name="description"
-          placeholder="Product Description"
-          value={product.description}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="brand"
-          placeholder="Brand"
-          value={product.brand}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="category"
-          placeholder="Category"
-          value={product.category}
-          onChange={handleChange}
-        />
-        <Input
-          type="number"
-          name="price"
-          placeholder="Price"
-          value={product.price}
-          onChange={handleChange}
-        />
-        <Input
-          type="number"
-          name="discount"
-          placeholder="Discount (%)"
-          value={product.discount}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="sizes"
-          placeholder="Sizes (comma-separated)"
-          value={product.sizes}
-          onChange={handleChange}
-        />
-        <Select name="fit" value={product.fit} onChange={handleChange}>
-          <option value="">Select Fit</option>
-          <option value="Slim">Slim</option>
-          <option value="Regular">Regular</option>
-          <option value="Loose">Loose</option>
-        </Select>
-        <Input
-          type="text"
-          name="colors"
-          placeholder="Colors (comma-separated)"
-          value={product.colors}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="material"
-          placeholder="Material"
-          value={product.material}
-          onChange={handleChange}
-        />
-        <Textarea
-          name="careInstructions"
-          placeholder="Care Instructions"
-          value={product.careInstructions}
-          onChange={handleChange}
-        />
-        <Input
-          type="number"
-          name="stock"
-          placeholder="Stock"
-          value={product.stock}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="weight"
-          placeholder="Weight"
-          value={product.weight}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="dimensions"
-          placeholder="Dimensions"
-          value={product.dimensions}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="shippingWeight"
-          placeholder="Shipping Weight"
-          value={product.shippingWeight}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="shippingDuration"
-          placeholder="Shipping Duration"
-          value={product.shippingDuration}
-          onChange={handleChange}
-        />
-        <Input
-          type="text"
-          name="images"
-          placeholder="Image URLs (comma-separated)"
-          value={product.images}
-          onChange={handleChange}
-        />
-        <label>
+        <FieldGroup>
+          <Label>Product Name *</Label>
+          <Input
+            type="text"
+            name="name"
+            placeholder="Enter product name"
+            value={product.name}
+            onChange={handleChange}
+          />
+        </FieldGroup>
+        <FieldGroup>
+          <Label>Description</Label>
+          <Textarea
+            name="description"
+            placeholder="Enter product description"
+            value={product.description}
+            onChange={handleChange}
+            rows="4"
+          />
+        </FieldGroup>
+        <FieldGroup>
+          <Label>Price *</Label>
+          <Input
+            type="number"
+            name="price"
+            placeholder="Enter price"
+            value={product.price}
+            onChange={handleChange}
+          />
+        </FieldGroup>
+        <FieldGroup>
+          <Label>Category *</Label>
+          <Input
+            type="text"
+            name="category"
+            placeholder="Enter category"
+            value={product.category}
+            onChange={handleChange}
+          />
+        </FieldGroup>
+        <FieldGroup>
+          <Label>Upload Images *</Label>
+          <FileUpload>
+            <input
+              type="file"
+              multiple
+              onChange={handleImageUpload}
+              style={{ display: 'none' }}
+              id="file-input"
+            />
+            <label htmlFor="file-input">Click to upload or drag images here</label>
+          </FileUpload>
+        </FieldGroup>
+        <CheckboxGroup>
           <input
             type="checkbox"
             name="sale"
             checked={product.sale}
             onChange={handleChange}
           />
-          On Sale
-        </label>
+          <Label>On Sale</Label>
+        </CheckboxGroup>
         {product.sale && (
-          <Input
-            type="number"
-            name="salePrice"
-            placeholder="Sale Price"
-            value={product.salePrice}
-            onChange={handleChange}
-          />
+          <FieldGroup>
+            <Label>Sale Price</Label>
+            <Input
+              type="number"
+              name="salePrice"
+              placeholder="Enter sale price"
+              value={product.salePrice}
+              onChange={handleChange}
+            />
+          </FieldGroup>
         )}
-        <Button onClick={handleAddProduct}>Add Product</Button>
+        <Button type="submit">Add Product</Button>
       </Form>
     </AddProductContainer>
   );

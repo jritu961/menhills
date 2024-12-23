@@ -9,12 +9,12 @@ const ProductSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
     trim: true
   },
   brand: {
     type: String,
-    required: true,
+    // required: true,
     trim: true
   },
   category: {
@@ -37,24 +37,24 @@ const ProductSchema = new mongoose.Schema({
   // Size and Fit Information
   sizes: {
     type: [String],  // Array of available sizes (e.g., ["S", "M", "L", "XL"])
-    required: true
+    // required: true
   },
   fit: {
     type: String,  // (e.g., "Slim", "Regular", "Loose")
     enum: ["Slim", "Regular", "Loose"],
-    required: true
+    // required: true
   },
 
   // Color Options
   colors: {
     type: [String],  // Array of available colors (e.g., ["Red", "Blue", "Black"])
-    required: true
+    // required: true
   },
 
   // Material and Care
   material: {
     type: String,
-    required: true
+    // required: true
   },
   careInstructions: {
     type: String,  // E.g., "Machine wash cold"
@@ -63,7 +63,7 @@ const ProductSchema = new mongoose.Schema({
   // Stock and Availability
   stock: {
     type: Number,
-    required: true,
+    // required: true,
     min: 0
   },
   available: {
