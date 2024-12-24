@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-
 const AddProductContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -144,7 +143,6 @@ const AddProduct = () => {
       alert('Please fill all required fields and upload images.');
       return;
     }
-
     const formData = new FormData();
     formData.append('name', product.name);
     formData.append('description', product.description);
@@ -175,7 +173,6 @@ const AddProduct = () => {
           "Content-Type": 'multipart/form-data',
         },
       });
-
       alert('Product added successfully!');
       setProduct({
         name: '',
