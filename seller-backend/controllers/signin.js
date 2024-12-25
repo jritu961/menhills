@@ -10,11 +10,9 @@ export const signInDAta = async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    console.log("5>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", typeof email, email);
 
     // Find user by email
     const user = await User.findOne({email}); // Ensure case-insensitive matching
-    console.log("user>>>>>>", user);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });

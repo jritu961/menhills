@@ -24,17 +24,17 @@ export const ProductCard = styled.div`
   border: 1px solid #ddd;
   display:flex;
   flex-direction:column;
-  justify-content:space-evenly;
+  justify-content:space-around;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
 
   img {
-    max-width:100%;
+    width:100%;
     border-radius: 5px;
     margin-bottom: 10px;
-    max-height:200px;;
+    max-height:300px;;
   }
 
   h3 {

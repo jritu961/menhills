@@ -1,21 +1,40 @@
 import Product from "../model/product.js";  
+import  cloudinary  from "../utils/cloudnary.js";
+import streamifier from "streamifier"; // To stream files to Cloudinary
+
 // Add a new product
 export const addProduct = async (req, res) => {
   try {
     const { name, price, category} = req.body;
-    const { file } = req;  // Multer stores the file in req.file for single uploads
+    const { files } = req;  // Multer stores the file in req.file for single uploads
 
     console.log("🚀 ~ addProduct ~ req.body:", req.body);
-    console.log("🚀 ~ addProduct ~ req.file:", file);
-    if (!name || !price || !category || !file) {
+    console.log("🚀 ~ addProduct ~ req.file:", files);
+    if (!name || !price || !category || !files) {
       return res.status(400).json({ message: "Name, price,images and category are required" });
     }
-    
+    const imageUploadPromises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "products" }, // Optional folder in Cloudinary
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result.secure_url); // Save the image URL
+          }
+        );
+
+        streamifier.createReadStream(file.buffer).pipe(uploadStream);
+      });
+    });
+
+    const imageUrls = await Promise.all(imageUploadPromises);
+
+    // Create new product with Cloudinary image URLs
     const newProduct = new Product({
       name,
       price,
       category,
-      images: file.path,  // Save the file path (or URL) to your database
+      images: imageUrls,  // Save Cloudinary image URLs in the database
     });
     console.log("🚀 ~ addProduct ~ newProduct:", newProduct)
     await newProduct.save();

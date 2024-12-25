@@ -8,13 +8,13 @@ import {
   getProductsByCategory,
   getProductsByPriceRange
 } from "../controllers/productController.js"; // Import controller functions
-import {registerUser} from "../controllers/sighup.js"
+import {registerUser} from "../controllers/signup.js"
 import {signInDAta} from "../controllers/signin.js"
 import multer from "multer";
-import { upload } from "../utils/multer.js";
 const router = express.Router();
-
-router.post("/products",upload.single('images'), addProduct);  // Add a new product
+const storage = multer.memoryStorage(); // Store files in memory
+const upload = multer({ storage });
+router.post("/products",upload.array('images', 5), addProduct);  // Add a new product
 
 // Routes for product operations
 router.post("/signup", registerUser);  // Add a new product

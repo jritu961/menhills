@@ -1,34 +1,46 @@
-version: "3.8"  # Updated to a valid version
+version: "3.8"
 
 services:
   sellerservice:
     build: ./seller-backend
     ports:
-      - "4000:4000"  # Correct port mapping
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
     networks:
-      - app-network  # Optional, but it's good practice to define networks
+      - app-network
 
   buyerservice:
     build: ./buyer-backend
     ports:
-      - "8989:8989"  # Correct port mapping
+      - "8989:8989"
+    environment:
+      - DATABASE_URL=${BUYER_DATABASE_URL}
     networks:
-      - app-network  # Optional, but it's good practice to define networks
+      - app-network
 
   seller-frontend:
-    build: ./seller-frontend  # Assuming you have a seller-frontend folder
+    build: ./seller-frontend
     ports:
-      - "3000:3000"  # Correct port mapping for frontend
+      - "3000:3000"
+    environment:
+      - REACT_APP_BASE_URL_Seller=${REACT_APP_BASE_URL_Seller}
+      - REACT_APP_BASE_Seller=${REACT_APP_BASE_Seller}
     networks:
-      - app-network  # Optional, but it's good practice to define networks
+      - app-network
 
   buyer-frontend:
-    build: ./buyer-frontend  # Assuming you have a buyer-frontend folder
+    build: ./buyer-frontend
     ports:
-      - "3001:3000"  # Correct port mapping for frontend
+      - "3001:3000"
+    environment:
+      - REACT_APP_BASE_URL_Buyer=${REACT_APP_BASE_URL_Buyer}
+      - REACT_APP_BASE_Buyer=${REACT_APP_BASE_Buyer}
     networks:
-      - app-network  # Optional, but it's good practice to define networks
+      - app-network
 
 networks:
-  app-network:  # Define a custom network if necessary
+  app-network:
     driver: bridge

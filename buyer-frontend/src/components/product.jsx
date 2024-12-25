@@ -30,14 +30,14 @@ const ProductSection = () => {
   return (
     <ProductContainer>
       {products.slice(0, 20).map((product) => {  // Limit to first 20 products
-        const imageSrc = `${process.env.REACT_APP_BASE_Seller}/${product.images[0]}`; // Build the image URL
+        const imageSrc = product.images[0]; // Build the image URL
         console.log("Image Source URL:", imageSrc); // Log the image source URL
         return (
           <ProductCard key={product.id}>
             <ProductImage
               src={imageSrc}
               alt={product.name}
-              onClick={() => handleClick(product.id)} // Trigger redirect on image click
+              onClick={() => handleClick(product._id)} // Trigger redirect on image click
             />
             <ProductName>{product.name}</ProductName>
             <ProductPrice>{product.price}</ProductPrice>
