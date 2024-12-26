@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Container, FormWrapper, Title, Input, Button, Terms, ErrorMessage } from '../styles/signup';
 import { Header } from './header';
 import { NavbarComponentData } from './navbarContent';
+import { useNavigate } from 'react-router-dom';
 
+import axios from "axios"
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -16,6 +18,7 @@ const RegisterPage = () => {
     country: 'India',
     isDefault: false,
   });
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); // Add loading state
@@ -49,23 +52,23 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     // Validate form
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
       return;
     }
-
     setLoading(true); // Set loading to true while submitting
-
+    
     try {
-      // Implement registration logic here (e.g., API call)
-      // Simulate registration success for now
+
+      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`,formData)
+
       console.log('Registered successfully', formData);
       setError('');
       // You can redirect to another page after successful registration
-      // e.g., history.push('/login') or window.location.replace('/login')
+      navigate('/login') 
     } catch (err) {
       setError('Registration failed. Please try again.');
     } finally {

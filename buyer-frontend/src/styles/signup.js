@@ -54,7 +54,7 @@ export const Title = styled.h2`
 
 // Styled input fields with a professional touch
 export const Input = styled.input`
-  padding: 1.1rem;
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 6px;
   font-size: 1.1rem;

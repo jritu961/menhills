@@ -1,9 +1,11 @@
-import { registerUser } from "../components/user.js";
+import { registerUser,loginUser } from "../components/user.js";
+ 
 import { Router } from "express";
 
 const router=Router()
 
 
 router.post('/register',registerUser)
+router.post('/login',loginUser)
 
     export default router

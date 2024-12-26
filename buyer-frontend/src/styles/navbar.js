@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const NavbarMainContainer = styled.div`
   display: flex;
+  width:100%;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
@@ -37,6 +38,7 @@ export const NavbarRight = styled.div`
 `;
 
 export const Navbar = styled.nav`
+display:flex;
   @media (max-width: 768px) {
     ${NavbarMainContainer} {
       flex-direction: column;

@@ -1,6 +1,16 @@
 import React from "react";
-import { NavbarMainContainer, NavbarLogo, NavbarRight, Navbar } from "../styles/navbar";
-import { UserAddOutlined, ShoppingCartOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  NavbarMainContainer,
+  NavbarLogo,
+  NavbarRight,
+  Navbar,
+} from "../styles/navbar";
+import {
+  UserAddOutlined,
+  ShoppingCartOutlined,
+  SearchOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 export const NavbarComponent = () => {
@@ -8,6 +18,14 @@ export const NavbarComponent = () => {
 
   const handleUserClick = () => {
     navigate("/login"); // Redirect to the login page
+  };
+
+  const handleLogout = () => {
+    // Clear authentication tokens or session
+    localStorage.removeItem("authToken"); // Example if you're using localStorage
+    sessionStorage.removeItem("authToken"); // Example if you're using sessionStorage
+    // Redirect to login page
+    navigate("/login");
   };
 
   return (
@@ -19,7 +37,10 @@ export const NavbarComponent = () => {
           <ShoppingCartOutlined className="icon" />
           <SearchOutlined className="icon" />
         </NavbarRight>
+        <NavbarRight>          <LogoutOutlined className="icon" onClick={handleLogout} />
+        </NavbarRight>
       </NavbarMainContainer>
+   
     </Navbar>
   );
 };
