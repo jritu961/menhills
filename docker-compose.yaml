@@ -17,7 +17,9 @@ services:
     ports:
       - "8989:8989"
     environment:
-      - DATABASE_URL=${BUYER_DATABASE_URL}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
     networks:
       - app-network
 

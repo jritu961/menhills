@@ -6,7 +6,7 @@ import { HomePage } from './pages/home.jsx';
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/login.jsx"; // Path to LoginPage
-import RegisterPage from "./components/sighnup.jsx"
+import RegisterPage from "./components/signup.jsx"
 import ItemDetails from "./components/ItemDetails.jsx"
 import MensWearPage from "./pages/menswear.jsx"
 const App = () => {

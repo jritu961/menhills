@@ -34,11 +34,10 @@ export const FormWrapper = styled.form`
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
   width: 100%;
   max-width: 450px;
-  z-index: 2;
-  margin-top:10px`;
+  gap:2px;
+  `;
 
 // Title with bold and modern font, showcasing a fashion-forward look
 export const Title = styled.h2`
