@@ -3,8 +3,9 @@ import { Container, FormWrapper, Title, Input, Button, Terms, ErrorMessage } fro
 import { Header } from './header';
 import { NavbarComponentData } from './navbarContent';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import EMailOtpModal from './emailOtpModel';  // Import the OTP Modal
 
-import axios from "axios"
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -18,10 +19,10 @@ const RegisterPage = () => {
     country: 'India',
     isDefault: false,
   });
-  const navigate = useNavigate(); // Initialize useNavigate
-
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,16 +34,13 @@ const RegisterPage = () => {
     if (!name || !email || !password || !phone || !street || !city || !state || !pincode) {
       return 'All fields are required.';
     }
-    // Email validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return 'Please enter a valid email address.';
     }
-    // Password validation
     if (password.length < 6) {
       return 'Password must be at least 6 characters.';
     }
-    // Phone number validation (10-digit number)
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(phone)) {
       return 'Please enter a valid 10-digit phone number.';
@@ -52,36 +50,41 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate form
+
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
       return;
     }
-    setLoading(true); // Set loading to true while submitting
-    
+
+    setLoading(true);
     try {
-
-      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`,formData)
-
-      console.log('Registered successfully', formData);
+      // Replace with your registration API logic
+      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`, formData);
       setError('');
-      // You can redirect to another page after successful registration
-      navigate('/login') 
+      setModalOpen(true);  // Open OTP modal after successful registration
     } catch (err) {
       setError('Registration failed. Please try again.');
     } finally {
-      setLoading(false); // Set loading to false after submission
+      setLoading(false);
+    }
+  };
+
+  const handleOtpSubmit = async (otp) => {
+    try {
+      // Send OTP verification request
+      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/verify-otp`, { otp });
+      console.log('OTP verified successfully');
+      navigate('/login');  // Navigate to login after OTP verification
+    } catch (error) {
+      console.error('OTP verification failed');
     }
   };
 
   return (
     <Container>
-      <div>
-        <Header />
-        <NavbarComponentData />
-      </div>
+      <Header />
+      <NavbarComponentData />
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '70px' }}>
         <FormWrapper onSubmit={handleSubmit}>
           <Title>Register for Data</Title>
@@ -150,6 +153,9 @@ const RegisterPage = () => {
           </Button>
         </FormWrapper>
       </div>
+
+      {/* OTP Modal */}
+      <EMailOtpModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleOtpSubmit} />
     </Container>
   );
 };

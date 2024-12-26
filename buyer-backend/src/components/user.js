@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import User from "../model/usermodel.js";
 import jwt from "jsonwebtoken"
+
 export const registerUser = async (req, res) => {
   const { name, email, password, phone, addresses, wishlist, cart } = req.body;
 
