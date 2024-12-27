@@ -25,6 +25,13 @@ const Sidebar = () => (
       component={Link}
       to="/update-product"
     >
+      Product
+    </Button>
+    <Button
+      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
+      component={Link}
+      to="/update-product"
+    >
       Update Product
     </Button>
     <Button
