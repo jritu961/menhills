@@ -6,7 +6,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_SELLER_URL=${DATABASE_SELLER_URL}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
     networks:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8989:8989"
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_BUYER_URL=${DATABASE_BUYER_URL}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
     networks:

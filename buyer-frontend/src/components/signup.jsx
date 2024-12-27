@@ -22,6 +22,8 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [otpError, setOtpError] = useState('');  // New state for OTP errors
+
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -60,26 +62,32 @@ const RegisterPage = () => {
     setLoading(true);
     try {
       // Replace with your registration API logic
-      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`, formData);
+      const result=await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`, formData);
       setError('');
+      const USERId=result?.data?.data?._id
+      const userIDData=localStorage.setItem("userId",USERId)
+      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/otp?userId=${USERId}`);
       setModalOpen(true);  // Open OTP modal after successful registration
     } catch (err) {
-      setError('Registration failed. Please try again.');
-    } finally {
-      setLoading(false);
+      setError('Invalid OTP. Please try again.');
+      setLoading(false); // Stop the loading indicator on error    } finally {
     }
   };
-
   const handleOtpSubmit = async (otp) => {
     try {
-      // Send OTP verification request
-      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/verify-otp`, { otp });
+      const userId = localStorage.getItem("userId");
+      await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/verify?userId=${userId}&otp=${otp}`);
       console.log('OTP verified successfully');
-      navigate('/login');  // Navigate to login after OTP verification
+      setOtpError('');  // Reset OTP error state
+      setModalOpen(false);  // Close the modal after successful OTP verification
+      // navigate('/login');  // Navigate to login after OTP verification
     } catch (error) {
-      console.error('OTP verification failed');
+      setOtpError('Invalid OTP. Please try again.');  // Set OTP error state
+      // Don't close the modal if OTP is invalid
     }
-  };
+};
+
+  
 
   return (
     <Container>

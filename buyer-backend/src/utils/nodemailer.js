@@ -14,11 +14,14 @@ const transporter = nodemailer.createTransport({
 });
 
 // Send email function
-const sendEmail = async (email, subject, text, html) => {
+const sendEmail = async (to, subject, text, html) => {
+  console.log("🚀 ~ sendEmail ~ text:", text);
+  console.log("🚀 ~ sendEmail ~ subject:", subject);
+  console.log("🚀 ~ sendEmail ~ email:", to);
   try {
     const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,  // Sender address
-      to: email,  // Recipient's email address
+      to: to,  // Recipient's email address
       subject: subject,  // Subject line
       text: text,  // Plain text body
       html: html,  // HTML body (optional)

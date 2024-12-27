@@ -85,7 +85,7 @@ const GradientButton = styled(Button)({
   },
 });
 
-const EMailOtpModal = ({ open, onClose, onSubmit }) => {
+const EMailOtpModal = ({ open, onClose, onSubmit, otpError }) => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -98,11 +98,12 @@ const EMailOtpModal = ({ open, onClose, onSubmit }) => {
 
     setLoading(true);
     try {
-      await onSubmit(otp); // Assuming onSubmit sends OTP for verification
-      setError('');
-      onClose(); // Close modal after successful verification
+      await onSubmit(otp);  // Handle OTP submit
+      setError('');  // Reset error if OTP is valid
+      // onClose();  // Close modal after successful OTP submission
     } catch (error) {
       setError('Failed to verify OTP');
+      // Ensure modal doesn't close when OTP verification fails
     } finally {
       setLoading(false);
     }
@@ -115,6 +116,7 @@ const EMailOtpModal = ({ open, onClose, onSubmit }) => {
         <Subtitle>Please enter the OTP sent to your email address.</Subtitle>
 
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        {otpError && <ErrorMessage>{otpError}</ErrorMessage>}  {/* Show OTP error */}
 
         <OtpInput
           label="Enter OTP"
@@ -146,5 +148,6 @@ const EMailOtpModal = ({ open, onClose, onSubmit }) => {
     </Modal>
   );
 };
+
 
 export default EMailOtpModal;

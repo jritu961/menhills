@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 dotenv.config()
-const url=process.env.DATABASE_URL
+const url=process.env.DATABASE_SELLER_URL
 console.log("url>>>>>>>>>>",url)
 const connectDb=async ()=>{
   await mongoose.connect(url)

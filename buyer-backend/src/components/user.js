@@ -58,18 +58,10 @@ export const registerUser = async (req, res) => {
 
     // Save the new user to the database
     const result = await newUser.save();
-
+    
     // Send the response with created user data (excluding password)
     res.status(201).json({
-      data: {
-        name: result.name,
-        email: result.email,
-        phone: result.phone,
-        addresses: result.addresses,
-        wishlist: result.wishlist,
-        cart: result.cart,
-        createdAt: result.createdAt,
-      },
+      data: result,
       message: "User has been successfully created.",
       status: true,
     });
