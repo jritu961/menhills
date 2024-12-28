@@ -1,465 +1,233 @@
 import React, { useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Container, TextField, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
-import { Link, Route, Routes } from 'react-router-dom';
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  TextField,
+  Grid,
+  Card,
+  CardContent,
+} from '@mui/material';
+import { Link, Route, Routes,useNavigate } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const Sidebar = () => (
-  <Box
-    sx={{
-      width: '200px',
-      backgroundColor: '#2C3E50',
-      height: '100vh',
-      paddingTop: '20px',
-      position: 'fixed',
-    }}
-  >
-    <Typography variant="h6" sx={{ color: 'white', paddingLeft: '20px' }}>Seller Dashboard</Typography>
-    <Button
-      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
-      component={Link}
-      to="/"
-    >
-      Dashboard
-    </Button>
-    <Button
-      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
-      component={Link}
-      to="/list-product"
-    >
-      Product
-    </Button>
-  
-    <Button
-      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
-      component={Link}
-      to="/day-wise-sales"
-    >
-      Day Wise Sales
-    </Button>
-    <Button
-      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
-      component={Link}
-      to="/add-product"
-    >
-      Add Product
-    </Button>
-    <Button
-      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
-      component={Link}
-      to="/delete-product"
-    >
-      Delete Product
-    </Button>
-    <Button
-      sx={{ color: 'white', display: 'block', marginTop: '20px', paddingLeft: '20px' }}
-      component={Link}
-      to="/returns-cancellations"
-    >
-      Returns & Cancellations
-    </Button>
-  </Box>
-);
+const Sidebar = ({ mobileOpen, handleDrawerToggle }) => {
+  const drawerWidth = 250;
 
-const Header = () => (
-  <AppBar position="sticky" sx={{ backgroundColor: '#34495E' }}>
-    <Toolbar>
-      <Typography variant="h6" sx={{ flexGrow: 1 }}>
+  const drawer = (
+    <Box
+      sx={{
+        backgroundColor: '#1A237E',
+        color: 'white',
+        height: '100%',
+        paddingTop: 2,
+      }}
+    >
+      <Typography variant="h6" sx={{ padding: '20px' }}>
         Seller Dashboard
       </Typography>
-      <Button color="inherit" component={Link} to="/">Logout</Button>
-    </Toolbar>
-  </AppBar>
-);
-
-const UpdateProduct = () => {
-  const [productData, setProductData] = useState({
-    name: '',
-    price: '',
-    description: '',
-    category: '',
-  });
-
-  const handleChange = (e) => {
-    setProductData({ ...productData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = () => {
-    console.log('Product Updated', productData);
-  };
+      <List>
+        <ListItem button component={Link} to="/">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem button component={Link} to="/list-product">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <ShoppingCartIcon />
+          </ListItemIcon>
+          <ListItemText primary="Products" />
+        </ListItem>
+        <ListItem button component={Link} to="/day-wise-sales">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <BarChartIcon />
+          </ListItemIcon>
+          <ListItemText primary="Sales Analytics" />
+        </ListItem>
+        <ListItem button component={Link} to="/add-product">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <AddBoxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Add Product" />
+        </ListItem>
+        <ListItem button component={Link} to="/settings">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Settings" />
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
-    <Box sx={{ marginLeft: '220px', padding: '20px' }}>
-      <Typography variant="h5" gutterBottom>Update Product</Typography>
-      <TextField
-        label="Product Name"
-        name="name"
-        value={productData.name}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Price"
-        name="price"
-        value={productData.price}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Description"
-        name="description"
-        value={productData.description}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Category"
-        name="category"
-        value={productData.category}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Update Product
-      </Button>
-    </Box>
+    <>
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+        }}
+      >
+        {drawer}
+      </Drawer>
+      {/* Desktop Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+        }}
+        open
+      >
+        {drawer}
+      </Drawer>
+    </>
   );
 };
 
-const DayWiseSales = () => {
-  const salesData = [
-    { date: '2024-12-25', totalSales: '$500', productsSold: 20 },
-    { date: '2024-12-26', totalSales: '$800', productsSold: 30 },
-  ];
+
+ const Header = ({ handleDrawerToggle }) => {
+  const [searchId, setSearchId] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchId.trim()) {
+      console.log(`Navigating to /product/${searchId}`);
+      navigate(`/product/${searchId}`);
+    } else {
+      alert('Please enter a valid product ID');
+    }
+  };
+  
 
   return (
-    <Box sx={{ marginLeft: '220px', padding: '20px' }}>
-      <Typography variant="h5" gutterBottom>Day-Wise Sales</Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Total Sales</TableCell>
-            <TableCell>Products Sold</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {salesData.map((row) => (
-            <TableRow key={row.date}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.totalSales}</TableCell>
-              <TableCell>{row.productsSold}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Box>
+    <AppBar
+      position="fixed"
+      sx={{
+        width: { sm: `calc(100% - 250px)` },
+        ml: { sm: '250px' },
+        backgroundColor: '#3949AB',
+      }}
+    >
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ display: { sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
+          Seller Dashboard
+        </Typography>
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="Search by ID..."
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
+          sx={{
+            backgroundColor: 'white',
+            borderRadius: 1,
+            width: { xs: '100%', sm: '300px' },
+          }}
+          InputProps={{
+            style: { padding: '0 8px' },
+          }}
+        />
+        <Button color="inherit" sx={{ ml: 1 }} onClick={handleSearch}>
+          Search
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 
-const AddProduct = () => {
-  const [productData, setProductData] = useState({
-    name: '',
-    price: '',
-    description: '',
-    category: '',
-  });
 
-  const handleChange = (e) => {
-    setProductData({ ...productData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = () => {
-    console.log('Product Added', productData);
-  };
-
-  return (
-    <Box sx={{ marginLeft: '220px', padding: '20px' }}>
-      <Typography variant="h5" gutterBottom>Add Product</Typography>
-      <TextField
-        label="Product Name"
-        name="name"
-        value={productData.name}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-  label="Store Name"
-  name="storeName"
-  //value={ //value={sellerData.storeName}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-/>
-
-<TextField
-  label="Total Sales"
-  name="totalSales"
-  //value={sellerData.totalSales}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Pending Orders"
-  name="pendingOrders"
-  // value={ //value={sellerData.pendingOrders}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Completed Orders"
-  name="completedOrders"
-  // value={ //value={sellerData.completedOrders}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Total Revenue"
-  name="totalRevenue"
-  // value={ //value={sellerData.totalRevenue}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Refunded Amount"
-  name="refundedAmount"
-  // value={ //value={sellerData.refundedAmount}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Current Inventory"
-  name="currentInventory"
-  // value={ //value={sellerData.currentInventory}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Active Products"
-  name="activeProducts"
-  // value={ //value={sellerData.activeProducts}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Low Stock Alerts"
-  name="lowStockAlerts"
-  // value={ //value={sellerData.lowStockAlerts}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Total Customers"
-  name="totalCustomers"
-  // value={ //value={sellerData.totalCustomers}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Customer Ratings"
-  name="customerRatings"
-  // value={ //value={sellerData.customerRatings}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Product Categories"
-  name="productCategories"
-  // value={ //value={sellerData.productCategories}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-/>
-
-<TextField
-  label="Pending Shipments"
-  name="pendingShipments"
-  // value={ //value={sellerData.pendingShipments}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Shipped Orders"
-  name="shippedOrders"
-  // value={ //value={sellerData.shippedOrders}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Return Requests"
-  name="returnRequests"
-  // value={ //value={sellerData.returnRequests}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Active Discounts"
-  name="activeDiscounts"
-  // value={ //value={sellerData.activeDiscounts}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Today's Sales"
-  name="todaysSales"
-  // value={ //value={sellerData.todaysSales}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Today's Returns"
-  name="todaysReturns"
-  // value={ //value={sellerData.todaysReturns}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-<TextField
-  label="Recent Reviews"
-  name="recentReviews"
-  // value={ //value={sellerData.recentReviews}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  multiline
-  rows={4}
-/>
-
-<TextField
-  label="Refund Requests"
-  name="refundRequests"
-  // value={ //value={sellerData.refundRequests}
-  onChange={handleChange}
-  fullWidth
-  margin="normal"
-  type="number"
-/>
-
-      <TextField
-        label="Price"
-        name="price"
-        value={productData.price}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Description"
-        name="description"
-        value={productData.description}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Category"
-        name="category"
-        value={productData.category}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Add Product
-      </Button>
-    </Box>
-  );
-};
-
-const DeleteProduct = () => (
-  <Box sx={{ marginLeft: '220px', padding: '20px' }}>
-    <Typography variant="h5" gutterBottom>Delete Product</Typography>
-    <TextField
-      label="Product ID"
-      fullWidth
-      margin="normal"
-    />
-    <Button variant="contained" color="secondary">
-      Delete Product
-    </Button>
+const DashboardContent = () => (
+  <Box sx={{ padding: 3 }}>
+    <Typography variant="h4" gutterBottom>
+      Welcome to Your Dashboard
+    </Typography>
+    <Grid container spacing={3}>
+      <Grid item xs={12} sm={6} md={3}>
+        <Card sx={{ backgroundColor: '#1E88E5', color: 'white' }}>
+          <CardContent>
+            <Typography variant="h6">Total Sales</Typography>
+            <Typography variant="h4">$15,000</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={6} md={3}>
+        <Card sx={{ backgroundColor: '#43A047', color: 'white' }}>
+          <CardContent>
+            <Typography variant="h6">Products Sold</Typography>
+            <Typography variant="h4">120</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={6} md={3}>
+        <Card sx={{ backgroundColor: '#FB8C00', color: 'white' }}>
+          <CardContent>
+            <Typography variant="h6">Active Orders</Typography>
+            <Typography variant="h4">25</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={6} md={3}>
+        <Card sx={{ backgroundColor: '#E53935', color: 'white' }}>
+          <CardContent>
+            <Typography variant="h6">Returns</Typography>
+            <Typography variant="h4">5</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   </Box>
 );
 
-const ReturnsCancellations = () => (
-  <Box sx={{ marginLeft: '220px', padding: '20px' }}>
-    <Typography variant="h5" gutterBottom>Returns & Cancellations</Typography>
-    <Typography variant="body1">Manage return requests and cancellations here.</Typography>
-  </Box>
-);
+const Dashboard = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-const Dashboard = () => (
-  <Box display="flex" minHeight="100vh">
-    {/* Sidebar */}
-    <Sidebar />
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
-    {/* Main Content */}
-    <Box sx={{ flexGrow: 1 }}>
-      {/* Header */}
-      <Header />
-
-      {/* Content Area */}
-      <Container sx={{ marginTop: '20px' }}>
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <Header handleDrawerToggle={handleDrawerToggle} />
+      <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Routes>
-          <Route path="/" element={<Typography variant="h5">Welcome to the Seller Dashboard</Typography>} />
-          <Route path="/update-product" element={<UpdateProduct />} />
-          <Route path="/day-wise-sales" element={<DayWiseSales />} />
-          <Route path="/add-product" element={<AddProduct />} />
-          <Route path="/delete-product" element={<DeleteProduct />} />
-          <Route path="/returns-cancellations" element={<ReturnsCancellations />} />
+          <Route path="/" element={<DashboardContent />} />
+          <Route path="/day-wise-sales" element={<Typography>Sales Analytics</Typography>} />
+          <Route path="/add-product" element={<Typography>Add Product</Typography>} />
+          <Route path="/settings" element={<Typography>Settings</Typography>} />
         </Routes>
-      </Container>
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default Dashboard;
