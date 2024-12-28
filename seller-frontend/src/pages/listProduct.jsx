@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
+import axios from "axios";
+import {useNavigate} from "react-router-dom"
 // Styled Components
 const PageWrapper = styled.div`
   font-family: Arial, sans-serif;
@@ -94,17 +95,29 @@ const PageButton = styled.button`
   }
 `;
 
-// Dummy Product Data
-const products = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  name: `Product ${index + 1}`,
-  price: `$${(index + 1) * 5}.00`,
-  image: `https://via.placeholder.com/250x200?text=Product+${index + 1}`,
-}));
+
 
 const ProductListingPage = () => {
+  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
+  const navigate = useNavigate();
+
+  // Fetch Products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const result = await axios.get(
+          `${process.env.REACT_APP_BASE_URL_Seller}/products`
+        );
+        setProducts(result.data.products);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // Pagination Logic
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -123,11 +136,14 @@ const ProductListingPage = () => {
       </Header>
       <ProductGrid>
         {currentProducts.map((product) => (
-          <ProductCard key={product.id}>
-            <ProductImage src={product.image} alt={product.name} />
+          <ProductCard
+            key={product._id}
+            onClick={() => navigate(`/product/${product._id}`)} // Navigate to ProductEditPage
+          >
+            <ProductImage src={product.images} alt={product.name} />
             <ProductName>{product.name}</ProductName>
             <ProductPrice>{product.price}</ProductPrice>
-            <Button>Add to Cart</Button>
+            <Button>Edit Details</Button>
           </ProductCard>
         ))}
       </ProductGrid>
@@ -147,3 +163,5 @@ const ProductListingPage = () => {
 };
 
 export default ProductListingPage;
+
+
