@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { Header } from "../components/header";
 import { NavbarComponentData } from "../components/navbarContent";
 import { NavbarComponent } from "../components/navbar";
@@ -36,7 +36,7 @@ const ItemDetails = () => {
   const [isInWishlist, setIsInWishlist] = useState(false); // State for wishlist
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState(''); // Color state
-
+  const navigate=useNavigate()
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,7 +53,37 @@ const ItemDetails = () => {
 
     fetchData();
   }, [id]);
-
+  const handleAddToCart = async () => {
+    if (!selectedSize) {
+      alert("Please select a size.");
+      return;
+    }
+  
+    if (!selectedColor) {
+      alert("Please select a color.");
+      return;
+    }
+  
+    const cartData = {
+      productId: product._id,
+      size: selectedSize,
+      color: selectedColor,
+      quantity: 1, // Default to 1 for simplicity
+    };
+  
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/add`, cartData);
+      if (response.status === 201 || response.status === 200) {
+        alert("Item added to cart successfully!");
+      } else {
+        alert("Failed to add item to cart.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("There was an issue adding the item to the cart.");
+    }
+  };
+  
   if (!product) {
     return <div>Loading...</div>;
   }
@@ -155,7 +185,7 @@ const ItemDetails = () => {
           <StockStatus>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</StockStatus>
 
           {/* Add to Bag Button */}
-          <Button>Add to Bag</Button>
+          <Button onClick={handleAddToCart}>Add to Bag</Button>
 
           {/* Add to Wishlist Button */}
           <WishlistButton onClick={handleWishlistToggle}>

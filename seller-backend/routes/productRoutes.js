@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";
 import {
   addProduct,
   getAllProducts,
@@ -10,7 +11,6 @@ import {
 } from "../controllers/productController.js"; // Import controller functions
 import {registerUser} from "../controllers/signup.js"
 import {signInDAta} from "../controllers/signin.js"
-import multer from "multer";
 const router = express.Router();
 const storage = multer.memoryStorage(); // Store files in memory
 const 

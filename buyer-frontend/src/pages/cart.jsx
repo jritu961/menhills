@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { NavbarComponentData } from "../components/navbarContent";
+import { Footer } from "../components/footer";
+import { Header } from "../components/header";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
-import { NavbarComponentData } from "../components/navbarContent"
-import {NavbarComponent} from "../components/navbar"
-import {Footer} from "../components/footer"
-import { Header } from "../components/header"
 
 // Styled Components
 const CartContainer = styled.div`
@@ -160,7 +160,7 @@ const TotalContainer = styled.div`
   margin-top: 30px;
   width: 100%;
   max-width: 500px;
-  margin:20px;
+  margin: 20px;
   background: #ffffff;
   border-radius: 10px;
   padding: 20px 30px;
@@ -243,59 +243,71 @@ const TotalText = styled.h3`
   }
 `;
 
-// const CheckoutButton = styled.button`
-//   background: #e74c3c;
-//   color: #fff;
-//   border: none;
-//   border-radius: 10px;
-//   padding: 10px 20px;
-//   font-size: 1rem;
-//   font-weight: 600;
-//   cursor: pointer;
-//   transition: background 0.3s ease;
-
-//   &:hover {
-//     background: #27ae60;
-//   }
-
-//   @media (max-width: 480px) {
-//     width: 100%;
-//   }
-// `;
-
 // Component
 const AddToCartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Product 1', price: 50, image: 'https://via.placeholder.com/100', quantity: 1 },
-    { id: 2, name: 'Product 2', price: 30, image: 'https://via.placeholder.com/100', quantity: 1 },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const TAX_RATE = 0.1; // 10% tax
   const DELIVERY_CHARGE = 5;
 
-  const handleRemove = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  // Fetch cart items
+  const fetchCartItems = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart`);
+      console.log("API Response:", response.data);
+      // Ensure cartItems is always an array
+      setCartItems(Array.isArray(response.data) ? response.data : []);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
-  const handleQuantityChange = (id, increment) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + increment) }
-          : item
-      )
-    );
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  // Remove item from cart
+  const handleRemove = async (id) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/remove/${id}`);
+      // Remove item from local state
+      setCartItems(cartItems.filter((item) => item.id !== id));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Update item quantity
+  const handleQuantityChange = async (id, increment) => {
+    try {
+      const item = cartItems.find((item) => item.id === id);
+      const newQuantity = Math.max(1, item.quantity + increment);
+      await axios.put(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/update/${id}`, { quantity: newQuantity });
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const tax = subtotal * TAX_RATE;
   const grandTotal = subtotal + tax + DELIVERY_CHARGE;
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <>
       <Header />
       <NavbarComponentData />
-
       <CartContainer>
         <Title>Your Cart</Title>
         <CartItems>
@@ -318,35 +330,33 @@ const AddToCartPage = () => {
           ))}
         </CartItems>
         <TotalContainer>
-  <TotalRow>
-    <span>Subtotal</span>
-    <span>${subtotal.toFixed(2)}</span>
-  </TotalRow>
-  <Divider />
-  <TotalRow>
-    <span>
-      Tax <Badge color="#3498db">10%</Badge>
-    </span>
-    <span>${tax.toFixed(2)}</span>
-  </TotalRow>
-  <Divider />
-  <TotalRow>
-    <span>Delivery Charges</span>
-    <span>${DELIVERY_CHARGE.toFixed(2)}</span>
-  </TotalRow>
-  <Divider />
-  <TotalRow highlight>
-    <span>Grand Total</span>
-    <span>${grandTotal.toFixed(2)}</span>
-  </TotalRow>
-  <CheckoutButton>Proceed to Checkout</CheckoutButton>
-</TotalContainer>
+          <TotalRow>
+            <span>Subtotal</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </TotalRow>
+          <Divider />
+          <TotalRow>
+            <span>
+              Tax <Badge color="#3498db">10%</Badge>
+            </span>
+            <span>${tax.toFixed(2)}</span>
+          </TotalRow>
+          <Divider />
+          <TotalRow>
+            <span>Delivery Charges</span>
+            <span>${DELIVERY_CHARGE.toFixed(2)}</span>
+          </TotalRow>
+          <Divider />
+          <TotalRow highlight>
+            <span>Grand Total</span>
+            <span>${grandTotal.toFixed(2)}</span>
+          </TotalRow>
+          <CheckoutButton>Proceed to Checkout</CheckoutButton>
+        </TotalContainer>
       </CartContainer>
-
       <Footer />
     </>
   );
 };
 
 export default AddToCartPage;
-
