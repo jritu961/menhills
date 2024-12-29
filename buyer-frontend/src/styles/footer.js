@@ -64,8 +64,6 @@ export const FooterSocialIcons = styled.div`
 `;
 
 export const NewsletterForm = styled.form`
-  display: flex;
-  gap: 10px;
 `;
 
 export const NewsletterInput = styled.input`
@@ -79,9 +77,12 @@ export const NewsletterButton = styled.button`
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
+  margin-left:5px;
+
   background-color: #ff5733;
   color: #fff;
   cursor: pointer;
+  margin-top:10px;
 
   &:hover {
     background-color: #c0392b;
