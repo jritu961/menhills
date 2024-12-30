@@ -1,22 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom v6
-import { ProductContainer, ProductCard, ProductImage, ProductName, ProductPrice } from '../styles/product';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom v6
+import {
+  ProductContainer,
+  ProductCard,
+  ProductImage,
+  ProductName,
+  ProductPrice,
+  SizeSelect,
+} from "../styles/product"; // Ensure you have styles for SizeSelect
 import axios from "axios";
 
 const ProductSection = () => {
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [products, setProducts] = useState([]); // State to hold the fetched products
+  const [selectedSize, setSelectedSize] = useState({}); // State to track selected sizes for each product
 
   const handleClick = (productId) => {
     // Redirect to the item details page with the product id
     navigate(`/item-details/${productId}`);
   };
 
+  const handleSizeChange = (productId, size) => {
+    setSelectedSize((prev) => ({
+      ...prev,
+      [productId]: size,
+    }));
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log("🚀 ~ fetchProducts ~ process.env.REACT_APP_BASE_URL_Seller:", process.env.REACT_APP_BASE_URL_Seller);
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products`);
+        console.log(
+          "🚀 ~ fetchProducts ~ process.env.REACT_APP_BASE_URL_Seller:",
+          process.env.REACT_APP_BASE_URL_Seller
+        );
+        const result = await axios.get(
+          `${process.env.REACT_APP_BASE_URL_Seller}/products`
+        );
         console.log("Fetched Products:", result.data.products);
         setProducts(result.data.products); // Update the state with the fetched products
       } catch (error) {
@@ -29,11 +49,11 @@ const ProductSection = () => {
 
   return (
     <ProductContainer>
-      {products.slice(0, 20).map((product) => {  // Limit to first 20 products
+      {products.slice(0, 20).map((product) => {
         const imageSrc = product.images[0]; // Build the image URL
         console.log("Image Source URL:", imageSrc); // Log the image source URL
         return (
-          <ProductCard key={product.id}>
+          <ProductCard key={product._id}>
             <ProductImage
               src={imageSrc}
               alt={product.name}
@@ -41,6 +61,21 @@ const ProductSection = () => {
             />
             <ProductName>{product.name}</ProductName>
             <ProductPrice>{product.price}</ProductPrice>
+
+            {/* Size dropdown */}
+            <SizeSelect
+              value={selectedSize[product._id] || ""}
+              onChange={(e) => handleSizeChange(product._id, e.target.value)}
+            >
+              <option value="" disabled>
+                Select Size
+              </option>
+              {product.sizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </SizeSelect>
           </ProductCard>
         );
       })}

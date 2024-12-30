@@ -31,9 +31,7 @@ export const addProduct = async (req, res) => {
 
     // Create new product with Cloudinary image URLs
     const newProduct = new Product({
-      name,
-      price,
-      category,
+      ...req.body,
       images: imageUrls,  // Save Cloudinary image URLs in the database
     });
     console.log("🚀 ~ addProduct ~ newProduct:", newProduct)
@@ -47,7 +45,7 @@ export const addProduct = async (req, res) => {
 // Get all products
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 });
     if (!products.length) {
       return res.status(404).json({ message: "No products found" });
     }

@@ -101,11 +101,12 @@ export const Ratings = styled.p`
 `;
 
 export const SizeSelect = styled.select`
-  padding: 10px;
-  margin-top: 10px;
   width: 100%;
-  border-radius: 5px;
+  padding: 10px;
   border: 1px solid #ccc;
+  font-size: 16px;
+  margin-top: 10px;
+  border-radius: 5px;
 `;
 
 export const Button = styled.button`

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from "../components/header";
 import { NavbarComponentData } from "../components/navbarContent";
 import { NavbarComponent } from "../components/navbar";
@@ -36,13 +36,15 @@ const ItemDetails = () => {
   const [isInWishlist, setIsInWishlist] = useState(false); // State for wishlist
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState(''); // Color state
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products/${id}`);
         console.log("Fetched Product:", result.data.product);
         setProduct(result.data.product);
+
         if (result.data.product.images?.length) {
           setMainImage(result.data.product.images[0]); // Set the first image as the default main image
         }
@@ -53,26 +55,27 @@ const ItemDetails = () => {
 
     fetchData();
   }, [id]);
+
   const handleAddToCart = async () => {
     if (!selectedSize) {
       alert("Please select a size.");
       return;
     }
-  
+
     if (!selectedColor) {
       alert("Please select a color.");
       return;
     }
-  
+
     const cartData = {
       productId: product._id,
       size: selectedSize,
       color: selectedColor,
       quantity: 1, // Default to 1 for simplicity
     };
-  
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/add`, cartData);
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart`, cartData);
       if (response.status === 201 || response.status === 200) {
         alert("Item added to cart successfully!");
       } else {
@@ -83,7 +86,7 @@ const ItemDetails = () => {
       alert("There was an issue adding the item to the cart.");
     }
   };
-  
+
   if (!product) {
     return <div>Loading...</div>;
   }
@@ -95,6 +98,10 @@ const ItemDetails = () => {
   const handleWishlistToggle = () => {
     setIsInWishlist(!isInWishlist); // Toggle the wishlist status
   };
+
+  // Split the sizes and colors from the fetched strings
+  const sizesArray = product.sizes[0].split(',');  // Assuming there's only one string like "L,M,S"
+  const colorsArray = product.colors[0].split(',');  // Assuming there's only one string like "Black,Blue,Red"
 
   return (
     <div>
@@ -138,15 +145,16 @@ const ItemDetails = () => {
           </Ratings>
 
           {/* Size Selection */}
-          {product.sizes?.length > 0 && (
+          {sizesArray?.length > 0 && (
             <>
               <SectionTitle>Select Size (UK Size)</SectionTitle>
               <SizeSelect
                 value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
               >
-                {product.sizes.map((size) => (
-                  <option key={size} value={size}>
+                <option value="">Select Size</option> {/* Default empty option */}
+                {sizesArray.map((size, index) => (
+                  <option key={index} value={size}>
                     Size {size}
                   </option>
                 ))}
@@ -155,14 +163,15 @@ const ItemDetails = () => {
           )}
 
           {/* Color Selection */}
-          {product.colors?.length > 0 && (
+          {colorsArray?.length > 0 && (
             <>
               <SectionTitle>Select Color</SectionTitle>
               <ColorSelect
                 value={selectedColor}
                 onChange={(e) => setSelectedColor(e.target.value)}
               >
-                {product.colors.map((color, index) => (
+                <option value="">Select Color</option> {/* Default empty option */}
+                {colorsArray.map((color, index) => (
                   <option key={index} value={color}>
                     {color}
                   </option>
@@ -185,7 +194,7 @@ const ItemDetails = () => {
           <StockStatus>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</StockStatus>
 
           {/* Add to Bag Button */}
-          <Button onClick={handleAddToCart}>Add to Bag</Button>
+          <Button onClick={handleAddToCart}>Add to Cart</Button>
 
           {/* Add to Wishlist Button */}
           <WishlistButton onClick={handleWishlistToggle}>

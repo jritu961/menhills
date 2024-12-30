@@ -1,24 +1,14 @@
-import { registerUser,loginUser } from "../components/user.js";
-import generateOtp from "../components/verifyEmail.js";
-import { verifyEmailOtp } from "../components/verifyEmail.js";
+import { registerUser,loginUser } from "../controller/user.js";
+import generateOtp from "../controller/verifyEmail.js";
+import { verifyEmailOtp } from "../controller/verifyEmail.js";
 import { Router } from "express";
-import { addItemToCart,getCartItems,updateCartItem,removeCartItem,clearCart } from "../components/cart.js";
-import multer from "multer";
 
 const router=Router()
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
-router.post('/cart/add',upload.single('image'), addItemToCart);
-router.post('/register',registerUser)
-router.post('/login',loginUser)
-router.post('/otp',generateOtp)
-router.post('/verify',verifyEmailOtp)
-
-router.get('/cart', getCartItems);
-router.put('/cart/update/:id', updateCartItem);
-router.delete('/cart/remove/:id', removeCartItem);
-router.delete('/cart/clear', clearCart);
+router.post('/v1/register',registerUser)
+router.post('/v1/login',loginUser)
+router.post('/v1/otp',generateOtp)
+router.post('/v1/verify',verifyEmailOtp)
 
 
 

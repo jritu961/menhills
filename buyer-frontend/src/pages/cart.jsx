@@ -4,7 +4,8 @@ import { Header } from "../components/header";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-
+ import checkUserLoginStatus from "../helper/loggedin.js"
+ import { getOrCreateDeviceId } from "../helper/device";   
 // Styled Components
 const CartContainer = styled.div`
   display: flex;
@@ -255,7 +256,11 @@ const AddToCartPage = () => {
   // Fetch cart items
   const fetchCartItems = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart`);
+      const deviceId=getOrCreateDeviceId()
+      console.log("🚀 ~ fetchCartItems ~ deviceId:", deviceId)
+      const userId=checkUserLoginStatus()
+      console.log("🚀 ~ fetchCartItems ~ userId:", userId)
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/`);
       console.log("API Response:", response.data);
       // Ensure cartItems is always an array
       setCartItems(Array.isArray(response.data) ? response.data : []);

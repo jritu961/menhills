@@ -37,3 +37,16 @@ export const ProductPrice = styled.p`
   color: #777;
   margin: 10px;
 `;
+export const SizeSelect = styled.select`
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #fff;
+
+  &:hover {
+    border-color: #aaa;
+  }
+`;

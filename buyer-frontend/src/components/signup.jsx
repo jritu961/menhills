@@ -5,6 +5,8 @@ import { NavbarComponentData } from './navbarContent';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import EMailOtpModal from './emailOtpModel';  // Import the OTP Modal
+import { toast } from 'react-toastify';  // Import react-toastify
+import { ToastContainer } from 'react-toastify';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -62,17 +64,18 @@ const RegisterPage = () => {
     setLoading(true);
     try {
       // Replace with your registration API logic
-      const result=await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`, formData);
+      const result = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/register`, formData);
       setError('');
-      const USERId=result?.data?.data?._id
-      const userIDData=localStorage.setItem("userId",USERId)
+      const USERId = result?.data?.data?._id;
+      const userIDData = localStorage.setItem("userId", USERId);
       await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/otp?userId=${USERId}`);
       setModalOpen(true);  // Open OTP modal after successful registration
     } catch (err) {
       setError('Invalid OTP. Please try again.');
-      setLoading(false); // Stop the loading indicator on error    } finally {
+      setLoading(false); // Stop the loading indicator on error
     }
   };
+
   const handleOtpSubmit = async (otp) => {
     try {
       const userId = localStorage.getItem("userId");
@@ -80,14 +83,17 @@ const RegisterPage = () => {
       console.log('OTP verified successfully');
       setOtpError('');  // Reset OTP error state
       setModalOpen(false);  // Close the modal after successful OTP verification
-      // navigate('/login');  // Navigate to login after OTP verification
+      toast.success('Verification Successful! Redirecting to login...');  // Show success message
+
+      // Redirect after a short delay (to let the toast message show up)
+      setTimeout(() => {
+        navigate('/login');  // Redirect to the login page
+      }, 2000);  // Adjust delay as needed
     } catch (error) {
       setOtpError('Invalid OTP. Please try again.');  // Set OTP error state
       // Don't close the modal if OTP is invalid
     }
-};
-
-  
+  };
 
   return (
     <Container>
@@ -164,6 +170,9 @@ const RegisterPage = () => {
 
       {/* OTP Modal */}
       <EMailOtpModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleOtpSubmit} />
+      
+      {/* Include toast container */}
+      <ToastContainer />
     </Container>
   );
 };

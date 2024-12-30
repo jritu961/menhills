@@ -24,6 +24,8 @@ export const NavbarComponent = () => {
     // Clear authentication tokens or session
     localStorage.removeItem("authToken"); // Example if you're using localStorage
     sessionStorage.removeItem("authToken"); // Example if you're using sessionStorage
+    localStorage.removeItem("userId"); 
+    
     // Redirect to login page
     navigate("/login");
   };
