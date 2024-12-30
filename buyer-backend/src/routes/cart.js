@@ -5,7 +5,7 @@ import CartController from '../controller/cart.js';
 const rootRouter = new Router();
 
 const cartController = new CartController();
-// -- /:deviceId
+
 rootRouter.post(
     '/v1/cart/:userId/:deviceId',
     cartController.addItem,

@@ -29,14 +29,18 @@ export const NavbarComponent = () => {
     // Redirect to login page
     navigate("/login");
   };
-
+  const handlecartClick = () => {
+    // Clear authentication tokens or session    
+    // Redirect to login page
+    navigate("/cart");
+  };
   return (
     <Navbar>
       <NavbarMainContainer>
         {/* <NavbarLogo>MENHILLS</NavbarLogo> */}
         <NavbarRight>
           <UserAddOutlined className="icon" onClick={handleUserClick} />
-          <ShoppingCartOutlined className="icon" />
+          <ShoppingCartOutlined className="icon" onClick={handlecartClick}/>
           <SearchOutlined className="icon" />
         </NavbarRight>
         <NavbarRight>          <LogoutOutlined className="icon" onClick={handleLogout} />

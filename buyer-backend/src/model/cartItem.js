@@ -1,20 +1,58 @@
 import mongoose from "mongoose";
-import Cart from "./cart.js";
 
 const CartItemSchema = new mongoose.Schema(
-    {
-        item_id: { type: String },
-        id: { type: String },
-        count: { type: Number },
-        customisationState: { type: mongoose.Schema.Types.Mixed },
-        customisations: { type: mongoose.Schema.Types.Mixed },
-        hasCustomisations: { type: Boolean },
-        cart: { type: String, ref: 'Cart' }
+  {
+    item_id: { 
+      type: String, 
+      required: [true, "Item ID is required"] 
     },
-    { _id: true, timestamps: true }
+    id: { 
+      type: String, 
+    },
+    count: { 
+      type: Number, 
+      required: [true, "Count is required"], 
+      min: [1, "Count must be at least 1"] 
+    },
+    images: { 
+      type: String, 
+      required: [true, "Image URL is required"], 
+      validate: {
+        validator: function (v) {
+          return /^https?:\/\/.+/i.test(v); // Validate URL format
+        },
+        message: "Invalid image URL format",
+      },
+    },
+    name: { 
+      type: String, 
+      required: [true, "Item name is required"], 
+      trim: true 
+    },
+    customisationState: { 
+      type: mongoose.Schema.Types.Mixed, 
+      default: null // Mixed type for custom data
+    },
+    customisations: { 
+      type: mongoose.Schema.Types.Mixed, 
+      default: null 
+    },
+    hasCustomisations: { 
+      type: Boolean, 
+      default: false 
+    },
+    cart: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Cart", 
+      required: true // Ensures this item belongs to a cart
+    },
+  },
+  { 
+    _id: true, 
+    timestamps: true // Automatically adds `createdAt` and `updatedAt`
+  }
 );
 
-
-const CartItem  = mongoose.model('cartItem', CartItemSchema, "cartItem");
+const CartItem = mongoose.model("CartItem", CartItemSchema, "cartItems");
 
 export default CartItem;

@@ -1,8 +1,15 @@
 import mongoose, { Schema } from "mongoose";
+import { v4 as uuidv4 } from "uuid"; // Import UUID library for generating unique IDs
 
 // Define the user schema
 const UserSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      default: uuidv4, // Generate a UUID for the user
+      unique: true,    // Ensure `userId` is unique
+      required: true,  // Make `userId` mandatory
+    },
     name: {
       type: String,
       required: [true, "Name is required"],

@@ -254,38 +254,43 @@ const AddToCartPage = () => {
   const DELIVERY_CHARGE = 5;
 
   // Fetch cart items
-  const fetchCartItems = async () => {
-    try {
-      const deviceId=getOrCreateDeviceId()
-      console.log("🚀 ~ fetchCartItems ~ deviceId:", deviceId)
-      const userId=checkUserLoginStatus()
-      console.log("🚀 ~ fetchCartItems ~ userId:", userId)
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/`);
-      console.log("API Response:", response.data);
-      // Ensure cartItems is always an array
-      setCartItems(Array.isArray(response.data) ? response.data : []);
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
+;
 
   // Remove item from cart
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/remove/${id}`);
-      // Remove item from local state
-      setCartItems(cartItems.filter((item) => item.id !== id));
+      const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/remove/${id}`);
+      // Assuming response contains updated cart data
+      setCartItems(Array.isArray(response.data.data) ? response.data.data : []);
     } catch (err) {
       setError(err.message);
     }
   };
+  
+  const fetchCartItems = async () => {
+    try {
+      const userId = checkUserLoginStatus(); // Ensure this function is defined and returns a user ID
+      const deviceId = await getOrCreateDeviceId(); // Ensure this function returns a valid device ID
+      
+      // Make the API request
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`);
+      console.log("API Response:", response.data);
+  
+      // Set cartItems from the response if it's an array
+      setCartItems(Array.isArray(response.data.data) ? response.data.data : []);
+      setLoading(false); // Set loading state to false once data is fetched
+    } catch (err) {
+      // Handle errors if API call fails
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+  
+  
 
+  useEffect(() => {
+    fetchCartItems();
+  }, [])
   // Update item quantity
   const handleQuantityChange = async (id, increment) => {
     try {
@@ -319,10 +324,12 @@ const AddToCartPage = () => {
           {cartItems.map((item) => (
             <CartItem key={item.id}>
               <ItemDetails>
-                <ItemImage src={item.image} alt={item.name} />
+                <ItemImage src={item.images} alt={item.name} />
                 <ItemInfo>
                   <ItemName>{item.name}</ItemName>
-                  <ItemPrice>${item.price.toFixed(2)}</ItemPrice>
+                  <ItemPrice>
+  ${item.price && !isNaN(item.price) ? item.price.toFixed(2) : 'N/A'}
+</ItemPrice>
                 </ItemInfo>
               </ItemDetails>
               <ItemActions>

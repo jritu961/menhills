@@ -26,6 +26,8 @@ import {
   FitSelect, // New fit selection
   ShippingDetails, // New shipping section
 } from '../styles/itemDetails'; // Importing styled components
+import checkUserLoginStatus from "../helper/loggedin.js"
+import { getOrCreateDeviceId } from "../helper/device.js";   
 
 import axios from "axios";
 
@@ -36,6 +38,8 @@ const ItemDetails = () => {
   const [isInWishlist, setIsInWishlist] = useState(false); // State for wishlist
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState(''); // Color state
+  const [quantity, setQuantity] = useState(1); // New state for quantity
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,14 +72,20 @@ const ItemDetails = () => {
     }
 
     const cartData = {
-      productId: product._id,
+      item_id: product._id,
       size: selectedSize,
       color: selectedColor,
-      quantity: 1, // Default to 1 for simplicity
+      count: quantity,
+      images:product.images[0],
+      name:product.name
     };
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart`, cartData);
+      const deviceId=await getOrCreateDeviceId()
+      console.log("🚀 ~ fetchCartItems ~ deviceId:", deviceId)
+      const userId=checkUserLoginStatus()
+      console.log("🚀 ~ fetchCartItems ~ userId:", userId)
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, cartData);
       if (response.status === 201 || response.status === 200) {
         alert("Item added to cart successfully!");
       } else {
@@ -189,7 +199,17 @@ const ItemDetails = () => {
               </FitSelect>
             </>
           )}
-
+ <SectionTitle>Quantity</SectionTitle>
+          <SizeSelect
+            value={quantity}
+            onChange={(e) => setQuantity(parseInt(e.target.value))}
+          >
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </SizeSelect>
           {/* Stock Status */}
           <StockStatus>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</StockStatus>
 
