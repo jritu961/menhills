@@ -109,9 +109,10 @@ const ItemDetails = () => {
     setIsInWishlist(!isInWishlist); // Toggle the wishlist status
   };
 
-  // Split the sizes and colors from the fetched strings
-  const sizesArray = product.sizes[0].split(',');  // Assuming there's only one string like "L,M,S"
-  const colorsArray = product.colors[0].split(',');  // Assuming there's only one string like "Black,Blue,Red"
+// Split the sizes and colors from the fetched strings, with safety checks
+const sizesArray = product?.sizes?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
+const colorsArray = product?.colors?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
+
 
   return (
     <div>
