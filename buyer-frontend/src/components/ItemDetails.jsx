@@ -61,10 +61,10 @@ const ItemDetails = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    if (!selectedSize) {
-      alert("Please select a size.");
-      return;
-    }
+      if (!selectedSize) {
+        alert("Please select a size.");
+        return;
+      }
 
     if (!selectedColor) {
       alert("Please select a color.");
@@ -77,8 +77,14 @@ const ItemDetails = () => {
       color: selectedColor,
       count: quantity,
       images:product.images[0],
-      name:product.name
+      name:product.name,
+      email:product.email,
+      price:product.price
+      
     };
+    console.log("🚀 ~ handleAddToCart ~ cartData.quantity:", cartData.quantity)
+    console.log("🚀 ~ handleAddToCart ~ cartData.selectedColor:", cartData.selectedColor)
+    console.log("🚀 ~ handleAddToCart ~ cartData.selectedSize:", cartData)
 
     try {
       const deviceId=await getOrCreateDeviceId()

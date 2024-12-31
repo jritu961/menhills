@@ -4,9 +4,10 @@ const checkUserLoginStatus = () => {
     
     if (!userId) {
       // If user is not logged in, set userId to undefined
-      localStorage.setItem('userId', undefined);
+      localStorage.setItem('userId', "undefined");
     }
-  
+    console.log("🚀 ~ checkUserLoginStatus ~ userId:", userId)
+
     return userId; // Return the userId or undefined
   };
   

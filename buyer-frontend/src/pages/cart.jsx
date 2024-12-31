@@ -247,9 +247,10 @@ const TotalText = styled.h3`
 // Component
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
+  console.log(cartItems,'cartItems')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [quntity, setQuantity] = useState(1)
   const TAX_RATE = 0.1; // 10% tax
   const DELIVERY_CHARGE = 5;
 
@@ -259,9 +260,19 @@ const AddToCartPage = () => {
   // Remove item from cart
   const handleRemove = async (id) => {
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/remove/${id}`);
+      const item = cartItems.find((item) => item._id === id);
+
+      console.log("🚀 ~ handleQuantityChange ~ cartItems:", cartItems)
+      if (!item) return; // Exit if the item is not found
+  
+      // Ensure quantity is at least 1
+      const userId = checkUserLoginStatus(); // Ensure user is logged in
+      console.log("🚀 ~ handleRemove ~ userId:", userId)
+      const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${item.item_id}`);
       // Assuming response contains updated cart data
       setCartItems(Array.isArray(response.data.data) ? response.data.data : []);
+      fetchCartItems(); 
+
     } catch (err) {
       setError(err.message);
     }
@@ -290,24 +301,57 @@ const AddToCartPage = () => {
 
   useEffect(() => {
     fetchCartItems();
-  }, [])
+  }, [ ])
   // Update item quantity
   const handleQuantityChange = async (id, increment) => {
+    console.log("🚀 ~ handleQuantityChange ~ id:", id);
+  
     try {
-      const item = cartItems.find((item) => item.id === id);
-      const newQuantity = Math.max(1, item.quantity + increment);
-      await axios.put(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/update/${id}`, { quantity: newQuantity });
+      // Find the specific item in the cart
+      const item = cartItems.find((item) => item._id === id);
+  
+      if (!item) return; // Exit if the item is not found
+  
+      // Calculate the new quantity and ensure it's at least 1
+      const newQuantity = Math.max(item.count + increment, 1); // Ensure quantity is at least 1
+      const updatedPrice = newQuantity * item.price; // Recalculate price based on new quantity
+  
+      // Ensure user is logged in and get the userId
+      const userId = checkUserLoginStatus();
+      if (!userId) {
+        console.error("User is not logged in");
+        return;
+      }
+  
+      // Update the quantity and price on the server
+      await axios.put(
+        `${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${item.item_id}`,
+        {
+          count: newQuantity,
+          cart: item.cart,
+          price: updatedPrice, // Send updated price to the server
+        }
+      );
+  
+      // Update the cartItems state with the new quantity and updated price
       setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
+        prevItems.map((cartItem) =>
+          cartItem._id === id
+            ? { ...cartItem, count: newQuantity, totalPrice: updatedPrice }
+            : cartItem
         )
       );
     } catch (err) {
+      console.error("🚀 ~ handleQuantityChange ~ error:", err.message);
       setError(err.message);
     }
   };
+  
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  
+
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.count, 0);
   const tax = subtotal * TAX_RATE;
   const grandTotal = subtotal + tax + DELIVERY_CHARGE;
 
@@ -327,16 +371,18 @@ const AddToCartPage = () => {
                 <ItemImage src={item.images} alt={item.name} />
                 <ItemInfo>
                   <ItemName>{item.name}</ItemName>
-                  <ItemPrice>
-  ${item.price && !isNaN(item.price) ? item.price.toFixed(2) : 'N/A'}
-</ItemPrice>
+                  <ItemPrice>{item.color}</ItemPrice>
+                  <ItemPrice>{item.size}</ItemPrice>
+                  <ItemPrice>₹{(item.price * item.count).toFixed(2)}</ItemPrice>
+
                 </ItemInfo>
               </ItemDetails>
               <ItemActions>
-                <QuantityButton onClick={() => handleQuantityChange(item.id, -1)}>-</QuantityButton>
-                <span>{item.quantity}</span>
-                <QuantityButton onClick={() => handleQuantityChange(item.id, 1)}>+</QuantityButton>
-                <RemoveButton onClick={() => handleRemove(item.id)}>Remove</RemoveButton>
+              <QuantityButton onClick={() => handleQuantityChange(item._id, -1)}>-</QuantityButton>
+<span>{item.count}</span>
+<QuantityButton onClick={() => handleQuantityChange(item._id, 1)}>+</QuantityButton>
+<RemoveButton onClick={() => handleRemove(item._id)}>Remove</RemoveButton>
+
               </ItemActions>
             </CartItem>
           ))}
@@ -344,24 +390,20 @@ const AddToCartPage = () => {
         <TotalContainer>
           <TotalRow>
             <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
-          </TotalRow>
-          <Divider />
+            <span>₹{subtotal.toFixed(2)}</span>
+                    </TotalRow>
           <TotalRow>
-            <span>
-              Tax <Badge color="#3498db">10%</Badge>
-            </span>
-            <span>${tax.toFixed(2)}</span>
+            <span>Tax (10%)</span>
+            <span>₹{tax.toFixed(2)}</span>
           </TotalRow>
-          <Divider />
           <TotalRow>
-            <span>Delivery Charges</span>
-            <span>${DELIVERY_CHARGE.toFixed(2)}</span>
+            <span>Delivery Charge</span>
+            <span>₹{DELIVERY_CHARGE.toFixed(2)}</span>
           </TotalRow>
           <Divider />
           <TotalRow highlight>
-            <span>Grand Total</span>
-            <span>${grandTotal.toFixed(2)}</span>
+            <span>Total</span>
+            <TotalText>₹{grandTotal.toFixed(2)}</TotalText>
           </TotalRow>
           <CheckoutButton>Proceed to Checkout</CheckoutButton>
         </TotalContainer>
@@ -372,3 +414,4 @@ const AddToCartPage = () => {
 };
 
 export default AddToCartPage;
+

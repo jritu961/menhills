@@ -9,6 +9,15 @@ const CartItemSchema = new mongoose.Schema(
     id: { 
       type: String, 
     },
+    size: { 
+      type: String, 
+    },
+    color: { 
+      type: String, 
+    },
+    price:{
+      type:Number
+    },
     count: { 
       type: Number, 
       required: [true, "Count is required"], 

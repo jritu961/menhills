@@ -16,13 +16,16 @@ class CartService {
         data.userId !== "undefined" &&
         data.userId !== "guestUser"
       ) {
-        await User.findOneAndUpdate(
-          { userId: data.userId },
-          { $set: { device_id: data.deviceId, ...(data.email && { email: data.email }) } },
-          { new: true, upsert: true }
-        );
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: data.userId }, 
+          { $set: { email:data.email } }, 
+          { upsert: false }
+      );
+        console.log("🚀 ~ CartService ~ addItem ~ updatedUser:", updatedUser)
+      
         
         cart = await Cart.findOne({ device_id: data.deviceId, userId: data.userId });
+        console.log("🚀 ~ CartService ~ addItem ~ cart:", cart)
       }
 
       if (!cart && data.deviceId && data.deviceId !== "undefined") {
@@ -33,17 +36,22 @@ class CartService {
       }
 
       if (cart) {
+        console.log("🚀 ~ CartService ~ addItem ~ cart._id:", cart._id)
+        console.log("🚀 ~ CartService ~ addItem ~ data.id:", data.item_id)
         // Check if the item already exists in the cart
-        const existingItem = await CartItem.findOne({ id: data.id, cart: cart._id }).lean();
+        const existingItem = await CartItem.findOne({ item_id: data.item_id }).lean();
+        
+        console.log("🚀 ~ CartService ~ addItem ~ existingItem:", existingItem)
         if (existingItem) {
-          const updateData = await CartItem.findOneAndUpdate(
-            { id: data.id, cart: cart._id },
-            { $inc: { count: 1 } },
-            { new: true }
-          );
-          console.log("Updated Item: ", updateData);
-          return { status: "success", data: updateData };
+            const updateData = await CartItem.findOneAndUpdate(
+                { id: data.id, cart: cart._id },
+                { $inc: { count: 1 } },
+                { new: true }
+            );
+            console.log("Updated Item: ", updateData);
+            return { status: "success", data: updateData };
         }
+        
 
         // Add new item to the cart
         const cartItem = new CartItem({
@@ -53,8 +61,13 @@ class CartService {
           count: data.count,
           images: data.images,
           name: data.name,
+          price:data.price,
+          color:data.color,
+          size:data.size
       
         });
+          console.log("🚀 ~ CartService ~ addItem ~ size:data.size:69", data)
+        console.log("🚀 ~ CartService ~ addItem ~ cartItem:", cartItem)
 
         return await cartItem.save();
       } else {
@@ -78,7 +91,12 @@ class CartService {
           customisationState: data?.customisationState || null,
           customisations: data?.customisations || null,
           hasCustomisations: data?.hasCustomisations || false,
+          color:data.color,
+          size:data.size
         });
+        console.log("🚀 ~ CartService ~ addItem ~ size:data.size:98", data)
+
+        console.log("🚀 ~ CartService ~ addItem ~ cartItem:", cartItem)
 
         return await cartItem.save();
       }
@@ -88,16 +106,20 @@ class CartService {
   }
 
   async updateItem(data) {
+    console.log("🚀 ~ CartService ~ updateItem ~ data:", data)
     try {
-      const existingItem = await CartItem.findOne({ _id: data.itemId });
-      if (existingItem) {
+     
         const updateData = await CartItem.findOneAndUpdate(
-          { _id: data.itemId },
-          { $set: { count: data?.quantity?.count } },
+          { item_id: data.itemId,
+            cart:data.cart
+           },
+          { $set: { count: data?.count ,price:data?.price} },
           { new: true }
         );
+            console.log("🚀 ~ CartService ~ updateItem ~ data.cart:", data.cart)
+        console.log("🚀 ~ CartService ~ updateItem ~ updateData:", updateData)
         return updateData;
-      }
+      
     } catch (err) {
       throw err;
     }
@@ -105,7 +127,7 @@ class CartService {
 
   async removeItem(data) {
     try {
-      return await CartItem.deleteOne({ _id: data.itemId });
+      return await CartItem.deleteOne({item_id: data.itemId });
     } catch (err) {
       throw err;
     }
