@@ -10,6 +10,8 @@ import RegisterPage from "./components/signup.jsx"
 import ItemDetails from "./components/ItemDetails.jsx"
 import MensWearPage from "./pages/menswear.jsx"
 import AddToCart from "./pages/cart.jsx"
+import AddressPage from "./pages/address.jsx"
+import CheckoutPage from "./pages/checkout.jsx"
 const App = () => {
   return (
     <Router>
@@ -20,7 +22,8 @@ const App = () => {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/item-details/:id" element={<ItemDetails />} />
         <Route path="/menswear" element={<MensWearPage />} />
-
+        <Route path="/address" element={<AddressPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </Router>
   );

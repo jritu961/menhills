@@ -6,6 +6,7 @@ import axios from 'axios';
 import styled from 'styled-components';
  import checkUserLoginStatus from "../helper/loggedin.js"
  import { getOrCreateDeviceId } from "../helper/device";   
+ import { useNavigate } from "react-router-dom";
 // Styled Components
 const CartContainer = styled.div`
   display: flex;
@@ -250,14 +251,18 @@ const AddToCartPage = () => {
   console.log(cartItems,'cartItems')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quntity, setQuantity] = useState(1)
   const TAX_RATE = 0.1; // 10% tax
   const DELIVERY_CHARGE = 5;
-
+ const navigate=useNavigate()
   // Fetch cart items
 ;
 
   // Remove item from cart
+  const handleCheckout = async () => {
+    console.log("Navigating to checkout");
+    navigate('/checkout');
+  };
+  
   const handleRemove = async (id) => {
     try {
       const item = cartItems.find((item) => item._id === id);
@@ -405,7 +410,8 @@ const AddToCartPage = () => {
             <span>Total</span>
             <TotalText>₹{grandTotal.toFixed(2)}</TotalText>
           </TotalRow>
-          <CheckoutButton>Proceed to Checkout</CheckoutButton>
+          <CheckoutButton onClick={handleCheckout}>Proceed to Checkout</CheckoutButton>
+
         </TotalContainer>
       </CartContainer>
       <Footer />
