@@ -1,5 +1,4 @@
-import BadRequestParameterError from "../../lib/errors/bad-request-parameter.error.js";
-import DeliveryAddressService from "./deliveryAddress.service.js";
+import DeliveryAddressService from "../services/address.js";
 
 const deliveryAddressService = new DeliveryAddressService();
 
@@ -13,6 +12,8 @@ class DeliveryAddressController {
    */
   deliveryAddress(req, res, next) {
     const { body: request, user } = req;
+    console.log("🚀 ~ DeliveryAddressController ~ deliveryAddress ~ user:", user)
+    console.log("🚀 ~ DeliveryAddressController ~ deliveryAddress ~ request:", request)
 
     deliveryAddressService
       .deliveryAddress(request, user)
@@ -36,9 +37,8 @@ class DeliveryAddressController {
 
     deliveryAddressService
       .onDeliveryAddressDetails(user)
-      .then((order) => {
-        req.body.responseData = order;
-        next();
+      .then((response) => {
+        res.json(response);
       })
       .catch((err) => {
         next(err);
@@ -60,12 +60,12 @@ class DeliveryAddressController {
       deliveryAddressService
         .updateDeliveryAddress(id, request, user?.decodedToken?.uid)
         .then((response) => {
+          console.log("🚀 ~ DeliveryAddressController ~ .then ~ response:", response)
           res.json(response);
         })
         .catch((err) => {
           next(err);
         });
-    else throw new BadRequestParameterError();
   }
   deleteDeliveryAddress(req, res, next) {
     const { body: request, params, user } = req;
@@ -80,7 +80,6 @@ class DeliveryAddressController {
         .catch((err) => {
           next(err);
         });
-    else throw new BadRequestParameterError();
   }
 }
 

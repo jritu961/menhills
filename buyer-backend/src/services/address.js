@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import NoRecordFoundError from "../../lib/errors/no-record-found.error.js";
 
-import DeliveryAddressMongooseModel from "./db/deliveryAddress.js";
+import DeliveryAddressMongooseModel from "../model/address.js";
 
 class DeliveryAddressService {
   /**
@@ -9,7 +8,9 @@ class DeliveryAddressService {
    * @param {Object} request
    * @param {Object} user
    */
-  async   deliveryAddress(request = {}, user = {}) {
+  async deliveryAddress(request = {}, user = {}) {
+    console.log("🚀 ~ DeliveryAddressService ~ deliveryAddress ~ request:", request)
+    console.log("🚀 ~ DeliveryAddressService ~ deliveryAddress ~ user:13", user)
     try {
       const deliveryAddressSchema = {
         userId: user?.decodedToken?.uid,
@@ -53,9 +54,11 @@ class DeliveryAddressService {
   async onDeliveryAddressDetails(user = {}) {
     try {
       const userId = user?.decodedToken?.uid ? user?.decodedToken?.uid : (user?.decodedToken?.user_id || user?.decodedToken?.userId)
+      console.log("🚀 ~ DeliveryAddressService ~ onDeliveryAddressDetails ~ userId:", userId)
       const deliveryAddressDetails = await DeliveryAddressMongooseModel.find({
         userId: userId, address: { $ne: null },
       });
+      console.log("🚀 ~ DeliveryAddressService ~ onDeliveryAddressDetails ~ deliveryAddressDetails:", deliveryAddressDetails)
 
       return deliveryAddressDetails;
     } catch (err) {
@@ -95,6 +98,7 @@ class DeliveryAddressService {
           }
         );
       storedDeliveryAddress = storedDeliveryAddress?.toJSON();
+      console.log("🚀 ~ DeliveryAddressService ~ updateDeliveryAddress ~ storedDeliveryAddress:", storedDeliveryAddress)
 
       if (storedDeliveryAddress)
         return {
@@ -106,8 +110,7 @@ class DeliveryAddressService {
           lat: storedDeliveryAddress?.lat,
           lng: storedDeliveryAddress?.lng,
         };
-      else
-        throw new NoRecordFoundError(`Delivery address with ${id} not found`);
+     
     } catch (err) {
       throw err;
     }
@@ -119,9 +122,8 @@ class DeliveryAddressService {
         await DeliveryAddressMongooseModel.deleteOne({ id: id });
 
       if (deliveryAddressDetails.deletedCount === 0) {
-        throw new NoRecordFoundError(
-          "Delivery address not found or already deleted."
-        );
+        return "Delivery address not found or already deleted."
+
       }
 
       return deliveryAddressDetails;

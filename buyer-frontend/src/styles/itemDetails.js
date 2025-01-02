@@ -1,175 +1,143 @@
-// StyledComponents.js (or itemDetails.js)
 import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: space-around;
+  padding: 10px;
   background-color: #f8f8f8;
   flex-wrap: wrap;
+  gap: 20px; /* Add space between items */
 `;
 
 export const ImageSection = styled.div`
-  flex: 0 0 40%;
+  flex: 0 0 45%; /* Adjusted for better responsiveness */
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 600px;
 `;
 
 export const ProductImage = styled.img`
-display:flex;
-flex-direction:column;
-justify-content:center;
-  max-width: 600px;
+  max-width: 100%; /* Make image responsive */
   height: auto;
-  border-radius: 10px;
   margin-bottom: 20px;
 `;
 
 export const ThumbnailSection = styled.div`
-max-width:600px;
-margin-left:15px;
-gap:20px;
-  margin-top: 20px;
+  display: flex;
+  gap: 10px;
 `;
 
 export const Thumbnail = styled.img`
-
-  max-width: 250px;
-  max-height: 250px;
-  margin-right: 10px;
-  border-radius: 5px;
+  max-width: 50px;
   cursor: pointer;
-  margin-top: 10px;
-  object-fit: cover;
-
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
-export const WishlistButton = styled.button`
-  background-color: #c3c3c3;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-  width: 100%;
-  text-align: center;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: #a2a2a2;
-  }
 `;
 
 export const DetailsSection = styled.div`
-  flex: 1;
+  flex: 0 0 45%; /* Adjusted for better responsiveness */
+  max-width: 600px;
+  background-color: #fff;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-export const Title = styled.h2`
-  font-size: 2rem;
+export const Title = styled.h1`
+  font-size: 24px;
+  margin-bottom: 10px;
+`;
+
+export const Price = styled.div`
+  font-size: 18px;
   font-weight: bold;
-  color: #333;
-`;
-
-export const Price = styled.p`
-  font-size: 1.5rem;
-  color: #ff3b3f;
-  margin-top: 20px;
+  margin-bottom: 10px;
 `;
 
 export const MRP = styled.span`
+  font-size: 16px;
   text-decoration: line-through;
-  color: #888;
+  margin-left: 10px;
 `;
 
 export const Discount = styled.span`
-  color: #28a745;
-  font-weight: bold;
+  color: #e74c3c;
+  font-size: 16px;
+  margin-left: 10px;
 `;
 
-export const Ratings = styled.p`
-  color: #ff9900;
-  font-size: 1.2rem;
-  margin-top: 10px;
+export const Ratings = styled.div`
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+export const SectionTitle = styled.h3`
+  font-size: 18px;
+  margin-top: 20px;
 `;
 
 export const SizeSelect = styled.select`
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 8px;
+  margin-top: 10px;
   font-size: 16px;
-  margin-top: 10px;
-  border-radius: 5px;
-`;
-
-export const Button = styled.button`
-  padding: 12px 20px;
-  background-color: #dc6f00;
-  color: white;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-  width: 100%;
-  
-  &:hover {
-    background-color: #d45f00;
-  }
-`;
-
-export const SectionTitle = styled.h3`
-  margin-top: 30px;
-  color: #333;
-  font-size: 1.25rem;
-`;
-
-export const Offer = styled.p`
-  background-color: #f8f8f8;
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-`;
-
-export const Description = styled.p`
-  color: #666;
-  margin-top: 20px;
-  font-size: 1rem;
 `;
 
 export const ColorSelect = styled.select`
-  padding: 10px;
-  margin-top: 10px;
   width: 100%;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 8px;
+  margin-top: 10px;
+  font-size: 16px;
 `;
 
 export const FitSelect = styled.select`
-  padding: 10px;
-  margin-top: 10px;
   width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  font-size: 16px;
+`;
+
+export const Button = styled.button`
+  width: 100%;
+  padding: 12px;
+  background-color: #27ae60;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #2ecc71;
+  }
+`;
+
+export const WishlistButton = styled(Button)`
+  background-color: #e74c3c;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+`;
+
+export const StockStatus = styled.div`
+  font-size: 16px;
+  margin-top: 10px;
+`;
+
+export const ShippingDetails = styled.div`
+  margin-top: 20px;
+  font-size: 16px;
+`;
+
+export const Offer = styled.div`
+  background-color: #f39c12;
+  padding: 10px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  margin-bottom: 10px;
 `;
 
-export const StockStatus = styled.p`
-  font-size: 1rem;
-  color: #333;
-  margin-top: 15px;
-`;
-
-export const ShippingDetails = styled.p`
-  font-size: 1rem;
-  color: #333;
-  margin-top: 15px;
+export const Description = styled.p`
+  font-size: 16px;
+  margin-top: 10px;
 `;
 

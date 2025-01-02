@@ -80,17 +80,11 @@ const ItemDetails = () => {
       name:product.name,
       email:product.email,
       price:product.price
-      
     };
-    console.log("🚀 ~ handleAddToCart ~ cartData.quantity:", cartData.quantity)
-    console.log("🚀 ~ handleAddToCart ~ cartData.selectedColor:", cartData.selectedColor)
-    console.log("🚀 ~ handleAddToCart ~ cartData.selectedSize:", cartData)
 
     try {
       const deviceId=await getOrCreateDeviceId()
-      console.log("🚀 ~ fetchCartItems ~ deviceId:", deviceId)
       const userId=checkUserLoginStatus()
-      console.log("🚀 ~ fetchCartItems ~ userId:", userId)
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, cartData);
       if (response.status === 201 || response.status === 200) {
         alert("Item added to cart successfully!");
@@ -115,9 +109,9 @@ const ItemDetails = () => {
     setIsInWishlist(!isInWishlist); // Toggle the wishlist status
   };
 
-// Split the sizes and colors from the fetched strings, with safety checks
-const sizesArray = product?.sizes?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
-const colorsArray = product?.colors?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
+  // Split the sizes and colors from the fetched strings, with safety checks
+  const sizesArray = product?.sizes?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
+  const colorsArray = product?.colors?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
 
 
   return (
@@ -206,7 +200,7 @@ const colorsArray = product?.colors?.[0]?.split(',') || [];  // Fallback to an e
               </FitSelect>
             </>
           )}
- <SectionTitle>Quantity</SectionTitle>
+          <SectionTitle>Quantity</SectionTitle>
           <SizeSelect
             value={quantity}
             onChange={(e) => setQuantity(parseInt(e.target.value))}

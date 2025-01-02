@@ -3,6 +3,7 @@ import dbConnect from "./src/db/connect.js";
 import { config as configDotenv } from "dotenv"; // Load dotenv
 import router from "./src/routes/user.js"
 import rootRouter from "./src/routes/cart.js"
+import address from "./src/routes/address.js"
 import cors from "cors"
 // Configure dotenv
 configDotenv();
@@ -12,6 +13,7 @@ app.use(cors())
 app.use(express.json());
 app.use('/user',router)
 app.use('/user',rootRouter)
+app.use('/user',address)
 
 const port = process.env.PORT || 8989;
 
