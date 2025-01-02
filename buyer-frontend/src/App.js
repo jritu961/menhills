@@ -12,6 +12,8 @@ import MensWearPage from "./pages/menswear.jsx"
 import AddToCart from "./pages/cart.jsx"
 import AddressPage from "./pages/address.jsx"
 import CheckoutPage from "./pages/checkout.jsx"
+import RazorPayPaymentPage from './pages/razorpayPayment.jsx';
+import OrderHistoryPage from "./pages/orderHistory.jsx"
 const App = () => {
   return (
     <Router>
@@ -24,6 +26,9 @@ const App = () => {
         <Route path="/menswear" element={<MensWearPage />} />
         <Route path="/address" element={<AddressPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment" element={<RazorPayPaymentPage />} />
+        <Route path="/order-history" element={<OrderHistoryPage />} />
+
       </Routes>
     </Router>
   );

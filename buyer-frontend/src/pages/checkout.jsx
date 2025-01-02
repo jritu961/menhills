@@ -1,9 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import AddressPage from "./address.jsx";
+import { useNavigate } from "react-router-dom";
+
 import { Header } from "../components/header"
 import {NavbarComponent} from "../components/navbar"
 import {Footer} from "../components/footer"
+
+
+
+
+
 const CheckoutPageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -81,6 +88,11 @@ const Label = styled.label`
 `;
 
 const CheckoutPage = () => {
+  const navigate = useNavigate();
+  const handleProceedToPay = () => {
+    // Navigate to PaymentPage with totalAmount as state
+    navigate("/payment", { state: { totalAmount } });
+  };
   const orderItems = [
     { name: "Shirt", quantity: 2, price: 1000 },
     { name: "Jeans", quantity: 1, price: 1500 },
@@ -121,8 +133,9 @@ const CheckoutPage = () => {
         <Label>
           <input type="radio" name="payment" value="upi" /> UPI
         </Label>
-        <PaymentButton>Proceed to Pay</PaymentButton>
-      </PaymentOptions>
+        <PaymentButton onClick={handleProceedToPay}>
+          Proceed to Pay
+        </PaymentButton>      </PaymentOptions>
     
     </CheckoutPageContainer>
     <Footer/>
