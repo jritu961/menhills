@@ -82,7 +82,6 @@ const Modal = styled.div`
   align-items: center;
   z-index: 1000;
   margin:10px;
-
 `;
 
 const ModalContent = styled.div`
@@ -124,12 +123,19 @@ const AddressPage = () => {
     gps: ""
   });
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const token=localStorage.getItem("authToken")
 
   // Fetch addresses on component mount
   useEffect(() => {
     const fetchAddresses = async () => {
+      const token = localStorage.getItem("authToken");
+      console.log("🚀 ~ fetchAddresses ~ token:", token);
       try {
-        const response = await axios.get("/v1/delivery_address"); // Replace with your API endpoint
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/delivery_address`, {
+          headers: { authorization: `Bearer ${token}` }
+        });
+        console.log("🚀 ~ fetchAddresses ~ response:", response.data)
+
         setAddresses(response.data); // Assuming the API returns an array of addresses
       } catch (error) {
         console.error("Error fetching addresses:", error);
@@ -151,14 +157,55 @@ const AddressPage = () => {
   // Add a new address
   const addAddress = async () => {
     if (newAddress.name && newAddress.city && newAddress.street) {
+      console.log("🚀 ~ addAddress ~ newAddress:", newAddress);
+
+      const addressPayload = {
+        userId: "6773abd980b28ae234a19894", // You may need to replace with dynamic value
+        id: newAddress.id || "cc5e5a54-7515-4472-8ea7-cc807074763d",
+        descriptor: {
+          name: newAddress.name,
+          phone: newAddress.phone || "",
+          email: newAddress.email || "",
+          code: newAddress.code || "",
+          shortDesc: newAddress.shortDesc || "",
+          longDesc: newAddress.longDesc || "",
+          images: newAddress.images || [],
+          audio: newAddress.audio || "",
+          "3d_render": newAddress["3d_render"] || ""
+        },
+        gps: newAddress.gps,
+        defaultAddress: false, // Assuming this as false unless specified
+        address: {
+          door: newAddress.door,
+          address_name: newAddress.address_name,
+          name: newAddress.name,
+          building: newAddress.building,
+          street: newAddress.street,
+          locality: newAddress.locality,
+          ward: newAddress.ward,
+          city: newAddress.city,
+          state: newAddress.state,
+          country: newAddress.country,
+          areaCode: newAddress.areaCode,
+          tag: newAddress.tag,
+          lat: newAddress.lat,
+          lng: newAddress.lng
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        __v: 0
+      };
+
       try {
         const token = localStorage.getItem("authToken");
+        console.log("🚀 ~ addAddress ~ addressPayload:201", addressPayload)
 
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/delivery_address`, newAddress, {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/delivery_address`, addressPayload, {
           headers: {
             Authorization: `Bearer ${token}`
           }
-        }); // Send address to the API
+        });
+
         setAddresses([...addresses, response.data]); // Add the new address to the list
         setNewAddress({
           door: "",
@@ -172,7 +219,10 @@ const AddressPage = () => {
           state: "",
           country: "",
           areaCode: "",
-         
+          tag: "",
+          lat: "",
+          lng: "",
+          gps: ""
         }); // Clear input fields
         setIsModalOpen(false); // Close modal after adding address
       } catch (error) {
@@ -183,13 +233,23 @@ const AddressPage = () => {
 
   // Delete an address
   const deleteAddress = async (id) => {
-    try {
-      await axios.delete(`/v1/delete_delivery_address/${id}`); // Send delete request to API
-      setAddresses(addresses.filter(address => address.id !== id)); // Remove address from list
-    } catch (error) {
-      console.error("Error deleting address:", error);
+  console.log("🚀 ~ deleteAddress ~ id:", id)
+  try {
+    const result = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/delete_delivery_address/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }); // Send delete request to API
+
+    if (result.status === 200) {
+      // Ensure the address is removed from the state right after successful deletion
+      setAddresses((prevAddresses) => prevAddresses.filter(address => address._id !== id)); // Filter out the deleted address
     }
-  };
+  } catch (error) {
+    console.error("Error deleting address:", error);
+  }
+};
+  
 
   return (
     <AddressPageContainer>
@@ -199,13 +259,20 @@ const AddressPage = () => {
       {/* Modal for adding new address */}
       <Modal isOpen={isModalOpen}>
         <ModalContent>
-          <h3>Add New Address</h3>
+          {/* <h3>Add New Address</h3> */}
           <AddressForm>
             <Input
               type="text"
               name="door"
               placeholder="Enter door number"
               value={newAddress.door}
+              onChange={handleInputChange}
+            />
+            <Input
+              type="text"
+              name="email"
+              placeholder="Enter Email Address"
+              value={newAddress.email}
               onChange={handleInputChange}
             />
             <Input
@@ -278,51 +345,45 @@ const AddressPage = () => {
               value={newAddress.areaCode}
               onChange={handleInputChange}
             />
-            <Input
-              type="text"
-              name="tag"
-              placeholder="Enter tag"
-              value={newAddress.tag}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              name="lat"
-              placeholder="Enter latitude"
-              value={newAddress.lat}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="text"
-              name="lng"
-              placeholder="Enter longitude"
-              value={newAddress.lng}
+           
+        
+             <Input
+              type="number"
+              name="phone"
+              placeholder="Enter Phone Number"
+              value={newAddress.phone}
               onChange={handleInputChange}
             />
             <Input
               type="text"
               name="gps"
-              placeholder="Enter GPS coordinates (lat,lng)"
+              placeholder="Enter GPS coordinates"
               value={newAddress.gps}
               onChange={handleInputChange}
             />
+            <div>
             <Button onClick={addAddress}>Add Address</Button>
             <ModalCloseButton onClick={() => setIsModalOpen(false)}>Close</ModalCloseButton>
+            </div>
+           
           </AddressForm>
         </ModalContent>
       </Modal>
 
       <AddressList>
-        {addresses.map((address) => (
-          <AddressCard key={address.id}>
-            <div>
-              <h4>{address.name}</h4>
-              <p>{address.address_name}, {address.street}, {address.city}, {address.state}, {address.country}</p>
-              <p>{address.gps}</p>
-            </div>
-            <Button onClick={() => deleteAddress(address.id)}>Delete</Button>
-          </AddressCard>
-        ))}
+      {addresses.map((address) => (
+  <AddressCard key={address._id}>
+    <div>
+      <h4>{address.address.address_name}</h4>
+      <p>{address.address.name}</p>
+      <p>{address.address.street}, {address.address.city}, {address.address.state}</p>
+      <p>{address.address.areaCode}</p>
+    </div>
+    <Button onClick={() => deleteAddress(address._id)}>Delete</Button>
+  </AddressCard>
+))}
+
+
       </AddressList>
     </AddressPageContainer>
   );

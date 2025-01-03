@@ -117,9 +117,11 @@ class DeliveryAddressService {
   }
 
   async deleteDeliveryAddress(id) {
+    console.log("🚀 ~ DeliveryAddressService ~ deleteDeliveryAddress ~ id:", id)
     try {
       const deliveryAddressDetails =
-        await DeliveryAddressMongooseModel.deleteOne({ id: id });
+        await DeliveryAddressMongooseModel.deleteOne({ _id: id });
+        console.log("🚀 ~ DeliveryAddressService ~ deleteDeliveryAddress ~ deliveryAddressDetails:", deliveryAddressDetails)
 
       if (deliveryAddressDetails.deletedCount === 0) {
         return "Delivery address not found or already deleted."
