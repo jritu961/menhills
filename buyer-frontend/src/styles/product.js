@@ -6,7 +6,8 @@ export const ProductContainer = styled.section`
   align-items: center;
   gap: 20px;
   padding: 40px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Enables wrapping to the next row */
+  border: 2px solid red;
 `;
 
 export const ProductCard = styled.div`
@@ -14,14 +15,29 @@ export const ProductCard = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  border: 2px solid green;
   transition: transform 0.3s ease;
+  flex: 1 1 calc(25% - 20px);
+  max-width: calc(25% - 20px);
+
   &:hover {
     transform: translateY(-10px);
   }
+
+  @media (max-width: 768px) {
+    flex: 1 1 calc(50% - 20px); /* 2 products per row on smaller screens */
+    max-width: calc(50% - 20px);
+  }
+
+  @media (max-width: 480px) {
+    flex: 1 1 100%; /* 1 product per row on very small screens */
+    max-width: 100%;
+  }
 `;
 
+
 export const ProductImage = styled.img`
-  max-width:280px;
+  max-width: 100%;
   height: 300px;
   object-fit: cover;
 `;
@@ -37,6 +53,7 @@ export const ProductPrice = styled.p`
   color: #777;
   margin: 10px;
 `;
+
 export const SizeSelect = styled.select`
   margin: 10px 0;
   padding: 8px;

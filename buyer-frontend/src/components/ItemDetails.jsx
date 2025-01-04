@@ -61,16 +61,16 @@ const ItemDetails = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-      if (!selectedSize) {
-        alert("Please select a size.");
-        return;
-      }
-
+    if (!selectedSize) {
+      alert("Please select a size.");
+      return;
+    }
+  
     if (!selectedColor) {
       alert("Please select a color.");
       return;
     }
-
+  
     const cartData = {
       item_id: product._id,
       size: selectedSize,
@@ -81,13 +81,29 @@ const ItemDetails = () => {
       email:product.email,
       price:product.price
     };
-
+  
     try {
       const deviceId=await getOrCreateDeviceId()
       const userId=checkUserLoginStatus()
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, cartData);
       if (response.status === 201 || response.status === 200) {
-        alert("Item added to cart successfully!");
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  
+        // Check if the item already exists in the cart
+        const itemIndex = cart.findIndex((item) => item.item_id === cartData.item_id);
+  
+        if (itemIndex !== -1) {
+          // Update the existing item
+          cart[itemIndex] = { ...cart[itemIndex], ...cartData };
+          alert("Item updated in the cart successfully!");
+        } else {
+          // Add new item to the cart
+          cart.push(cartData);
+          alert("Item added to cart successfully!");
+        }
+  
+        // Save the updated cart to localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
       } else {
         alert("Failed to add item to cart.");
       }
@@ -96,7 +112,8 @@ const ItemDetails = () => {
       alert("There was an issue adding the item to the cart.");
     }
   };
-
+  
+  
   if (!product) {
     return <div>Loading...</div>;
   }
@@ -109,7 +126,6 @@ const ItemDetails = () => {
     setIsInWishlist(!isInWishlist); // Toggle the wishlist status
   };
 
-  // Split the sizes and colors from the fetched strings, with safety checks
   const sizesArray = product?.sizes?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
   const colorsArray = product?.colors?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
 

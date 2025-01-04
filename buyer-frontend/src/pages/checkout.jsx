@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import styled from "styled-components";
 import AddressPage from "./address.jsx";
 import { useNavigate } from "react-router-dom";
@@ -87,60 +87,130 @@ const Label = styled.label`
   }
 `;
 
-const CheckoutPage = () => {
-  const navigate = useNavigate();
-  const handleProceedToPay = () => {
-    // Navigate to PaymentPage with totalAmount as state
-    navigate("/payment", { state: { totalAmount } });
-  };
-  const orderItems = [
-    { name: "Shirt", quantity: 2, price: 1000 },
-    { name: "Jeans", quantity: 1, price: 1500 },
-  ];
 
+
+// ... Styled components for OrderSummary, PaymentOptions, etc.
+
+const CheckoutPage = () => {
+  const [orderItems, setOrderItems] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch or filter selected items (example assumes fetching from localStorage or API)
+    const cartData = JSON.parse(localStorage.getItem("cart")) || []; // Replace with API call if needed
+    console.log("cartData101>>>>>>>>",cartData)
+    const selectedItems = cartData.filter((item) => item.isSelected); // Adjust based on your data structure
+    console.log("selectedItems>>>>>>>>",selectedItems)
+
+    setOrderItems(cartData);
+  }, []);
+
+   const handleRazorpayPayment = async () => {
+    try {
+      const order = await fetch(`${process.env.REACT_APP_BASE_URL_Buyer}/create-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: totalAmount }), // Pass total amount
+      }).then((res) => res.json());
+
+      const options = {
+        key: "rzp_test_ppnch0jTkkUkKU", 
+        amount: order.amount,
+        currency: order.currency,
+        name: "Men's Wear Store",
+        description: "Purchase Men's Wear",
+        image: "https://your-logo-url.com",
+        order_id: order.id,
+        handler: (response) => {
+          // alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+          navigate("/order-history"); // Redirect to order history page on success
+        },
+        prefill: {
+          name: "Customer Name",
+          email: "customer@example.com",
+          contact: "9876543210",
+        },
+        notes: {
+          address: "Customer Address",
+        },
+        modal: {
+          iframe: false,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Error initiating Razorpay payment:", error);
+      alert("Failed to initiate payment. Please try again.");
+    }
+  };
   const totalAmount = orderItems.reduce(
-    (total, item) => total + item.quantity * item.price,
+    (total, item) => total + item.count * item.price,
     0
   );
+  console.log("totalAmount>>>>>>>>",totalAmount)
+
+
+
 
   return (
-   <>
-    <Header/>
-    <CheckoutPageContainer>
-      <AddressPage />
+    <>
+      <Header />
+      <CheckoutPageContainer>
+        <AddressPage />
 
-      <OrderSummary>
-        <Heading>Order Summary</Heading>
-        {orderItems.map((item, index) => (
-          <SummaryItem key={index}>
-            <span>
-              {item.name} (x{item.quantity})
-            </span>
-            <span>₹{item.quantity * item.price}</span>
-          </SummaryItem>
-        ))}
-        <Total>Total: ₹{totalAmount}</Total>
-      </OrderSummary>
+        <OrderSummary>
+          <Heading>Order Summary</Heading>
+          {orderItems.length > 0 ? (
+            orderItems.map((item, index) => (
+              <SummaryItem key={index}>
+                 <span>
+                 <img src={item.images} alt={item.name} width="50" height="50" />
+                 </span>
+                <span>
+                  {item.name} (x{item.count})
+                </span>
+                <span>
+                  {item.color} 
+                </span>
+                <span>
+                  {item.size} 
+                </span>
+                <span>₹{item.count * item.price}</span>
+              </SummaryItem>
+            ))
+          ) : (
+            <p>No items selected for purchase.</p>
+          )}
+          <Total>Total: ₹{totalAmount}</Total>
+        </OrderSummary>
 
-      <PaymentOptions>
-        <Heading>Payment Options</Heading>
-        <Label>
-          <input type="radio" name="payment" value="cod" /> Cash on Delivery
-        </Label>
-        <Label>
-          <input type="radio" name="payment" value="card" /> Credit/Debit Card
-        </Label>
-        <Label>
-          <input type="radio" name="payment" value="upi" /> UPI
-        </Label>
-        <PaymentButton onClick={handleProceedToPay}>
-          Proceed to Pay
-        </PaymentButton>      </PaymentOptions>
-    
-    </CheckoutPageContainer>
-    <Footer/>
+        <PaymentOptions>
+          <Heading>Payment Options</Heading>
+          <Label>
+            <input type="radio" name="payment" value="cod" /> Cash on Delivery
+          </Label>
+          <Label>
+            <input type="radio" name="payment" value="card" /> Credit/Debit Card
+          </Label>
+          <Label>
+            <input type="radio" name="payment" value="upi" /> UPI
+          </Label>
+          <PaymentButton onClick={handleRazorpayPayment}>
+            Proceed to Pay
+          </PaymentButton>
+        </PaymentOptions>
+      </CheckoutPageContainer>
+      <Footer />
     </>
   );
 };
 
 export default CheckoutPage;
+

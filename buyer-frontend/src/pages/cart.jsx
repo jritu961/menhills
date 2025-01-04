@@ -276,8 +276,18 @@ const AddToCartPage = () => {
       const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${item.item_id}`);
       // Assuming response contains updated cart data
       setCartItems(Array.isArray(response.data.data) ? response.data.data : []);
-      fetchCartItems(); 
 
+      const updatedCartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Filter out the item to remove it from the cart in localStorage
+    const filteredCartItems = updatedCartItems.filter(
+      (e) => e.item_id !== item.item_id
+    );
+
+    // Update localStorage with the new cart items
+    localStorage.setItem('cart', JSON.stringify(filteredCartItems));
+      fetchCartItems(); 
+  
     } catch (err) {
       setError(err.message);
     }
@@ -287,7 +297,7 @@ const AddToCartPage = () => {
     try {
       const userId = checkUserLoginStatus(); // Ensure this function is defined and returns a user ID
       const deviceId = await getOrCreateDeviceId(); // Ensure this function returns a valid device ID
-      
+  
       // Make the API request
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`);
       console.log("API Response:", response.data);
@@ -303,7 +313,7 @@ const AddToCartPage = () => {
   };
   
   
-
+  
   useEffect(() => {
     fetchCartItems();
   }, [ ])
