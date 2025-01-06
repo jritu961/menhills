@@ -15,18 +15,23 @@ import { useNavigate } from "react-router-dom";
 
 export const NavbarComponent = () => {
   const navigate = useNavigate();
-
+  
   const handleUserClick = () => {
-    navigate("/login"); // Redirect to the login page
+    const token=localStorage.getItem("authToken")
+  console.log("🚀 ~ NavbarComponent ~ ̥:",token)
+    if(!token){
+      navigate("/login"); // Redirect to the login page
+
+    }
+    navigate("/my-info"); // Redirect to the login page
+
   };
 
   const handleLogout = () => {
     // Clear authentication tokens or session
-    localStorage.removeItem("authToken"); // Example if you're using localStorage
-    sessionStorage.removeItem("authToken"); // Example if you're using sessionStorage
-    localStorage.removeItem("userId"); 
+    localStorage.clear(); // Removes all items from localStorage
+
     
-    // Redirect to login page
     navigate("/login");
   };
   const handlecartClick = () => {

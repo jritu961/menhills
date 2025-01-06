@@ -87,23 +87,23 @@ const ItemDetails = () => {
       const userId=checkUserLoginStatus()
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, cartData);
       if (response.status === 201 || response.status === 200) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // let cart = JSON.parse(localStorage.getItem('cart')) || [];
   
         // Check if the item already exists in the cart
-        const itemIndex = cart.findIndex((item) => item.item_id === cartData.item_id);
+        // const itemIndex = cart.findIndex((item) => item.item_id === cartData.item_id);
   
-        if (itemIndex !== -1) {
-          // Update the existing item
-          cart[itemIndex] = { ...cart[itemIndex], ...cartData };
-          alert("Item updated in the cart successfully!");
-        } else {
-          // Add new item to the cart
-          cart.push(cartData);
-          alert("Item added to cart successfully!");
-        }
+        // if (itemIndex !== -1) {
+        //   // Update the existing item
+        //   cart[itemIndex] = { ...cart[itemIndex], ...cartData };
+        //   alert("Item updated in the cart successfully!");
+        // } else {
+        //   // Add new item to the cart
+        //   cart.push(cartData);
+        //   alert("Item added to cart successfully!");
+        // }
   
-        // Save the updated cart to localStorage
-        localStorage.setItem("cart", JSON.stringify(cart));
+        // // Save the updated cart to localStorage
+        // localStorage.setItem("cart", JSON.stringify(cart));
       } else {
         alert("Failed to add item to cart.");
       }

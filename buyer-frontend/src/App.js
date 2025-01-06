@@ -14,6 +14,8 @@ import AddressPage from "./pages/address.jsx"
 import CheckoutPage from "./pages/checkout.jsx"
 import RazorPayPaymentPage from './pages/razorpayPayment.jsx';
 import OrderHistoryPage from "./pages/orderHistory.jsx"
+import UserProfile from "./pages/profile.jsx"
+import Wishlist from "./components/wishlist.jsx"
 const App = () => {
   return (
     <Router>
@@ -28,6 +30,9 @@ const App = () => {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/payment" element={<RazorPayPaymentPage />} />
         <Route path="/order-history" element={<OrderHistoryPage />} />
+        <Route path="/my-info" element={<UserProfile/>}/>
+        <Route path="/wishlist" element={<Wishlist />} />
+
 
       </Routes>
     </Router>
