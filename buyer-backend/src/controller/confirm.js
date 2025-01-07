@@ -6,18 +6,18 @@ import Order from '../model/order.js'; // Import the Order model
 
 
 export async function confirmOrder(req, res) {
-    const { orderId } = req.body;
-    console.log("orderId received:", orderId);
+    const { id } = req.body;
+    console.log("orderId received:", id);
     
     // Validate the orderId format using Mongoose's ObjectId.isValid
-    if (!mongoose.Types.ObjectId.isValid(orderId)) {
-        return res.status(400).json({ success: false, message: 'Invalid order ID format' });
+    if (!id) {
+        return res.status(400).json({ success: false, message: 'Order is is necessary' });
     }
 
     try {
         // Attempt to find the order and update it atomically
         const result = await Order.findOneAndUpdate(
-            { _id: orderId },  // Find the order by ID
+            { _id: id },  // Find the order by ID
             {
                 $set: {
                     is_order_confirmed: true,  // Mark as confirmed
