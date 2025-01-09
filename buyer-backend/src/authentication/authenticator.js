@@ -6,20 +6,17 @@ import { verifyJwtToken } from './validateToken.js';
  */
 export const authentication = () => async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log("🚀 ~ authentication ~ authHeader:", authHeader)
 
   if (!authHeader) {
     return handleError(res, 'Authentication failed: Missing Authorization header');
   }
 
   const token = authHeader.split(' ')[1]; // Extract the token from the 'Bearer' header
-  console.log("🚀 ~ authentication ~ token:", token)
 
   try {
     // Verify JWT token
     const decodedToken = verifyJwtToken(token);
 
-    console.log('Decoded Token:', decodedToken); // Log the decoded token for debugging
 
     // If uid is missing in the decoded token, throw an error
     if (!decodedToken || !decodedToken.uid) {

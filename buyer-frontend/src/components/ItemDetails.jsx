@@ -46,7 +46,6 @@ const ItemDetails = () => {
     const fetchData = async () => {
       try {
         const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products/${id}`);
-        console.log("Fetched Product:", result.data.product);
         setProduct(result.data.product);
 
         if (result.data.product.images?.length) {

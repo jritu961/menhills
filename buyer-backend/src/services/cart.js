@@ -4,7 +4,6 @@ import User from "../model/usermodel.js";
 
 class CartService {
   async addItem(data) {
-    console.log("🚀 ~ CartService ~ addItem ~ data:", data);
     try {
       let cart;
       // Find or create user cart based on deviceId and userId
@@ -21,11 +20,9 @@ class CartService {
           { $set: { email:data.email } }, 
           { upsert: false }
       );
-        console.log("🚀 ~ CartService ~ addItem ~ updatedUser:", updatedUser)
       
         
         cart = await Cart.findOne({ device_id: data.deviceId, userId: data.userId });
-        console.log("🚀 ~ CartService ~ addItem ~ cart:", cart)
       }
 
       if (!cart && data.deviceId && data.deviceId !== "undefined") {
@@ -36,19 +33,18 @@ class CartService {
       }
 
       if (cart) {
-        console.log("🚀 ~ CartService ~ addItem ~ cart._id:", cart._id)
-        console.log("🚀 ~ CartService ~ addItem ~ data.id:", data.item_id)
+
         // Check if the item already exists in the cart
         const existingItem = await CartItem.findOne({ item_id: data.item_id }).lean();
         
-        console.log("🚀 ~ CartService ~ addItem ~ existingItem:", existingItem)
+       
+
         if (existingItem) {
             const updateData = await CartItem.findOneAndUpdate(
-                { id: data.id, cart: cart._id },
-                { $inc: { count: 1 } },
+                { item_id: data.item_id, cart: cart._id },
+                { $inc: { count: data.count} },
                 { new: true }
             );
-            console.log("Updated Item: ", updateData);
             return { status: "success", data: updateData };
         }
         
@@ -66,8 +62,6 @@ class CartService {
           size:data.size
       
         });
-          console.log("🚀 ~ CartService ~ addItem ~ size:data.size:69", data)
-        console.log("🚀 ~ CartService ~ addItem ~ cartItem:", cartItem)
 
         return await cartItem.save();
       } else {
@@ -87,6 +81,7 @@ class CartService {
           id: data.id,
           count: data.count,
           images: data.images,
+          price:data.price,
           name: data.name,
           customisationState: data?.customisationState || null,
           customisations: data?.customisations || null,
@@ -94,9 +89,7 @@ class CartService {
           color:data.color,
           size:data.size
         });
-        console.log("🚀 ~ CartService ~ addItem ~ size:data.size:98", data)
-
-        console.log("🚀 ~ CartService ~ addItem ~ cartItem:", cartItem)
+      
 
         return await cartItem.save();
       }
@@ -106,7 +99,6 @@ class CartService {
   }
 
   async updateItem(data) {
-    console.log("🚀 ~ CartService ~ updateItem ~ data:", data)
     try {
      
         const updateData = await CartItem.findOneAndUpdate(
@@ -116,8 +108,7 @@ class CartService {
           { $set: { count: data?.count ,price:data?.price} },
           { new: true }
         );
-            console.log("🚀 ~ CartService ~ updateItem ~ data.cart:", data.cart)
-        console.log("🚀 ~ CartService ~ updateItem ~ updateData:", updateData)
+         
         return updateData;
       
     } catch (err) {

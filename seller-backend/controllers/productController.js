@@ -8,8 +8,7 @@ export const addProduct = async (req, res) => {
     const { name, price, category} = req.body;
     const { files } = req;  // Multer stores the file in req.file for single uploads
 
-    console.log("🚀 ~ addProduct ~ req.body:", req.body);
-    console.log("🚀 ~ addProduct ~ req.file:", files);
+ 
     if (!name || !price || !category || !files) {
       return res.status(400).json({ message: "Name, price,images and category are required" });
     }

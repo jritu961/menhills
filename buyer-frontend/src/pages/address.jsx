@@ -129,12 +129,10 @@ const AddressPage = () => {
   useEffect(() => {
     const fetchAddresses = async () => {
       const token = localStorage.getItem("authToken");
-      console.log("🚀 ~ fetchAddresses ~ token:", token);
       try {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/delivery_address`, {
           headers: { authorization: `Bearer ${token}` }
         });
-        console.log("🚀 ~ fetchAddresses ~ response:", response.data)
 
         setAddresses(response.data); // Assuming the API returns an array of addresses
       } catch (error) {
@@ -157,7 +155,6 @@ const AddressPage = () => {
   // Add a new address
   const addAddress = async () => {
     if (newAddress.name && newAddress.city && newAddress.street) {
-      console.log("🚀 ~ addAddress ~ newAddress:", newAddress);
 
       const addressPayload = {
         userId: "6773abd980b28ae234a19894", // You may need to replace with dynamic value
@@ -198,11 +195,10 @@ const AddressPage = () => {
 
       try {
         const token = localStorage.getItem("authToken");
-        console.log("🚀 ~ addAddress ~ addressPayload:201", addressPayload)
 
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/delivery_address`, addressPayload, {
           headers: {
-            Authorization: `Bearer ${token}`
+            authorization: `Bearer ${token}`
           }
         });
 
@@ -233,7 +229,6 @@ const AddressPage = () => {
 
   // Delete an address
   const deleteAddress = async (id) => {
-  console.log("🚀 ~ deleteAddress ~ id:", id)
   try {
     const result = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/delete_delivery_address/${id}`, {
       headers: {

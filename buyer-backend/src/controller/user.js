@@ -27,7 +27,6 @@ export const registerUser = async (req, res) => {
     const user = await User.findOne({
       $or: [{ email }, { phone }],
     });
-    console.log("🚀 ~ registerUser ~ user:", user)
 
     if (user) {
       // Check which field already exists
@@ -41,7 +40,6 @@ export const registerUser = async (req, res) => {
 
     // Hash the password before saving it
     const salt = await bcrypt.genSalt(10);
-    console.log("🚀 ~ registerUser ~ salt:", salt)
     
     const hashedPassword = await bcrypt.hash(password, salt);
 

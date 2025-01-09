@@ -12,8 +12,6 @@ class DeliveryAddressController {
    */
   deliveryAddress(req, res, next) {
     const { body: request, user } = req;
-    console.log("🚀 ~ DeliveryAddressController ~ deliveryAddress ~ user:", user)
-    console.log("🚀 ~ DeliveryAddressController ~ deliveryAddress ~ request:", request)
 
     deliveryAddressService
       .deliveryAddress(request, user)
@@ -60,7 +58,6 @@ class DeliveryAddressController {
       deliveryAddressService
         .updateDeliveryAddress(id, request, user?.decodedToken?.uid)
         .then((response) => {
-          console.log("🚀 ~ DeliveryAddressController ~ .then ~ response:", response)
           res.json(response);
         })
         .catch((err) => {

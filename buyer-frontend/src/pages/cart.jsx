@@ -248,7 +248,6 @@ const TotalText = styled.h3`
 // Component
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState([]);
-  console.log(cartItems,'cartItems')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const TAX_RATE = 0.1; // 10% tax
@@ -259,7 +258,6 @@ const AddToCartPage = () => {
 
   // Remove item from cart
   const handleCheckout = async () => {
-    console.log("Navigating to checkout");
     navigate('/checkout');
   };
   
@@ -267,24 +265,18 @@ const AddToCartPage = () => {
     try {
       const item = cartItems.find((item) => item._id === id);
 
-      console.log("🚀 ~ handleQuantityChange ~ cartItems:", cartItems)
-      if (!item) return; // Exit if the item is not found
+      if (!item) return; 
   
-      // Ensure quantity is at least 1
-      const userId = checkUserLoginStatus(); // Ensure user is logged in
-      console.log("🚀 ~ handleRemove ~ userId:", userId)
+      const userId = checkUserLoginStatus(); 
       const response = await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${item.item_id}`);
-      // Assuming response contains updated cart data
       setCartItems(Array.isArray(response.data.data) ? response.data.data : []);
 
       const updatedCartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Filter out the item to remove it from the cart in localStorage
     const filteredCartItems = updatedCartItems.filter(
       (e) => e.item_id !== item.item_id
     );
 
-    // Update localStorage with the new cart items
     localStorage.setItem('cart', JSON.stringify(filteredCartItems));
       fetchCartItems(); 
   
@@ -295,18 +287,13 @@ const AddToCartPage = () => {
   
   const fetchCartItems = async () => {
     try {
-      const userId = checkUserLoginStatus(); // Ensure this function is defined and returns a user ID
-      const deviceId = await getOrCreateDeviceId(); // Ensure this function returns a valid device ID
+      const userId = checkUserLoginStatus(); 
+      const deviceId = await getOrCreateDeviceId(); 
   
-      // Make the API request
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`);
-      console.log("API Response:", response.data);
-  
-      // Set cartItems from the response if it's an array
       setCartItems(Array.isArray(response.data.data) ? response.data.data : []);
-      setLoading(false); // Set loading state to false once data is fetched
+      setLoading(false); 
     } catch (err) {
-      // Handle errors if API call fails
       setError(err.message);
       setLoading(false);
     }
@@ -316,10 +303,9 @@ const AddToCartPage = () => {
   
   useEffect(() => {
     fetchCartItems();
-  }, [ ])
+  }, [])
   // Update item quantity
   const handleQuantityChange = async (id, increment) => {
-    console.log("🚀 ~ handleQuantityChange ~ id:", id);
   
     try {
       // Find the specific item in the cart

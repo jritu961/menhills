@@ -39,7 +39,6 @@ router.get("/users",async (req,res) => {
  })
 //  for testing
 router.get("/users/:id",async (req,res) => {
-    console.log('req.params.id',req.params.id)
     let data = await User.findOne({userId : req.params.id});
  
      res.status(200).json({"use": "testing",
@@ -78,7 +77,6 @@ router.get("/fulfillment-History",async (req,res) => {
  })
  })
 router.get("/orders/:id",async (req,res) => {
-    console.log('req.params.id',req.params.id)
     let data = await Order.findOne({id: req.params.id});
     if(!data) {
      data = await Order.findOne({userId: req.params.id});

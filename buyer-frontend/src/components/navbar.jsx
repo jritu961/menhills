@@ -18,7 +18,6 @@ export const NavbarComponent = () => {
   
   const handleUserClick = () => {
     const token=localStorage.getItem("authToken")
-  console.log("🚀 ~ NavbarComponent ~ ̥:",token)
     if(!token){
       navigate("/login"); // Redirect to the login page
 

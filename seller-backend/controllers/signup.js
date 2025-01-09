@@ -17,7 +17,6 @@ try{
      const userRole = role || 'user';
 
     const hashPassword=await bcrypt.hash(password,10)
-    console.log("🚀 ~ registerUser ~ hashPassword:", hashPassword)
     await User.create({
         name,email,password:hashPassword,role
     })

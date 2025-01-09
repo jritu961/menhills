@@ -9,8 +9,6 @@ class DeliveryAddressService {
    * @param {Object} user
    */
   async deliveryAddress(request = {}, user = {}) {
-    console.log("🚀 ~ DeliveryAddressService ~ deliveryAddress ~ request:", request)
-    console.log("🚀 ~ DeliveryAddressService ~ deliveryAddress ~ user:13", user)
     try {
       const deliveryAddressSchema = {
         userId: user?.decodedToken?.uid,
@@ -54,11 +52,9 @@ class DeliveryAddressService {
   async onDeliveryAddressDetails(user = {}) {
     try {
       const userId = user?.decodedToken?.uid ? user?.decodedToken?.uid : (user?.decodedToken?.user_id || user?.decodedToken?.userId)
-      console.log("🚀 ~ DeliveryAddressService ~ onDeliveryAddressDetails ~ userId:", userId)
       const deliveryAddressDetails = await DeliveryAddressMongooseModel.find({
         userId: userId, address: { $ne: null },
       });
-      console.log("🚀 ~ DeliveryAddressService ~ onDeliveryAddressDetails ~ deliveryAddressDetails:", deliveryAddressDetails)
 
       return deliveryAddressDetails;
     } catch (err) {
@@ -98,7 +94,6 @@ class DeliveryAddressService {
           }
         );
       storedDeliveryAddress = storedDeliveryAddress?.toJSON();
-      console.log("🚀 ~ DeliveryAddressService ~ updateDeliveryAddress ~ storedDeliveryAddress:", storedDeliveryAddress)
 
       if (storedDeliveryAddress)
         return {
@@ -117,12 +112,12 @@ class DeliveryAddressService {
   }
 
   async deleteDeliveryAddress(id) {
-    console.log("🚀 ~ DeliveryAddressService ~ deleteDeliveryAddress ~ id:", id)
+
     try {
       const deliveryAddressDetails =
         await DeliveryAddressMongooseModel.deleteOne({ _id: id });
-        console.log("🚀 ~ DeliveryAddressService ~ deleteDeliveryAddress ~ deliveryAddressDetails:", deliveryAddressDetails)
 
+        
       if (deliveryAddressDetails.deletedCount === 0) {
         return "Delivery address not found or already deleted."
 

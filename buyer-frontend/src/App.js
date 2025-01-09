@@ -29,7 +29,7 @@ const App = () => {
         <Route path="/address" element={<AddressPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/payment" element={<RazorPayPaymentPage />} />
-        <Route path="/order-history" element={<OrderHistoryPage />} />
+        <Route path="/order" element={<OrderHistoryPage />} />
         <Route path="/my-info" element={<UserProfile/>}/>
         <Route path="/wishlist" element={<Wishlist />} />
 

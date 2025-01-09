@@ -52,7 +52,7 @@ const RazorPayPaymentPage = ({ totalAmount }) => {
         order_id: order.id,
         handler: (response) => {
           // alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-          navigate("/order-history"); // Redirect to order history page on success
+          navigate("/order"); // Redirect to order history page on success
         },
         prefill: {
           name: "Customer Name",

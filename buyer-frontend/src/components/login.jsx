@@ -39,11 +39,9 @@ const LoginPage = () => {
         password,
       });
 
-      console.log('Login successful:', response.data.user.id);
       
       // Handle the response (e.g., store the token, navigate to another page)
       const { token } = response.data;
-      console.log("🚀 ~ handleLogin ~ token:", token);
       localStorage.setItem('authToken', token); // Save token to local storage
       localStorage.setItem('userId', response.data.user.id);
 

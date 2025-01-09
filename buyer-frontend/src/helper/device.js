@@ -4,7 +4,6 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 export const generateUniqueBrowserId = async () => {
   const fp = await FingerprintJS.load();
   const result = await fp.get();
-  console.log("🚀 ~ generateUniqueBrowserId ~ result:", result);
 
   // Store the visitorId in local storage as deviceId
   localStorage.setItem('deviceId', result.visitorId);

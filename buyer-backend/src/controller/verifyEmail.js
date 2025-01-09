@@ -9,20 +9,17 @@ import sendEmail from "../utils/nodemailer.js"
 const generateOtp = async (req, res) => {
   try {
     const { userId } = req.query; // Correcting from `req.param` to `req.params`
-    console.log("🚀 ~ generateOtp ~ userId:", userId);
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required." });
     }
 
-    console.log("🚀 ~ generateOtp ~ userId:", userId);
 
     // Generate a 6-digit OTP
     const otp = crypto.randomInt(100000, 999999).toString();
 
     // Get the current user from the database
     const user = await User.findById(userId);
-    console.log("🚀 ~ generateOtp ~ user:", user)
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
@@ -35,7 +32,6 @@ const generateOtp = async (req, res) => {
     user.emailOtpExpires = otpExpires;
 
     await user.save(); // Save the updated user document
-    console.log("🚀 ~ generateOtp ~ user:39", user)
 
     await sendEmail(
       user.email,  // 'to' address
@@ -44,7 +40,6 @@ const generateOtp = async (req, res) => {
       ''  // HTML body (optional, leave empty if not needed)
     );
     
-    console.log("OTP generated successfully:", otp);
     return res.status(200).json({ message:"OTP generated successfully:" });
   } catch (error) {
     console.error("Error generating OTP:", error.message);

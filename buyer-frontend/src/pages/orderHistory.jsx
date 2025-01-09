@@ -156,56 +156,36 @@ const OrderHistoryPage = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+  const token=localStorage.getItem("authToken")
   useEffect(() => {
     const fetchOrders = async () => {
-      const fetchedOrders = [
-        {
-          orderId: 'ORD123',
-          date: '2025-01-01',
-          amount: 2500,
-          status: 'Completed',
-          products: [
-            {
-              image: 'https://via.placeholder.com/50',
-              name: 'Men\'s T-Shirt',
-              price: 500,
-              color: 'Red',
-            },
-          ],
-        },
-        {
-          orderId: 'ORD124',
-          date: '2025-01-02',
-          amount: 3000,
-          status: 'Pending',
-          products: [
-            {
-              image: 'https://via.placeholder.com/50',
-              name: 'Women\'s Jacket',
-              price: 1500,
-              color: 'Black',
-            },
-          ],
-        },
-        {
-          orderId: 'ORD125',
-          date: '2025-01-03',
-          amount: 1500,
-          status: 'Cancelled',
-          products: [
-            {
-              image: 'https://via.placeholder.com/50',
-              name: 'Men\'s Jeans',
-              price: 1200,
-              color: 'Blue',
-            },
-          ],
-        },
-      ];
-      setOrders(fetchedOrders);
-      setFilteredOrders(fetchedOrders);
+      try {
+        const fetchedOrders = await fetch(`${process.env.REACT_APP_BASE_URL_Buyer}/order`, {
+          method: 'GET', // Explicitly specify the HTTP method
+          headers: {
+            "Content-Type": "application/json", // Include Content-Type for JSON payloads
+            "Authorization": `Bearer ${token}`, // Use proper capitalization for Authorization header
+          },
+        });
+    
+        // Check for errors in the response
+        if (!fetchedOrders.ok) {
+          console.error("Error fetching orders:", fetchedOrders.statusText);
+          throw new Error(`Failed to fetch orders: ${fetchedOrders.statusText}`);
+        }
+    
+        // Parse the JSON response
+        const orders = await fetchedOrders.json();
+        console.log("🚀 ~ fetchOrders ~ orders:", orders);
+    
+        // Set the parsed data to state
+        setOrders(orders.data);
+        setFilteredOrders(orders.data);
+      } catch (error) {
+        console.error("Error in fetchOrders:", error.message);
+      }
     };
+    
 
     fetchOrders();
   }, []);
@@ -236,26 +216,16 @@ const OrderHistoryPage = () => {
       <OrdersContainer>
         <h2>Order History</h2>
         {filteredOrders.map((order) => (
-          <OrderCard key={order.orderId}>
+          <OrderCard key={order._id}>
             <OrderHeader>
               <div>
-                <OrderId>{order.orderId}</OrderId>
-                <OrderDate>{order.date}</OrderDate>
+                <OrderId>{order._id}</OrderId>
+                <OrderDate>{order.createdAt}</OrderDate>
               </div>
               <OrderAmount>₹{order.amount}</OrderAmount>
             </OrderHeader>
-            <OrderStatus status={order.status}>{order.status}</OrderStatus>
-            <div>
-              {order.products.map((product, index) => (
-                <ProductDetails key={index}>
-                  <ProductImage src={product.image} alt={product.name} />
-                  <ProductInfo>
-                    <ProductName>{product.name}</ProductName>
-                    <ProductColor>Color: {product.color}</ProductColor>
-                  </ProductInfo>
-                </ProductDetails>
-              ))}
-            </div>
+            <OrderStatus status={order.status}>{order.is_order_confirmed}</OrderStatus>
+            
           </OrderCard>
         ))}
       </OrdersContainer>

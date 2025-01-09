@@ -124,13 +124,13 @@ const Sidebar = () => {
       <Overlay isOpen={isOpen} onClick={() => setIsOpen(false)} />
       <SidebarContainer isOpen={isOpen}>
         <SidebarHeader isOpen={isOpen}>My Dashboard</SidebarHeader>
-        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/order-history")}>
+        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/order")}>
           <SidebarIcon>
             <FaShoppingBag />
           </SidebarIcon>
           <span>Order Details</span>
         </SidebarItem>
-        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/order-history")}>
+        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/order")}>
           <SidebarIcon>
             <FaUndo />
           </SidebarIcon>

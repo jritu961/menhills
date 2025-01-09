@@ -10,9 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'ritujaiswal';
  * @returns {object} - The decoded token.
  */
 export const verifyJwtToken = (token, secretKey = JWT_SECRET) => {
-  console.log("🚀 ~ verifyJwtToken ~ token:", token)
   try {
-    console.log("🚀 ~ verifyJwtToken ~ JWT_SECRET:", JWT_SECRET)
 
     return jwt.verify(token, secretKey);
   } catch (error) {

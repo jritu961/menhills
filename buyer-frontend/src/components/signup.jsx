@@ -80,7 +80,6 @@ const RegisterPage = () => {
     try {
       const userId = localStorage.getItem("userId");
       await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/verify?userId=${userId}&otp=${otp}`);
-      console.log('OTP verified successfully');
       setOtpError('');  // Reset OTP error state
       setModalOpen(false);  // Close the modal after successful OTP verification
       toast.success('Verification Successful! Redirecting to login...');  // Show success message

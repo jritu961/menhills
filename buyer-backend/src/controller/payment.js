@@ -8,13 +8,23 @@ const razorpay = new Razorpay({
   key_secret: "yydc1erOVUl4u53UFj9jtFSI",
 });
 
+const createRazorpayOrder = (orderData) => {
+  return new Promise((resolve, reject) => {
+    razorpay.orders.create(orderData, (err, order) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(order);
+      }
+    });
+  });
+};
 export const createOrder = async (req, res) => {
   const { amount, billing, quote } = req.body;
-  console.log("🚀 ~ createOrder ~ req.body:", req.user);
    const {uid:userId}=req.user.decodedToken 
   try {
     // Create Razorpay order
-    const razorpayOrder = razorpay.orders.create({
+    const razorpayOrder =await createRazorpayOrder({
       amount: amount * 100, // Amount in paise
       currency: 'INR',
       receipt: `receipt-${Date.now()}`,
@@ -30,11 +40,11 @@ export const createOrder = async (req, res) => {
       transactionId: razorpayOrder.receipt, // Use the receipt or any identifier
     };
 
-   await saveOrderInDB(orderData);
+   const result=await saveOrderInDB(orderData);
 
     // Respond with success
     res.json({
-
+      _id:result._id,
       id: razorpayOrder.id,
       amount: amount * 100, // Send amount in paise
        "currency": "INR"
@@ -51,7 +61,6 @@ export const createOrder = async (req, res) => {
 export const verifyPayment = (req, res) => {
   try {
     const { payment_id, order_id, signature } = req.body; // Data received from frontend
-    console.log("🚀 ~ verifyPayment ~ req.body:", req.body)
 
     if (!payment_id || !order_id || !signature) {
       return res.status(400).json({
@@ -63,17 +72,14 @@ export const verifyPayment = (req, res) => {
     // Concatenate order_id and payment_id to create the body
     const body = `${order_id}|${payment_id}`;
 
-    console.log("🚀 ~ verifyPayment ~ body:", body)
     // Generate a Razorpay signature using the key secret from environment variables
     const generated_signature = crypto
       .createHmac("sha256", "yydc1erOVUl4u53UFj9jtFSI") // Use key secret from environment variables
       .update(body)
       .digest("hex");
-      console.log("🚀 ~ verifyPayment ~ generated_signature:", generated_signature)
 
     // Compare generated signature with the received signature
     if (generated_signature === signature) {
-      console.log("Payment verified successfully:", { payment_id, order_id });
       return res.status(200).json({
         success: true,
         message: "Payment verified successfully",

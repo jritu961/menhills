@@ -5,7 +5,6 @@ const cartService = new CartService();
 class CartController {
 
     async addItem(req, res, next) {
-    console.log("🚀 ~ CartController ~ addItem ~ req:***********", req.body)
 
         try {
             const { deviceId, userId } = req.params
@@ -23,9 +22,7 @@ class CartController {
     async getCartItem(req, res) {
         try {
           const { deviceId, userId } = req.params;
-      
-          console.log("🚀 ~ CartController ~ getCartItem ~ deviceId:", deviceId);
-      
+            
           // Validate input parameters
           if ((!userId || userId === "guestUser") && (!deviceId || ["null", "undefined"].includes(deviceId))) {
             return res.status(400).json({ 
@@ -39,7 +36,6 @@ class CartController {
             ...req.query, 
             ...req.params 
           });
-          console.log("🚀 ~ CartController ~ getCartItem ~ cartItem:", cartItem)
       
           // Return data in the response
           return res.status(200).json({
@@ -58,14 +54,9 @@ class CartController {
 
       async updateItem(req, res, next) {
         try {
-            console.log("🚀 ~ CartController ~ updateItem ~ req.body:", req.body);
     
-            // Call the service and get the result
             const result = await cartService.updateItem({ ...req.body, ...req.params });
-            console.log("🚀 ~ CartController ~ updateItem ~ result:", result)
-    
-            // Send a proper response with status code and data
-            if (result) {
+                if (result) {
                 return res.status(200).json({
                     success: true,
                     message: "Item updated successfully",
@@ -94,8 +85,6 @@ class CartController {
         try {
             
             const result=await cartService.removeItem({ ...req.body, ...req.params })
-            console.log("🚀 ~ CartController ~ removeItem ~ req.params:", req.params)
-            console.log("🚀 ~ CartService ~ removeItem ~ result:", result)
       return res.status(200).json({data:result,message:"Deleted Item Successfully"})
         } catch (err) {
             next(err);

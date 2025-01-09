@@ -30,14 +30,10 @@ const ProductSection = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log(
-          "🚀 ~ fetchProducts ~ process.env.REACT_APP_BASE_URL_Seller:",
-          process.env.REACT_APP_BASE_URL_Seller
-        );
+        
         const result = await axios.get(
           `${process.env.REACT_APP_BASE_URL_Seller}/products`
         );
-        console.log("Fetched Products:", result.data.products);
         setProducts(result.data.products); // Update the state with the fetched products
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -51,7 +47,6 @@ const ProductSection = () => {
     <ProductContainer>
       {products.slice(0, 20).map((product) => {
         const imageSrc = product.images[0]; // Build the image URL
-        console.log("Image Source URL:", imageSrc); // Log the image source URL
         return (
           <ProductCard key={product._id}>
             <ProductImage
