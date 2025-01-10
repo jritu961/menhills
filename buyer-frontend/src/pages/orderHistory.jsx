@@ -1,95 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from "../components/header"
-import { NavbarComponentData } from "../components/navbarContent"
-import {NavbarComponent} from "../components/navbar"
+import { Header } from "../components/header";
+import { NavbarComponentData } from "../components/navbarContent";
+import { NavbarComponent } from "../components/navbar";
 import styled from 'styled-components';
-import {Footer} from "../components/footer"
-
-const SidebarContainer = styled.div`
-  width: 250px;
-  padding: 20px;
+import { Footer } from "../components/footer";
+import Sidebar from '../components/sideBar';
+const HeaderContainer = styled.div`
+  display:flex;
+  height: 80px; /* Adjust the height as needed */
+  background-color: #2c3e50;
   color: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+  
   @media (max-width: 768px) {
-    /* display:flex; */
-    gap:5px;
-    width: 200px;
-    left: ${(props) => (props.isOpen ? '0' : '-250px')};
-    top: 0;
-    transition: left 0.3s ease;
+   justify-content:center;
+}
+
+
+`;
+
+const HeaderTitle = styled.h3`
+  font-size: 22px;
+  color: #ecf0f1;
+  @media (max-width: 768px) {
+    /* flex-direction: column; */
+    display:none;
   }
 `;
 
-const SidebarTitle = styled.h3`
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 20px;
+const FilterButtonContainer = styled.div`
+  display: flex;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    /* flex-direction: column; */
+    justify-content:center;
+    align-items: center;
+
+  }
+  @media (max-width: 510px) {
+    gap: 2px;
+    padding:2px;
+}
 `;
 
-const SidebarButton = styled.button`
-  width: 100%;
-  padding: 12px;
+const FilterButton = styled.button`
+  padding: 10px;
   background-color: #f28c00;
   border: none;
-  margin-bottom: 10px;
-  cursor: pointer;
   font-size: 16px;
   font-weight: bold;
   color: white;
-  text-align: left;
+  cursor: pointer;
   border-radius: 5px;
+  transition: background-color 0.3s;
 
   &:hover {
     background-color: #d17a00;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  @media (max-width: 510px) {
+    padding: 3px;
+    display:none;
+    flex-direction:column;
+}
 `;
 
 const OrderHistoryContainer = styled.div`
-  display: flex;
+margin-left:350px;
   flex-direction: row;
-  /* padding-left: 260px; */
-  /* transition: padding-left 0.3s ease; */
-
+  transition: all 0.3s;
   @media (max-width: 768px) {
-    flex-direction: column;
-    padding-left: 0;
+    margin-left:50px;
+  }
+  @media (max-width: 768px) {
+             padding-left: 0;
   }
 `;
 
 const OrdersContainer = styled.div`
-  flex: 1;
-  padding: 40px;
-  background-color: #fff;
+
+display:flex;
+justify-content:center;
+flex-direction:column;
+max-width:100%;
+  padding: 20px;
+  background-color: #f9f9f9;
   overflow-y: auto;
+  box-sizing: border-box;
+  gap: 20px;
 
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 10px;
   }
 `;
 
 const OrderCard = styled.div`
+
   background-color: #fff;
-  padding: 20px;
+  padding: 25px;
   margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  max-width: 850px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeIn 0.5s ease-out;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   }
 
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @media (max-width: 1300px) {
+    max-width: 550px;
+  }
+  @media (max-width: 1300px) {
+    max-width: 380px;
+  }
   @media (max-width: 768px) {
-    padding: 15px;
+    padding: 20px;
   }
 `;
 
 const OrderHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const OrderId = styled.h4`
@@ -104,14 +161,14 @@ const OrderDate = styled.p`
 `;
 
 const OrderAmount = styled.p`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: #f28c00;
 `;
 
 const OrderStatus = styled.div`
-  color: f4a261;
-  padding: 8px 12px;
+  color: #fff;
+  padding: 8px 16px;
   background-color: ${(props) => {
     if (props.status === 'Completed') return '#6c9e3b';
     if (props.status === 'Cancelled') return '#e74c3c';
@@ -126,18 +183,51 @@ const OrderStatus = styled.div`
 const ProductDetails = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 15px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const ProductImage = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
-  border-radius: 5px;
-`;
+  border-radius: 8px;
 
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+  }
+`;
+const ImageContainer = styled.div`
+  flex: 1;
+  background-color: #eef2f3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
 const ProductInfo = styled.div`
   margin-left: 15px;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 const ProductName = styled.p`
@@ -155,40 +245,34 @@ const OrderHistoryPage = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const token=localStorage.getItem("authToken")
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const fetchedOrders = await fetch(`${process.env.REACT_APP_BASE_URL_Buyer}/order`, {
-          method: 'GET', // Explicitly specify the HTTP method
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json", // Include Content-Type for JSON payloads
-            "Authorization": `Bearer ${token}`, // Use proper capitalization for Authorization header
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
         });
-    
-        // Check for errors in the response
+
         if (!fetchedOrders.ok) {
           console.error("Error fetching orders:", fetchedOrders.statusText);
           throw new Error(`Failed to fetch orders: ${fetchedOrders.statusText}`);
         }
-    
-        // Parse the JSON response
+
         const orders = await fetchedOrders.json();
-        console.log("🚀 ~ fetchOrders ~ orders:", orders);
-    
-        // Set the parsed data to state
         setOrders(orders.data);
         setFilteredOrders(orders.data);
       } catch (error) {
         console.error("Error in fetchOrders:", error.message);
       }
     };
-    
 
     fetchOrders();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (selectedStatus === 'All') {
@@ -199,38 +283,59 @@ const OrderHistoryPage = () => {
   }, [selectedStatus, orders]);
 
   return (
-<>
-<Header/>
-<NavbarComponent/>
-<NavbarComponentData/>
-<OrderHistoryContainer>
-      <SidebarContainer isOpen={isSidebarOpen}>
-        <SidebarTitle>Order Status</SidebarTitle>
-        <SidebarButton onClick={() => setSelectedStatus('All')}>All</SidebarButton>
-        <SidebarButton onClick={() => setSelectedStatus('Completed')}>Completed</SidebarButton>
-        <SidebarButton onClick={() => setSelectedStatus('Pending')}>Pending</SidebarButton>
-        <SidebarButton onClick={() => setSelectedStatus('Cancelled')}>Cancelled</SidebarButton>
-        <SidebarButton onClick={() => setSelectedStatus('Returned')}>Returned</SidebarButton>
-      </SidebarContainer>
+    <>
+    <div style={{display:"flex",flexDirection:"column"}}>    <Header />
+      <NavbarComponent styled={{ position: 'fixed', top: '0', left: '0', right: '0', zIndex: '1000' }} />
+      <NavbarComponentData styled={{ position: 'fixed', top: '0', left: '0', right: '0', zIndex: '1000' }} />
+      <HeaderContainer>
+        <HeaderTitle>Order History</HeaderTitle>
+        <FilterButtonContainer>
+          <FilterButton onClick={() => setSelectedStatus('All')}>All</FilterButton>
+          <FilterButton onClick={() => setSelectedStatus('Completed')}>Completed</FilterButton>
+          <FilterButton onClick={() => setSelectedStatus('Pending')}>Pending</FilterButton>
+          <FilterButton onClick={() => setSelectedStatus('Cancelled')}>Cancelled</FilterButton>
+          <FilterButton onClick={() => setSelectedStatus('Returned')}>Returned</FilterButton>
+        </FilterButtonContainer>
+      </HeaderContainer>
+     
 
-      <OrdersContainer>
-        <h2>Order History</h2>
-        {filteredOrders.map((order) => (
-          <OrderCard key={order._id}>
-            <OrderHeader>
+      <OrderHistoryContainer>
+        
+        <OrdersContainer>
+          {filteredOrders.map((order) => (
+            <OrderCard key={order._id}>
+              <OrderHeader>
+                <div>
+                  <OrderId>{order._id}</OrderId>
+                  <OrderDate>{new Date(order.createdAt).toLocaleDateString()}</OrderDate>
+                </div>
+                <OrderAmount>₹{order.price}</OrderAmount>
+              </OrderHeader>
+              <OrderStatus status={order.order_recon_status}>
+                {order.is_order_confirmed ? 'Confirmed' : 'Pending'}
+              </OrderStatus>
               <div>
-                <OrderId>{order._id}</OrderId>
-                <OrderDate>{order.createdAt}</OrderDate>
+                <h4>Items:</h4>
+                {order.items.map((item) => (
+                  <ProductDetails key={item.item_id}>
+                    <ProductImage src={item.images[0]} alt={item.name} />
+                    <ProductInfo>
+                      <ProductName>{item.name}</ProductName>
+                      <ProductColor>Color: {item.color}</ProductColor>
+                      <p>Size: {item.size}</p>
+                    </ProductInfo>
+                  </ProductDetails>
+                ))}
               </div>
-              <OrderAmount>₹{order.amount}</OrderAmount>
-            </OrderHeader>
-            <OrderStatus status={order.status}>{order.is_order_confirmed}</OrderStatus>
-            
-          </OrderCard>
-        ))}
-      </OrdersContainer>
-    </OrderHistoryContainer>
-    <Footer/>
+            </OrderCard>
+          ))}
+        </OrdersContainer>
+       
+      </OrderHistoryContainer>
+      <Sidebar/>
+      <Footer/>
+      </div>
+  
     </>
   );
 };

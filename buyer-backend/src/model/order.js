@@ -92,7 +92,18 @@ const FulfillmentSchema = new mongoose.Schema(
   },
   { _id: false }
 );
-
+const ItemSchema = new mongoose.Schema(
+  {
+    item_id: { type: String, required: true },
+    name: { type: String, required: true },
+    images: { type: [String] }, // Array of image URLs
+    count: { type: Number, required: true, min: 1 }, // Quantity of the item
+    price: { type: mongoose.Decimal128, required: true }, // Price of the item
+    size: { type: String }, // Optional size field
+    color: { type: String }, // Optional color field
+  },
+  { _id: false } // Avoid creating separate _id for each item
+);
 // Order Schema
 const OrderSchema = new mongoose.Schema(
   {
@@ -139,6 +150,8 @@ const OrderSchema = new mongoose.Schema(
     feedback_sent: { type: Boolean, default: false },
     buyer_state: { type: String, default: "unconfirmed" },
     remaining_cart_value: { type: mongoose.Decimal128 },
+    items: { type: [ItemSchema], required: true }, // Embedding the ItemSchema
+
   },
   { _id: true, timestamps: true }
 );

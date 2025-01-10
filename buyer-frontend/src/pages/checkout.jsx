@@ -102,7 +102,6 @@ const CheckoutPage = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`
         );
-
         setOrderItems(response.data.data);
       } catch (error) {
         console.error("Error fetching order items:", error);
@@ -148,59 +147,68 @@ const CheckoutPage = () => {
             );
   
             if (paymentVerification.data.success) {
-  
-              const confirmOrderData = {
-                userId,
-                deviceId,
-                orderId: order._id,
-                price:order.amount,
-                payment_origin_source: "razorpay", // Example value
-                payment_return_destination: "example_return_url", // Replace with actual value
-                addOns: [], // Populate this with actual add-ons data
-                billing: {
+             console.log("🚀 ~ handler: ~ orderItems:", orderItems)
+             
+             const confirmOrderData = {
+              userId,
+              deviceId,
+              orderId: order._id, // Ensure order._id is valid
+              price: order.amount, // Ensure order.amount is valid
+              payment_origin_source: "razorpay", // Replace with actual payment source
+              payment_return_destination: "example_return_url", // Replace with actual return URL
+              addOns: [], // Populate this with actual add-ons data if any
+              billing: {
+                name: "Customer Name", // Replace with actual customer name
+                phone: "9876543210", // Replace with actual phone number
+                email: "customer@example.com", // Replace with actual email address
+                organization: {}, // Add organization details if applicable
+                address: {
+                  door: "123",
                   name: "Customer Name",
-                  phone: "9876543210",
-                  email: "customer@example.com",
-                  organization: {},
-                  address: {
-                    door: "123",
-                    name: "Customer Name",
-                    building: "Building Name",
-                    street: "Street Name",
-                    locality: "Locality",
-                    ward: "Ward",
-                    city: "City Name",
-                    state: "State",
-                    country: "Country",
-                    areaCode: "123456",
-                  },
-                  time: {
-                    label: "Working hours",
-                    duration: "2 hours",
-                    range: { start: new Date(), end: new Date() },
-                    days: "Mon-Fri",
-                  },
-                  taxNumber: "123456789",
-                  locationId: "location_id",
-                  updated_at: new Date(),
-                  created_at: new Date(),
+                  building: "Building Name",
+                  street: "Street Name",
+                  locality: "Locality",
+                  ward: "Ward",
+                  city: "City Name",
+                  state: "State Name",
+                  country: "Country",
+                  areaCode: "123456",
                 },
-                payment: {
-                  uri: "payment_uri",
-                  razorpayPaymentId: response.razorpay_payment_id,
-                  tlMethod: "http/post", // Example method
-                  params: new Map(),
-                  type: "ON-ORDER",
-                  status: "PAID",
-                  time: { label: "Payment time", timestamp: new Date() },
+                time: {
+                  label: "Working hours",
+                  duration: "2 hours",
+                  range: { start: new Date(), end: new Date() },
+                  days: "Mon-Fri",
                 },
-                city: "City Name", // Add city info
-                state: "State Name", // Add state info
-                userId,
-                deviceId,
-                transactionId: response.razorpay_order_id, // Use Razorpay order ID
-                paymentStatus: "PAID", // Assuming payment is successful
-              };
+                taxNumber: "123456789", // Replace with actual tax number
+                locationId: "location_id", // Replace with actual location ID
+                updated_at: new Date(),
+                created_at: new Date(),
+              },
+              payment: {
+                uri: "payment_uri", // Replace with actual payment URI
+                razorpayPaymentId: response.razorpay_payment_id, // Ensure it's valid
+                tlMethod: "http/post", // Replace with actual transfer method if needed
+                params: {}, // Use an object instead of Map unless necessary
+                type: "ON-ORDER", // Confirm if this is the correct payment type
+                status: "PAID", // Confirm the payment status
+                time: { label: "Payment time", timestamp: new Date() },
+              },
+              items: orderItems.map((item) => ({
+                item_id: item.item_id,
+                name: item.name,
+                images: item.images || [], // Default to an empty array if images are undefined
+                count: item.count,
+                price: item.price,
+                size: item.size,
+                color: item.color,
+              })),
+              city: "City Name", // Replace with actual city name
+              state: "State Name", // Replace with actual state name
+              transactionId: response.razorpay_order_id, // Ensure it's valid
+              paymentStatus: "PAID", // Assuming payment is successful
+            };
+            
   
               // Confirm the order after payment verification
               const confirmOrder = await axios.post(
