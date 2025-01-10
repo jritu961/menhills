@@ -55,6 +55,7 @@ const SidebarHeader = styled.div`
 
 const SidebarItem = styled.div`
   display: flex;
+  margin-top:40px;
   align-items: center;
   gap: ${(props) => (props.isOpen ? "15px" : "0")};
   font-size: ${(props) => (props.isOpen ? "18px" : "0")};
@@ -86,13 +87,14 @@ const SidebarIcon = styled.div`
 
 const ToggleButton = styled.div`
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 10px;
+  left: 0px;
+  margin-bottom:10px;
   z-index: 1100;
   cursor: pointer;
   font-size: 24px;
   background-color: #1f2937;
-  padding: 10px;
+  padding: 7px;
   border-radius: 50%;
   color: white;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -133,7 +135,7 @@ const Sidebar = () => {
       </ToggleButton>
       <Overlay isOpen={isOpen} onClick={() => setIsOpen(false)} />
       <SidebarContainer isOpen={isOpen}>
-        <SidebarHeader isOpen={isOpen}>Dashboard</SidebarHeader>
+        <SidebarHeader isOpen={isOpen}></SidebarHeader>
         <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/order")}>
           <SidebarIcon>
             <FaShoppingBag />
