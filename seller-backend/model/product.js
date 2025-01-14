@@ -42,6 +42,7 @@ const ProductSchema = new mongoose.Schema({
   fit: {
     type: String,  // (e.g., "Slim", "Regular", "Loose")
     enum: ["Slim", "Regular", "Loose"],
+    default:["Slim"]
     // required: true
   },
 

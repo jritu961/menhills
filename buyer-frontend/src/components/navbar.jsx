@@ -10,47 +10,50 @@ import {
   ShoppingCartOutlined,
   SearchOutlined,
   LogoutOutlined,
+  HeartOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 export const NavbarComponent = () => {
   const navigate = useNavigate();
-  
+
   const handleUserClick = () => {
-    const token=localStorage.getItem("authToken")
-    if(!token){
+    const token = localStorage.getItem("authToken");
+    if (!token) {
       navigate("/login"); // Redirect to the login page
-
+    } else {
+      navigate("/my-info"); // Redirect to the user info page
     }
-    navigate("/my-info"); // Redirect to the login page
-
   };
 
   const handleLogout = () => {
     // Clear authentication tokens or session
     localStorage.clear(); // Removes all items from localStorage
-
-    
     navigate("/login");
   };
-  const handlecartClick = () => {
-    // Clear authentication tokens or session    
-    // Redirect to login page
+
+  const handleCartClick = () => {
     navigate("/cart");
   };
+
+  const handleWishlistClick = () => {
+    navigate("/wishlist"); // Redirect to the wishlist page
+  };
+
   return (
     <Navbar>
       <NavbarMainContainer>
         {/* <NavbarLogo>MENHILLS</NavbarLogo> */}
         <NavbarRight>
           <UserAddOutlined className="icon" onClick={handleUserClick} />
-          <ShoppingCartOutlined className="icon" onClick={handlecartClick}/>
+          <ShoppingCartOutlined className="icon" onClick={handleCartClick} />
+          <HeartOutlined className="icon" onClick={handleWishlistClick} />
           <SearchOutlined className="icon" />
         </NavbarRight>
-        <NavbarRight>          <LogoutOutlined className="icon" onClick={handleLogout} />
+        <NavbarRight>
+          <LogoutOutlined className="icon" onClick={handleLogout} />
         </NavbarRight>
       </NavbarMainContainer>
-   
     </Navbar>
   );
 };

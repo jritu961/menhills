@@ -31,8 +31,10 @@ const PaymentButton = styled.button`
 
 const RazorPayPaymentPage = ({ totalAmount }) => {
   const navigate = useNavigate(); // Hook to navigate to order history page
-
+  const token=localStorage.getItem("authToken")
   const handleRazorpayPayment = async () => {
+    console.log("tokennn",token)
+
     try {
       const order = await fetch(`${process.env.REACT_APP_BASE_URL_Buyer}/create-order`, {
         method: "POST",

@@ -5,154 +5,191 @@ import WishlistItem from "../model/wishlistItem.js"
 class WishListService {
   async addItem(data) {
     try {
-      let wishlist, wishlist_ids = [], device_wishlist, login_wishlist;
-      if (data.wishlist_key && data.wishlist_key != "undefined") {
-        wishlist = await WishList.findOne({ wishlist_key: data.wishlist_key });
-        if (wishlist?._id) {
-          wishlist_ids.push(wishlist?._id)
-          device_wishlist = wishlist?._id
-        }
+      console.log("Received data:", data);
+      const { deviceId, userId, id } = data;
+      console.log("Received data:", deviceId,userId);
 
-      } 
-      if (data.userId && (data.userId != "null" && data.userId != "undefined" && data.userId != "guestUser")) {
-        wishlist = await WishList.findOne({ userId: data.userId });
-        if (wishlist?._id) {
-          wishlist_ids.push(wishlist?._id)
-          login_wishlist = wishlist?._id
-        }
+      let wishlist, wishlistId;
+
+      // Check for existing wishlist
+      if (deviceId) {
+        wishlist = await WishList.findOne({ deviceId });
+      }
+      if (userId && userId !== "guestUser") {
+        wishlist = await WishList.findOne({ userId });
       }
 
-      if (wishlist_ids.length) {
-        const existingItem = await WishlistItem.findOne({ "item.id": data.id, "wishlist": (device_wishlist ? device_wishlist : login_wishlist) });
+      // If wishlist exists, check for duplicate item
+      if (wishlist?._id) {
+        wishlistId = wishlist._id;
+        console.log("existingItem00",id,wishlistId)
+
+        const existingItem = await WishlistItem.findOne({
+          "item.item_id": data.item_id,
+          wishlist: wishlistId,
+        });
+        console.log("existingItem00",existingItem)
         if (existingItem) {
           return { status: "error", message: "Item already exists in wishlist" };
-        } else {
-          let wishlistItem = new WishlistItem();
-          wishlistItem.wishlist = device_wishlist ? device_wishlist : login_wishlist;
-          wishlistItem.item = data;
-          wishlistItem.added = true
-          const saveData = await wishlistItem.save();
-          return saveData
         }
-
-      } else {
-        let wishlist = {};
-        if (data.wishlist_key && (!data.userId || data.userId == "undefined" || data.userId == "guestUser")) {
-          wishlist = { ...wishlist,
-            wishlist_key: data.wishlist_key,
-          }
-
-        }
-        if (data.userId && (data.userId != "null" && data.userId != "undefined" && data.userId != "guestUser")) {
-          wishlist = { ...wishlist,
-            userId: data.userId,
-          }
-        }
-
-        const saved_wishlist = await new WishList({
-          wishlist_key: data.wishlist_key,
-        }).save();
-        
-        let wishlistItem = new WishlistItem();
-        wishlistItem.wishlist = saved_wishlist._id;
-        wishlistItem.item = data;
-        wishlistItem.added = true
-
-        let wishlistdata = await wishlistItem.save();
-        return wishlistdata
-
       }
+
+      // If no wishlist exists, create one
+      if (!wishlist) {
+        wishlist = new WishList({
+          deviceId:deviceId,
+          userId: userId !== "guestUser" ? userId : undefined,
+        });
+        const result=await wishlist.save();
+        console.log("result42",result)
+        wishlistId = wishlist._id;
+      }
+
+      // Add item to wishlist
+      const wishlistItem = new WishlistItem({
+        wishlist: wishlistId,
+        item: data,
+        added: true,
+      });
+      const savedItem = await wishlistItem.save();
+      return { status: "success", data: savedItem };
     } catch (err) {
-      throw err;
+      console.error("Error adding item to wishlist:", err);
+      throw new Error("Unable to add item to wishlist");
     }
   }
 
   async getWishlistItem(data) {
     try {
-      let wishlist, wishlist2;
-      if (data.wishlist_key) {
-        wishlist = await WishList.findOne({ wishlist_key: data.wishlist_key });
-      } 
-      if (data.userId && (data.userId != "null" && data.userId != "undefined" && data.userId != "guestUser")) {
-        wishlist2 = await WishList.findOne({ userId: data.userId });
+      console.log("Fetching wishlist items for:", data);
+      const { deviceId, userId } = data;
+
+      // Find wishlist(s)
+      const wishlistIds = [];
+      if (deviceId) {
+        const wishlist = await WishList.findOne({ deviceId });
+        if (wishlist?._id) wishlistIds.push(wishlist._id);
       }
-      let wishlistIds = []
-      if (wishlist?._id) wishlistIds.push(wishlist?._id)
-      if (wishlist2?._id) wishlistIds.push(wishlist2?._id)
-      let wishlistData = await WishlistItem.find({ wishlist: { $in: wishlistIds } });
+      if (userId && userId !== "guestUser") {
+        const wishlist = await WishList.findOne({ userId });
+        if (wishlist?._id) wishlistIds.push(wishlist._id);
+      }
 
-      return wishlistData;
+      if (!wishlistIds.length) {
+        return { status: "error", message: "No wishlist found" };
+      }
+
+      // Get wishlist items
+      const wishlistItems = await WishlistItem.find({
+        wishlist: { $in: wishlistIds },
+      });
+      return { status: "success", data: wishlistItems };
     } catch (err) {
-      throw err;
+      console.error("Error fetching wishlist items:", err);
+      throw new Error("Unable to fetch wishlist items");
     }
   }
 
-  async wishlistCart(req, res, next) {
-    try {
-      return res.send(await cartService.clearCart({ ...req.params }));
-    }
-    catch (err) {
-      next(err);
-    }
-  }
-  
   async clearWishlist(data) {
     try {
-      let wishlist = {}, wishlist2 = {};
-      if (data.wishlist_key) {
-        wishlist = await WishList.findOne({ wishlist_key: data.wishlist_key });
-      } 
-      if (data.userId && (data.userId != "null" && data.userId != "undefined" && data.userId != "guestUser")) {
-        wishlist2 = await WishList.findOne({ userId: data.userId });
+      const { deviceId, userId } = data;
+      const wishlistIds = [];
+
+      // Get wishlist IDs
+      if (deviceId) {
+        const wishlist = await WishList.findOne({ deviceId });
+        if (wishlist?._id) wishlistIds.push(wishlist._id);
       }
-      let wishlistIds = []
-      if (wishlist?._id) wishlistIds.push(wishlist?._id)
-      if (wishlist2?._id) wishlistIds.push(wishlist2?._id)
+      if (userId && userId !== "guestUser") {
+        const wishlist = await WishList.findOne({ userId });
+        if (wishlist?._id) wishlistIds.push(wishlist._id);
+      }
+
+      if (!wishlistIds.length) {
+        return { status: "error", message: "No wishlist found to clear" };
+      }
+
+      // Clear wishlist items and wishlist
       await WishlistItem.deleteMany({ wishlist: { $in: wishlistIds } });
-      return await WishList.deleteOne({ _id: { $in: wishlistIds } });
+      await WishList.deleteMany({ _id: { $in: wishlistIds } });
+
+      return { status: "success", message: "Wishlist cleared successfully" };
     } catch (err) {
-      throw err;
+      console.error("Error clearing wishlist:", err);
+      throw new Error("Unable to clear wishlist");
     }
   }
 
   async removeWishlistItem(data) {
     try {
-      let wishlist, wishlist2;
-      if (data.wishlist_key) {
-        wishlist = await WishList.findOne({ wishlist_key: data.wishlist_key });
-      } 
-      if (data.userId && (data.userId != "null" && data.userId != "undefined" && data.userId != "guestUser")) {
-        wishlist2 = await WishList.findOne({ userId: data.userId });
+      const { deviceId, userId, itemId } = data;
+      const wishlistIds = [];
+
+      // Get wishlist IDs
+      if (deviceId) {
+        const wishlist = await WishList.findOne({ deviceId });
+        if (wishlist?._id) wishlistIds.push(wishlist._id);
       }
-      let wishlistIds = []
-      if (wishlist?._id) wishlistIds.push(wishlist?._id)
-      if (wishlist2?._id) wishlistIds.push(wishlist2?._id)
+      if (userId && userId !== "guestUser") {
+        const wishlist = await WishList.findOne({ userId });
+        if (wishlist?._id) wishlistIds.push(wishlist._id);
+      }
 
-      return await WishlistItem.deleteOne({ wishlist: { $in: wishlistIds }, "item.product.id": data.itemId });
-    } catch (err) {
-      throw err;
-    }
-  }
+      if (!wishlistIds.length) {
+        return { status: "error", message: "No wishlist found" };
+      }
+      console.log("wishlistIds141",wishlistIds[0],itemId)
+      // Remove item from wishlist
+      const result = await WishlistItem.deleteOne({
+        wishlist: { $in: wishlistIds },
+        "item.item_id": itemId,
+      });
 
-  async removeWishlistItemById(data) {
-    try {
-      return await WishlistItem.deleteOne({ _id: data.withlist_id });
+      if (result.deletedCount === 0) {
+        return { status: "error", message: "Item not found in wishlist" };
+      }
+      return { status: "success", message: "Item removed from wishlist" };
     } catch (err) {
-      throw err;
+      console.error("Error removing wishlist item:", err);
+      throw new Error("Unable to remove item from wishlist");
     }
   }
 
   async updateWishlistItem(data) {
     try {
-      let wishlistItem = await WishlistItem.findOne({ _id: data.itemId });
-      wishlistItem.item = data;
-      return await wishlistItem.save();
+      const { itemId, ...updatedData } = data;
+      const wishlistItem = await WishlistItem.findOne({ _id: itemId });
+
+      if (!wishlistItem) {
+        return { status: "error", message: "Wishlist item not found" };
+      }
+
+      wishlistItem.item = updatedData;
+      const updatedItem = await wishlistItem.save();
+      return { status: "success", data: updatedItem };
     } catch (err) {
-      throw err;
+      console.error("Error updating wishlist item:", err);
+      throw new Error("Unable to update wishlist item");
     }
   }
 
+  async removeWishlistItemById(data) {
+    try {
+      const { wishlistId } = data;
+      console.log("data179",data)
+      const result = await WishlistItem.deleteOne({ _id: wishlistId });
+
+      if (result.deletedCount === 0) {
+        return { status: "error", message: "Wishlist item not found" };
+      }
+      return { status: "success", message: "Wishlist item removed successfully" };
+    } catch (err) {
+      console.error("Error removing wishlist item by ID:", err);
+      throw new Error("Unable to remove wishlist item by ID");
+    }
+  }
 }
+
 
 
 export default WishListService;

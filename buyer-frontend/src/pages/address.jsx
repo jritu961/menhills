@@ -105,6 +105,7 @@ const ModalCloseButton = styled.button`
 
 const AddressPage = () => {
   const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null); 
   const [newAddress, setNewAddress] = useState({
     door: "",
     address_name: "",
@@ -142,9 +143,7 @@ const AddressPage = () => {
 
     fetchAddresses();
   }, []);
-
-  // Handle input changes for address fields
-  const handleInputChange = (e) => {
+const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewAddress((prev) => ({
       ...prev,
@@ -152,12 +151,16 @@ const AddressPage = () => {
     }));
   };
 
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address);
+  };
+
   // Add a new address
   const addAddress = async () => {
     if (newAddress.name && newAddress.city && newAddress.street) {
 
       const addressPayload = {
-        userId: "6773abd980b28ae234a19894", // You may need to replace with dynamic value
+        userId: "6773abd980b28ae234a19894", 
         id: newAddress.id || "cc5e5a54-7515-4472-8ea7-cc807074763d",
         descriptor: {
           name: newAddress.name,
@@ -171,7 +174,7 @@ const AddressPage = () => {
           "3d_render": newAddress["3d_render"] || ""
         },
         gps: newAddress.gps,
-        defaultAddress: false, // Assuming this as false unless specified
+        defaultAddress: false,
         address: {
           door: newAddress.door,
           address_name: newAddress.address_name,
@@ -365,7 +368,7 @@ const AddressPage = () => {
         </ModalContent>
       </Modal>
 
-      <AddressList>
+      {/* <AddressList>
       {addresses.map((address) => (
   <AddressCard key={address._id}>
     <div>
@@ -379,7 +382,41 @@ const AddressPage = () => {
 ))}
 
 
-      </AddressList>
+      </AddressList> */}
+      <AddressList>
+      {addresses.map((address) => (
+        <AddressCard key={address._id}>
+          <div>
+            <h4>{address.address.address_name}</h4>
+            <p>{address.address.name}</p>
+            <p>
+              {address.address.street}, {address.address.city},{" "}
+              {address.address.state}
+            </p>
+            <p>{address.address.areaCode}</p>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="selectedAddress"
+              checked={selectedAddress?._id === address._id}
+              onChange={() => handleSelectAddress(address)}
+            />
+            <Button onClick={() => deleteAddress(address._id)}>Delete</Button>
+          </div>
+        </AddressCard>
+      ))}
+    </AddressList>
+
+      {selectedAddress && (
+        <div>
+          <Heading>Selected Address</Heading>
+          <p>
+            {selectedAddress.address.street}, {selectedAddress.address.city},{" "}
+            {selectedAddress.address.state}, {selectedAddress.address.areaCode}
+          </p>
+        </div>
+      )}
     </AddressPageContainer>
   );
 };

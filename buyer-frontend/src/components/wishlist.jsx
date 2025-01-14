@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import styled from "styled-components";
 import { FaTrashAlt, FaHeart } from "react-icons/fa";
+import checkUserLoginStatus from "../helper/loggedin.js"
+import { getOrCreateDeviceId } from "../helper/device";
+import axios from 'axios';
 
 
 const WishlistContainer = styled.div`
@@ -48,7 +51,6 @@ const ImageContainer = styled.div`
 
   img {
     max-width: 100%;
-    height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 
@@ -129,33 +131,46 @@ const EmptyWishlist = styled.div`
 `;
 
 const Wishlist = () => {
-  const wishlistItems = [
-    {
-      id: 1,
-      name: "Men's Casual Shirt",
-      price: "$49.99",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 2,
-      name: "Men's Leather Jacket",
-      price: "$129.99",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 3,
-      name: "Men's Sports Shoes",
-      price: "$89.99",
-      image: "https://via.placeholder.com/300",
-    },
-  ];
-
-  const handleRemove = (id) => {
-    console.log("Remove item with ID:", id);
+   const [wishlistItems, setWishlistItem] = useState([]);
+    const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+      let result
+  const fetchCartItems = async () => {
+    try {
+      const userId = checkUserLoginStatus(); 
+      const deviceId = await getOrCreateDeviceId(); 
+  
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/wishlist/${userId}/${deviceId}`);
+      result=response.data.data
+      console.log("response.data.data",result)
+      setWishlistItem(Array.isArray(response.data.data) ? response.data.data : []);
+      setLoading(false); 
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
-  const handleMoveToCart = (id) => {
-    console.log("Move item with ID to cart:", id);
+  useEffect(()=>{
+    fetchCartItems()
+  },[])
+  const handleRemove =async (id) => {
+    const userId= checkUserLoginStatus()
+      let deviceId=await getOrCreateDeviceId()
+   
+    await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/item/wishlist/${userId}/${deviceId}/${id}`);
+    fetchCartItems()  };
+
+  const handleMoveToCart = async(id) => {
+    console.log("id",id)
+    const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products/${id}`);
+    const resultData=result.data.product
+    const userId= checkUserLoginStatus()
+      let deviceId=await getOrCreateDeviceId()
+
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, resultData);
+      await axios.delete(`${process.env.REACT_APP_BASE_URL_Buyer}/item/wishlist/${userId}/${deviceId}/${id}`);
+      fetchCartItems()
   };
 
   return (
@@ -164,19 +179,22 @@ const Wishlist = () => {
       {wishlistItems.length > 0 ? (
         <WishlistGrid>
           {wishlistItems.map((item) => (
-            <WishlistItem key={item.id}>
+            <WishlistItem key={item.item.item_id}>
               <ImageContainer>
-                <img src={item.image} alt={item.name} />
+                <img src={item.item.images} alt={item.item.name} />
               </ImageContainer>
               <ItemInfo>
-                <ItemName>{item.name}</ItemName>
-                <ItemPrice>{item.price}</ItemPrice>
+                <ItemName>{item.item.name}</ItemName>
+                <ItemPrice>{item.item.price}</ItemPrice>
+                <ItemPrice>{item.item.color}</ItemPrice>
+                <ItemPrice>{item.item.size}</ItemPrice>
+
                 <ActionButtons>
-                  <RemoveButton onClick={() => handleRemove(item.id)}>
+                  <RemoveButton onClick={() => handleRemove(item.item.item_id)}>
                     <FaTrashAlt />
                     Remove
                   </RemoveButton>
-                  <MoveToCartButton onClick={() => handleMoveToCart(item.id)}>
+                  <MoveToCartButton onClick={() => handleMoveToCart(item.item.item_id)}>
                     <FaHeart />
                     Move to Cart
                   </MoveToCartButton>

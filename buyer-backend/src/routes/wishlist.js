@@ -6,35 +6,35 @@ import WishlistController from '../controller/wishlist.js';
 const rootRouter = new Router();
 
 const wishListController = new WishlistController();
-// -- /:wishlist_key
+// -- /:deviceId
 
 
 rootRouter.post(
-    '/v2/wishlist/:userId/:wishlist_key',wishListController.addItem
+    '/v1/wishlist/:userId/:deviceId',wishListController.addItem
 );
 
 rootRouter.get(
-    '/v2/wishlist/:userId/:wishlist_key',
+    '/v1/wishlist/:userId/:deviceId',
     wishListController.getWishlistItem
 );
 
 rootRouter.delete(
-    '/v2/all/wishlist/:userId/:wishlist_key',
+    '/v1/all/wishlist/:userId/:deviceId',
     wishListController.clearWishlist,
 );
 
 rootRouter.delete(
-    '/v2/item/wishlist/:userId/:wishlist_key/:itemId',
+    '/v1/item/wishlist/:userId/:deviceId/:itemId',
     wishListController.removeWishlistItem,
 );
 
 rootRouter.delete(
-    '/v2/wishlist/:userId/:withlist_id',
+    '/v1/wishlist/:userId/:withlist_id',
     wishListController.removeWishlistItemById,
 );
 
 rootRouter.put(
-    '/v2/wishlist/:userId/:itemId',
+    '/v1/wishlist/:userId/:itemId',
     wishListController.updateWishlistItem,
 );
 

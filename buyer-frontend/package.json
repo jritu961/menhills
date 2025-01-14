@@ -16,6 +16,7 @@
     "axios": "^1.7.9",
     "fingerprintjs": "^0.5.3",
     "install": "^0.13.0",
+    "jwt-decode": "^4.0.0",
     "npm": "^11.0.0",
     "razorpay": "^2.9.5",
     "react": "^18.3.1",

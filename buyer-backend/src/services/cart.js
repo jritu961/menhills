@@ -48,21 +48,19 @@ class CartService {
             return { status: "success", data: updateData };
         }
         
-
         // Add new item to the cart
         const cartItem = new CartItem({
           cart: cart._id,
-          item_id: data.item_id,
+          item_id: data.item_id || data._id,
           id: data.id,
-          count: data.count,
-          images: data.images,
+          count: data.count || 1,
+          images: Array.isArray(data.images) && data.images.length > 0 ? data.images[0] : data.images,
           name: data.name,
           price:data.price,
           color:data.color,
           size:data.size
       
         });
-
         return await cartItem.save();
       } else {
         // Create a new cart and add the item

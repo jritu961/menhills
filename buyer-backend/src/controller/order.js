@@ -20,14 +20,14 @@ export async function getOrdersHandler(req, res) {
             query['customer_id'] = userId; // Filter by user's ID in the customer field
         }
 
-        console.log("🚀 ~ getOrdersHandler ~ query:", query)
+ 
 
         const orders = await OrderModel.find({userId:query.customer_id})
             .skip(skip)
             .limit(limitValue)
             .sort({ createdAt: -1 });
 
-            console.log("🚀 ~ getOrdersHandler ~ orders:", orders)
+       
 
         // const orderData = await Promise.all(orders.map(async (order) => {
         //     const {

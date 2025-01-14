@@ -3,7 +3,6 @@ import Order from '../model/order.js'; // Import the Order model
 
 export async function confirmOrder(req, res) {
   const data = req.body; // Extract the data from the request body
-  console.log("🚀 ~ confirmOrder ~ data:", data);
 
   // Validate orderId
   if (!data.orderId) {
@@ -33,7 +32,6 @@ export async function confirmOrder(req, res) {
       { new: true } // Return the updated order
     ).exec(); // Ensure the query is executed as a promise
 
-    console.log("🚀 ~ confirmOrder ~ result:", result);
 
     // If no order is found
     if (!result) {

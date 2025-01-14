@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 const WishListSchema = new mongoose.Schema(
   {
     userId: { type: String },
+    deviceId:{type:String},
     wishlist_key: { type: String },
   },
   { timestamps: true }
