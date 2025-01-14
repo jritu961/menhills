@@ -13,69 +13,72 @@ import RazorPayPaymentPage from './pages/razorpayPayment.jsx';
 import OrderHistoryPage from "./pages/orderHistory.jsx"
 import UserProfile from "./pages/profile.jsx"
 import Wishlist from "./components/wishlist.jsx"
+import { MyProvider } from './context/categoryContext.jsx'; // Use MyProvider instead of MyContext
 
 function App() {
     return (
         <Router>
-            <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/cart" element={<AddToCart />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<RegisterPage />} />
-                <Route path="/item-details/:id" element={<ItemDetails />} />
-                <Route path="/menswear" element={<MensWearPage />} />
+            <MyProvider> {/* Wrap the Routes with MyProvider */}
+                <Routes>
+                    {/* Public Routes */}
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/cart" element={<AddToCart />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<RegisterPage />} />
+                    <Route path="/item-details/:id" element={<ItemDetails />} />
+                    <Route path="/menswear" element={<MensWearPage />} />
 
-                {/* Private Routes */}
-                <Route
-                    path="/address"
-                    element={
-                        <PrivateRoute>
-                            <AddressPage />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/checkout"
-                    element={
-                        <PrivateRoute>
-                            <CheckoutPage />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/payment"
-                    element={
-                        <PrivateRoute>
-                            <RazorPayPaymentPage />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/order"
-                    element={
-                        <PrivateRoute>
-                            <OrderHistoryPage />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/my-info"
-                    element={
-                        <PrivateRoute>
-                            <UserProfile />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/wishlist"
-                    element={
-                        <PrivateRoute>
-                            <Wishlist />
-                        </PrivateRoute>
-                    }
-                />
-            </Routes>
+                    {/* Private Routes */}
+                    <Route
+                        path="/address"
+                        element={
+                            <PrivateRoute>
+                                <AddressPage />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/checkout"
+                        element={
+                            <PrivateRoute>
+                                <CheckoutPage />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/payment"
+                        element={
+                            <PrivateRoute>
+                                <RazorPayPaymentPage />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/order"
+                        element={
+                            <PrivateRoute>
+                                <OrderHistoryPage />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/my-info"
+                        element={
+                            <PrivateRoute>
+                                <UserProfile />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/wishlist"
+                        element={
+                            <PrivateRoute>
+                                <Wishlist />
+                            </PrivateRoute>
+                        }
+                    />
+                </Routes>
+            </MyProvider>
         </Router>
     );
 }

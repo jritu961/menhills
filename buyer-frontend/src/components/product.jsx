@@ -9,12 +9,13 @@ import {
   SizeSelect,
 } from "../styles/product"; // Ensure you have styles for SizeSelect
 import axios from "axios";
+import { useMyContext } from "../context/categoryContext";
 
 const ProductSection = () => {
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [products, setProducts] = useState([]); // State to hold the fetched products
   const [selectedSize, setSelectedSize] = useState({}); // State to track selected sizes for each product
-
+ const {category}=useMyContext()
   const handleClick = (productId) => {
     // Redirect to the item details page with the product id
     navigate(`/item-details/${productId}`);
@@ -30,6 +31,7 @@ const ProductSection = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+
         
         const result = await axios.get(
           `${process.env.REACT_APP_BASE_URL_Seller}/products`

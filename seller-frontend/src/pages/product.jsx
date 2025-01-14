@@ -216,16 +216,7 @@ const AddProduct = () => {
             onChange={handleChange}
           />
         </FieldGroup>
-        <FieldGroup>
-          <Label>Brand</Label>
-          <Input
-            type="text"
-            name="brand"
-            placeholder="Enter product brand"
-            value={product.brand}
-            onChange={handleChange}
-          />
-        </FieldGroup>
+       
         <FieldGroup>
           <Label>Discount</Label>
           <Input
@@ -267,15 +258,48 @@ const AddProduct = () => {
           />
         </FieldGroup>
         <FieldGroup>
-          <Label>Category *</Label>
-          <Input
-            type="text"
-            name="category"
-            placeholder="Enter category"
-            value={product.category}
-            onChange={handleChange}
-          />
-        </FieldGroup>
+  <Label>Category *</Label>
+  <Select
+  name="category"
+  value={product.category}
+  onChange={handleChange}
+  required
+>
+  <option value="">Select Category</option>
+
+  <optgroup label="Formal Wear">
+    <option value="Suits">Suits</option>
+    <option value="Shirts">Shirts</option>
+    <option value="Pants">Pants</option>
+  </optgroup>
+
+  <optgroup label="Casual Wear">
+    <option value="T-Shirts">T-Shirts</option>
+    <option value="Jeans">Jeans</option>
+    <option value="Shorts">Shorts</option>
+    <option value="Sweaters">Sweaters</option>
+    <option value="Hoodies">Hoodies</option>
+  </optgroup>
+
+  <optgroup label="Sportswear">
+    <option value="Activewear">Activewear</option>
+  </optgroup>
+
+  <optgroup label="Outerwear">
+    <option value="Jackets">Jackets</option>
+  </optgroup>
+
+  <optgroup label="Party Wear">
+    <option value="Accessories">Accessories</option>
+  </optgroup>
+
+  <optgroup label="Footwear">
+    <option value="Footwear">Footwear</option>
+  </optgroup>
+</Select>
+
+</FieldGroup>
+
         {/* New Fields for Sizes, Fit, Colors */}
         <FieldGroup>
           <Label>Sizes</Label>
@@ -295,8 +319,9 @@ const AddProduct = () => {
             name="fit"
             value={product.fit}
             onChange={handleChange}
+            required
           >
-            <option value="">Select Fit</option>
+            <option value="">Select Fit *</option>
             <option value="Slim">Slim</option>
             <option value="Regular">Regular</option>
             <option value="Loose">Loose</option>

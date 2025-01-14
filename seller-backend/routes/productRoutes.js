@@ -11,17 +11,17 @@ import {
 } from "../controllers/productController.js"; // Import controller functions
 import {registerUser} from "../controllers/signup.js"
 import {signInDAta} from "../controllers/signin.js"
+import { Category } from "../controllers/category.js";
 const router = express.Router();
-const storage = multer.memoryStorage(); // Store files in memory
+const storage = multer.memoryStorage();
 const 
 upload = multer({ storage });
-router.post("/products",upload.array('images', 5), addProduct);  // Add a new product
+router.post("/products",upload.array('images', 5), addProduct);  
+/////////////
+router.post("/signup", registerUser);  
+router.post("/signin", signInDAta);  
 
-// Routes for product operations
-router.post("/signup", registerUser);  // Add a new product
-router.post("/signin", signInDAta);  // Add a new product
-
-router.get("/products", getAllProducts);  // Get all products
+router.get("/products", getAllProducts);  
 router.get("/products/:id", getProductById);  // Get a single product by ID
 router.put("/products/:id",upload.array('images', 5), updateProduct);  // Update a product by ID
 router.delete("/products/:id", deleteProduct);  // Delete a product by ID

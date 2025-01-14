@@ -1,12 +1,11 @@
 import Product from "../model/product.js";  
 import  cloudinary  from "../utils/cloudnary.js";
-import streamifier from "streamifier"; // To stream files to Cloudinary
+import streamifier from "streamifier"; 
 
-// Add a new product
 export const addProduct = async (req, res) => {
   try {
     const { name, price, category} = req.body;
-    const { files } = req;  // Multer stores the file in req.file for single uploads
+    const { files } = req;  
 
  
     if (!name || !price || !category || !files) {
@@ -15,10 +14,10 @@ export const addProduct = async (req, res) => {
     const imageUploadPromises = files.map((file) => {
       return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
-          { folder: "products" }, // Optional folder in Cloudinary
+          { folder: "products" }, 
           (error, result) => {
             if (error) reject(error);
-            else resolve(result.secure_url); // Save the image URL
+            else resolve(result.secure_url); 
           }
         );
 
@@ -28,10 +27,9 @@ export const addProduct = async (req, res) => {
 
     const imageUrls = await Promise.all(imageUploadPromises);
 
-    // Create new product with Cloudinary image URLs
     const newProduct = new Product({
       ...req.body,
-      images: imageUrls,  // Save Cloudinary image URLs in the database
+      images: imageUrls,  
     });
     console.log("🚀 ~ addProduct ~ newProduct:", newProduct)
     await newProduct.save();
@@ -41,18 +39,30 @@ export const addProduct = async (req, res) => {
   }
 };
 
-// Get all products
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const { category } = req.query;
+
+    let query = {};
+
+    if (category) {
+      const categories = category.split(','); 
+      query.category = { $in: categories }; 
+    }
+
+    const products = await Product.find(query).sort({ createdAt: -1 });
+
     if (!products.length) {
       return res.status(404).json({ message: "No products found" });
     }
+
     res.status(200).json({ message: "Products fetched successfully", products });
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch products", error: error.message });
   }
 };
+
+
 
 // Get a single product by ID
 export const getProductById = async (req, res) => {

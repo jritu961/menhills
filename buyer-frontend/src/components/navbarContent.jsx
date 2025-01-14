@@ -1,67 +1,88 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BarsOutlined } from "@ant-design/icons";
 import { NavbarMainContainer, NavbarHeading, Navbar } from "../styles/navbarContent.js";
-import {getOrCreateDeviceId} from "../helper/device.js"
+import { getOrCreateDeviceId } from "../helper/device.js";
+import { useMyContext } from "../context/categoryContext.jsx"; // Correct import
+import axios from "axios"
 export const NavbarComponentData = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  const [deviceId, setDeviceId] = useState(null);  // Stores the device ID
-  const [loading, setLoading] = useState(true);    // Tracks loading state
 
-  // 3. useEffect hook to fetch deviceId when the component mounts
+  const { setcategory } = useMyContext(); // Use the custom hook to access context
+
+  const [deviceId, setDeviceId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategories, setSelectedCategories] = useState([]);  // Store selected categories
+
   useEffect(() => {
     const fetchDeviceId = async () => {
-      const id = await getOrCreateDeviceId(); // Get or create the device ID
-      setDeviceId(id);  // Set the device ID in the state
-      setLoading(false); // Set loading to false once data is fetched
+      const id = await getOrCreateDeviceId();
+      setDeviceId(id);
+      setLoading(false);
     };
 
-    fetchDeviceId();  // Call the async function inside useEffect
-  }, []); // Empty dependency array ensures this runs only once on component mount
+    fetchDeviceId();
+  }, []);
 
-  // 4. Conditional rendering based on loading state
+  const handleCategoryClick = async(category) => {
+    setcategory(category); // Set category in context
+    console.log("🚀 ~ handleCategoryClick ~ category:", category);
+    const result = await axios.get(
+      `${process.env.REACT_APP_BASE_URL_Seller}/products?category=${category}`
+    );
+    setSelectedCategories((prevCategories) => {
+      const updatedCategories = [...prevCategories];
+      if (updatedCategories.includes(category)) {
+        updatedCategories.splice(updatedCategories.indexOf(category), 1);  // Remove if already selected
+      } else {
+        updatedCategories.push(category);  // Add the new category
+      }
+      return updatedCategories;
+    });
+  };
+
   if (loading) {
-    return <div>Loading device ID...</div>;  // Show loading text until deviceId is fetched
+    return <div>Loading device ID...</div>;
   }
 
-
   return (
-    <Navbar>
-      <NavbarMainContainer isMenuOpen={isMenuOpen}>
-        <BarsOutlined
-          onClick={toggleMenu}
-          style={{ fontSize: '2rem', color: '#fff', cursor: 'pointer' }}
-        />
-        {/* Desktop Menu (hidden on mobile) */}
-        <div className="desktop-menu">
-          <NavbarHeading>Formal Wear</NavbarHeading>
-          <NavbarHeading>Casual Wear</NavbarHeading>
-          
-          <NavbarHeading>Sportswear</NavbarHeading>
-          <NavbarHeading>Outerwear</NavbarHeading>
-          <NavbarHeading>Party Wear</NavbarHeading>
-          <NavbarHeading>Innerwear</NavbarHeading>
-          <NavbarHeading>Sleepwear & Loungewear</NavbarHeading>
-          <NavbarHeading>Footwear</NavbarHeading>
-        </div>
-
-        {/* Mobile Menu (hidden on desktop) */}
-        {isMenuOpen && (
-          <div className="mobile-menu">
-            <NavbarHeading>Formal Wear</NavbarHeading>
-            <NavbarHeading>Casual Wear</NavbarHeading>
-            <NavbarHeading>Ethnic & Traditional Wear</NavbarHeading>
-            <NavbarHeading>Sportswear</NavbarHeading>
-            <NavbarHeading>Outerwear</NavbarHeading>
-            <NavbarHeading>Party Wear</NavbarHeading>
-            <NavbarHeading>Innerwear</NavbarHeading>
-            <NavbarHeading>Sleepwear & Loungewear</NavbarHeading>
-            <NavbarHeading>Footwear</NavbarHeading>
+    <>
+      <Navbar>
+        <NavbarMainContainer isMenuOpen={isMenuOpen}>
+          <BarsOutlined
+            onClick={toggleMenu}
+            style={{ fontSize: "2rem", color: "#fff", cursor: "pointer" }}
+          />
+          <div className="desktop-menu">
+            <NavbarHeading onClick={() => handleCategoryClick("Formal Wear")}>Formal Wear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Casual Wear")}>Casual Wear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Shirts")}>Sportswear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Outerwear")}>Outerwear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Party Wear")}>Party Wear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Innerwear")}>Innerwear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Sleepwear & Loungewear")}>Sleepwear & Loungewear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Footwear")}>Footwear</NavbarHeading>
           </div>
-        )}
-      </NavbarMainContainer>
-    </Navbar>
+
+          {isMenuOpen && (
+            <div className="mobile-menu">
+              <NavbarHeading onClick={() => handleCategoryClick("Formal Wear")}>Formal Wear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Casual Wear")}>Casual Wear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Sportswear")}>Sportswear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Outerwear")}>Outerwear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Party Wear")}>Party Wear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Innerwear")}>Innerwear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Sleepwear & Loungewear")}>Sleepwear & Loungewear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Footwear")}>Footwear</NavbarHeading>
+            </div>
+          )}
+        </NavbarMainContainer>
+      </Navbar>
+
+      {/* Pass selected categories to ProductSection */}
+      {/* <ProductSection categories={selectedCategories} /> */}
+    </>
   );
 };
