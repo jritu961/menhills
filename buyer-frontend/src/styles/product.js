@@ -7,7 +7,6 @@ export const ProductContainer = styled.section`
   gap: 20px;
   padding: 40px;
   flex-wrap: wrap; /* Enables wrapping to the next row */
-  border: 2px solid red;
 `;
 
 export const ProductCard = styled.div`
@@ -15,9 +14,8 @@ export const ProductCard = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border: 2px solid green;
   transition: transform 0.3s ease;
-  flex: 1 1 calc(25% - 20px);
+  /* flex: 1 1 calc(25% - 20px); */
   max-width: calc(25% - 20px);
 
   &:hover {
@@ -25,12 +23,11 @@ export const ProductCard = styled.div`
   }
 
   @media (max-width: 768px) {
-    flex: 1 1 calc(50% - 20px); /* 2 products per row on smaller screens */
+    /* flex: 1 1 calc(50% - 20px);  */
     max-width: calc(50% - 20px);
   }
 
   @media (max-width: 480px) {
-    flex: 1 1 100%; /* 1 product per row on very small screens */
     max-width: 100%;
   }
 `;

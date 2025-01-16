@@ -71,7 +71,7 @@ const ProductSection = () => {
 
         const imageSrc = product.images?.[0] || "placeholder.jpg"; // Fallback image
         const name = product.name || "Unnamed Product";
-        const price = product.price ? `$${product.price}` : "Price Unavailable";
+        const price = product.price ? `₹${product.price}` : "Price Unavailable";
         const sizes = product.sizes || [];
 
         return (
@@ -84,22 +84,7 @@ const ProductSection = () => {
             <ProductName>{name}</ProductName>
             <ProductPrice>{price}</ProductPrice>
 
-            {/* Size dropdown */}
-            {sizes.length > 0 && (
-              <SizeSelect
-                value={selectedSize[product._id] || ""}
-                onChange={(e) => handleSizeChange(product._id, e.target.value)}
-              >
-                <option value="" disabled>
-                  Select Size
-                </option>
-                {sizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </SizeSelect>
-            )}
+          
           </ProductCard>
         );
       })}

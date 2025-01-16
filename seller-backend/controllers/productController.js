@@ -53,12 +53,12 @@ export const getAllProducts = async (req, res) => {
     const products = await Product.find(query).sort({ createdAt: -1 });
 
     if (!products.length) {
-       res.status(404).json({ message: "No products found222" });
+       return res.status(200).json({ message: "No products found" });
     }
 
-    res.status(200).json({ message: "Products fetched successfully", products });
+    return res.status(200).json({ message: "Products fetched successfully", products });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch products", error: error.message });
+    return res.status(500).json({ message: "Failed to fetch products", error: error.message });
   }
 };
 

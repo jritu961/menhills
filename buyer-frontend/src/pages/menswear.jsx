@@ -43,7 +43,7 @@ const MensWearPage = () => {
             <ProductCard key={product._id} onClick={() => handleClick(product._id)}>
               <img src={product.images[0]} alt={product.name} />
               <h3>{product.name}</h3>
-              <p>{product.price}</p>
+              <p>₹{product.price}</p>
             </ProductCard>
           ))
         ) : (

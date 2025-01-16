@@ -28,7 +28,6 @@ export const NavbarComponentData = () => {
 
   const handleCategoryClick = async(category) => {
     setcategory(category); // Set category in context
-    console.log("🚀 ~ handleCategoryClick ~ category:", category);
     const result = await axios.get(
       `${process.env.REACT_APP_BASE_URL_Seller}/products?category=${category}`
     );

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   NavbarMainContainer,
-  NavbarLogo,
   NavbarRight,
   Navbar,
 } from "../styles/navbar";
@@ -11,6 +10,7 @@ import {
   SearchOutlined,
   LogoutOutlined,
   HeartOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -40,10 +40,13 @@ export const NavbarComponent = () => {
     navigate("/wishlist"); // Redirect to the wishlist page
   };
 
+  const handleHomeClick = () => {
+    navigate("/"); // Redirect to the homepage
+  };
+
   return (
     <Navbar>
       <NavbarMainContainer>
-        {/* <NavbarLogo>MENHILLS</NavbarLogo> */}
         <NavbarRight>
           <UserAddOutlined className="icon" onClick={handleUserClick} />
           <ShoppingCartOutlined className="icon" onClick={handleCartClick} />
@@ -51,6 +54,7 @@ export const NavbarComponent = () => {
           <SearchOutlined className="icon" />
         </NavbarRight>
         <NavbarRight>
+          <HomeOutlined className="icon" onClick={handleHomeClick} />
           <LogoutOutlined className="icon" onClick={handleLogout} />
         </NavbarRight>
       </NavbarMainContainer>
