@@ -44,10 +44,9 @@ export const NavbarMainContainer = styled.div`
   }
 `;
 
-// Navbar Heading Styling
 export const NavbarHeading = styled.div`
   font-size: 1.1rem;
-  color: #fff;
+  color: ${({ isActive }) => (isActive ? '#ff6347' : '#fff')};  // Active category color
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
   text-transform: uppercase;
@@ -74,7 +73,13 @@ export const NavbarHeading = styled.div`
   &:hover::after {
     width: 100%;
   }
+
+  /* Highlight the active category */
+  background-color: ${({ isActive }) => (isActive ? '#444' : 'transparent')};  // Background change on active
+  border-radius: 5px;
+  padding: 5px 10px;
 `;
+
 
 export const Navbar = styled.nav`
   @media (max-width: 768px) {
