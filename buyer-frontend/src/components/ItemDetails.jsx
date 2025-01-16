@@ -39,7 +39,7 @@ const ItemDetails = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState(''); // Color state
   const [quantity, setQuantity] = useState(1); // New state for quantity
-
+  let cartData
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const ItemDetails = () => {
       return;
     }
   
-    const cartData = {
+     cartData = {
       item_id: product._id,
       size: selectedSize,
       color: selectedColor,
@@ -84,6 +84,7 @@ const ItemDetails = () => {
     try {
       const deviceId=await getOrCreateDeviceId()
       const userId=checkUserLoginStatus()
+      console.log("cartData>>>>>>>>>>",cartData)
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, cartData);
       if (response.status === 201 || response.status === 200) {
         // let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -120,10 +121,35 @@ const ItemDetails = () => {
   const handleImageClick = (image) => {
     setMainImage(image); // Set the clicked image as the main image
   };
+ const token=localStorage.getItem("authToken")
 
-  const handleWishlistToggle = () => {
-    setIsInWishlist(!isInWishlist); // Toggle the wishlist status
+  const handleWishlistToggle = async() => {
+    const userId=  checkUserLoginStatus()
+    const cartData = {
+    item_id: product._id,
+    size: selectedSize,
+    color: selectedColor,
+    count: quantity,
+    images: product.images[0],
+    name: product.name,
+    email: product.email,
+    price: product.price,
   };
+
+   console.log("cartData112",cartData)
+   const deviceId=await getOrCreateDeviceId()
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_BASE_URL_Buyer}/wishlist/${userId}/${deviceId}`,
+      cartData, // Pass the data (cartData) as the second argument
+      {
+        headers: {
+          authorization: `Bearer ${token}`, // Headers should be inside a `headers` object
+        },
+      }
+    );
+  }
+    
 
   const sizesArray = product?.sizes?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
   const colorsArray = product?.colors?.[0]?.split(',') || [];  // Fallback to an empty array if undefined
