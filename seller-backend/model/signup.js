@@ -16,8 +16,8 @@ const UserModel=new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'], // You can add more roles if needed
-        default: 'user' // Default to 'user' if no role is provided
+        enum: ['user', 'admin'],
+        default: 'user' 
     },
     created_at:{
         type:Date,

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
+// import { useMyContext } from "../context/categoryContext";
 // Styled Components for styling
 const AddressPageContainer = styled.div`
   padding: 20px;
@@ -105,7 +105,9 @@ const ModalCloseButton = styled.button`
 
 const AddressPage = () => {
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null); 
+  const [selectedAddress, setSelectedAddress] = useState(null)
+  // const { setAddress } = useMyContext(); 
+
   const [newAddress, setNewAddress] = useState({
     door: "",
     address_name: "",
@@ -153,6 +155,7 @@ const handleInputChange = (e) => {
 
   const handleSelectAddress = (address) => {
     setSelectedAddress(address);
+    // setAddress(address)
   };
 
   // Add a new address

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
+// import { useMyContext } from "../context/categoryContext.jsx";
 import axios from "axios";
 
 import { Header } from "../components/header";
@@ -92,6 +92,8 @@ const CheckoutPage = () => {
   const [userId, setUserId] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
   const navigate = useNavigate();
+  // const { address } = useContext(useMyContext);
+  // console.log("🚀 ~ CheckoutPage ~ address:", address)
   const token=localStorage.getItem('authToken')
   useEffect(() => {
     const fetchOrderItems = async () => {
@@ -292,7 +294,7 @@ const CheckoutPage = () => {
             <input type="radio" name="payment" value="upi" /> UPI
           </Label>
           <PaymentButton onClick={handleRazorpayPayment} disabled={isProcessingPayment}>
-  {isProcessingPayment ? "Processing..." : "Proceed to Pay"}
+  {isProcessingPayment ? "Processing..." : "Proceed to Payyy"}
 </PaymentButton>
 
         </PaymentOptions>

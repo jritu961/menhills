@@ -9,7 +9,7 @@ import MensWearPage from "./pages/menswear.jsx"
 import AddToCart from "./pages/cart.jsx"
 import AddressPage from "./pages/address.jsx"
 import CheckoutPage from "./pages/checkout.jsx"
-import RazorPayPaymentPage from './pages/razorpayPayment.jsx';
+// import RazorPayPaymentPage from './pages/razorpayPayment.jsx';
 import OrderHistoryPage from "./pages/orderHistory.jsx"
 import UserProfile from "./pages/profile.jsx"
 import Wishlist from "./components/wishlist.jsx"
@@ -49,7 +49,7 @@ function App() {
                         path="/payment"
                         element={
                             <PrivateRoute>
-                                <RazorPayPaymentPage />
+                                {/* <RazorPayPaymentPage /> */}
                             </PrivateRoute>
                         }
                     />
