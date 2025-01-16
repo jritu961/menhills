@@ -12,15 +12,14 @@ import axios from "axios";
 import { useMyContext } from "../context/categoryContext";
 
 const ProductSection = () => {
-  const navigate = useNavigate(); // Use useNavigate for navigation
-  const [products, setProducts] = useState([]); // State to hold the fetched products
-  const [selectedSize, setSelectedSize] = useState({}); // State to track selected sizes for each product
-  const [loading, setLoading] = useState(true); // State for loading indicator
-  const [error, setError] = useState(null); // State for error handling
-  const { category } = useMyContext();
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [selectedSize, setSelectedSize] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { category } = useMyContext(); // Get category from context
 
   const handleClick = (productId) => {
-    // Redirect to the item details page with the product id
     navigate(`/item-details/${productId}`);
   };
 
@@ -35,11 +34,11 @@ const ProductSection = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
+        const categoryQuery = category ? `?category=${category}` : '';
         const result = await axios.get(
-          `${process.env.REACT_APP_BASE_URL_Seller}/products`
+          `${process.env.REACT_APP_BASE_URL_Seller}/products${categoryQuery}`
         );
-        console.log("Fetched products:", result.data.products);
-        setProducts(result.data.products || []); // Fallback to an empty array
+        setProducts(result.data.products || []);
       } catch (err) {
         console.error("Error fetching products:", err);
         setError("Failed to load products. Please try again later.");
@@ -49,7 +48,7 @@ const ProductSection = () => {
     };
 
     fetchProducts();
-  }, [category]); // Re-fetch products if the category changes
+  }, [category]); // Re-fetch products when category changes
 
   if (loading) {
     return <p>Loading products...</p>;
@@ -66,7 +65,6 @@ const ProductSection = () => {
   return (
     <ProductContainer>
       {products.slice(0, 20).map((product, index) => {
-        // Safeguard against null or undefined product
         if (!product) return null;
 
         const imageSrc = product.images?.[0] || "placeholder.jpg"; // Fallback image
@@ -83,8 +81,6 @@ const ProductSection = () => {
             />
             <ProductName>{name}</ProductName>
             <ProductPrice>{price}</ProductPrice>
-
-          
           </ProductCard>
         );
       })}
@@ -93,3 +89,5 @@ const ProductSection = () => {
 };
 
 export default ProductSection;
+
+

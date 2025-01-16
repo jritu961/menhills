@@ -41,6 +41,7 @@ export const NavbarComponentData = () => {
       return updatedCategories;
     });
   };
+  
 
   if (loading) {
     return <div>Loading device ID...</div>;
@@ -55,7 +56,7 @@ export const NavbarComponentData = () => {
             style={{ fontSize: "2rem", color: "#fff", cursor: "pointer" }}
           />
           <div className="desktop-menu">
-            <NavbarHeading onClick={() => handleCategoryClick("Formal Wear")}>Formal Wear</NavbarHeading>
+            <NavbarHeading onClick={() => handleCategoryClick("Formal Wear,Shirts")}>Formal Wear</NavbarHeading>
             <NavbarHeading onClick={() => handleCategoryClick("Casual Wear")}>Casual Wear</NavbarHeading>
             <NavbarHeading onClick={() => handleCategoryClick("Shirts")}>Sportswear</NavbarHeading>
             <NavbarHeading onClick={() => handleCategoryClick("Outerwear")}>Outerwear</NavbarHeading>
@@ -67,7 +68,7 @@ export const NavbarComponentData = () => {
 
           {isMenuOpen && (
             <div className="mobile-menu">
-              <NavbarHeading onClick={() => handleCategoryClick("Formal Wear")}>Formal Wear</NavbarHeading>
+              <NavbarHeading onClick={() => handleCategoryClick("Formal Wear,Shirts")}>Formal Wear</NavbarHeading>
               <NavbarHeading onClick={() => handleCategoryClick("Casual Wear")}>Casual Wear</NavbarHeading>
               <NavbarHeading onClick={() => handleCategoryClick("Sportswear")}>Sportswear</NavbarHeading>
               <NavbarHeading onClick={() => handleCategoryClick("Outerwear")}>Outerwear</NavbarHeading>
