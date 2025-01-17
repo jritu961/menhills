@@ -8,7 +8,6 @@ import Sidebar from '../components/sideBar';
 const HeaderContainer = styled.div`
   display:flex;
   height: 80px; /* Adjust the height as needed */
-  background-color: #2c3e50;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -50,7 +49,7 @@ const FilterButtonContainer = styled.div`
 
 const FilterButton = styled.button`
   padding: 10px;
-  background-color: #f28c00;
+  background-color: #ccc;
   border: none;
   font-size: 16px;
   font-weight: bold;
@@ -74,11 +73,15 @@ const FilterButton = styled.button`
 `;
 
 const OrderHistoryContainer = styled.div`
+margin-top:60px;
 margin-left:350px;
+display:flex;
   flex-direction: row;
+  justify-content:center;
   transition: all 0.3s;
   @media (max-width: 768px) {
-    margin-left:50px;
+    /* margin-left:50px; */
+    margin-left:0px;
   }
   @media (max-width: 768px) {
              padding-left: 0;
@@ -108,7 +111,7 @@ const OrderCard = styled.div`
   padding: 25px;
   margin-bottom: 20px;
   border-radius: 12px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: black;
   max-width: 850px;
   transition: transform 0.3s, box-shadow 0.3s;
   animation: fadeIn 0.5s ease-out;
@@ -173,7 +176,7 @@ const OrderStatus = styled.div`
     if (props.status === 'Completed') return '#6c9e3b';
     if (props.status === 'Cancelled') return '#e74c3c';
     if (props.status === 'Pending') return '#f39c12';
-    return '#8e44ad';
+    return '#ccc';
   }};
   border-radius: 20px;
   font-weight: bold;

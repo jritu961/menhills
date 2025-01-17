@@ -31,7 +31,6 @@ export const addProduct = async (req, res) => {
       ...req.body,
       images: imageUrls,  
     });
-    console.log("🚀 ~ addProduct ~ newProduct:", newProduct)
     await newProduct.save();
     res.status(201).json({ message: "Product added successfully", product: newProduct });
   } catch (error) {

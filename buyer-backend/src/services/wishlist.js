@@ -5,9 +5,7 @@ import WishlistItem from "../model/wishlistItem.js"
 class WishListService {
   async addItem(data) {
     try {
-      console.log("Received data:", data);
       const { deviceId, userId, id } = data;
-      console.log("Received data:", deviceId,userId);
 
       let wishlist, wishlistId;
 
@@ -22,13 +20,11 @@ class WishListService {
       // If wishlist exists, check for duplicate item
       if (wishlist?._id) {
         wishlistId = wishlist._id;
-        console.log("existingItem00",id,wishlistId)
 
         const existingItem = await WishlistItem.findOne({
           "item.item_id": data.item_id,
           wishlist: wishlistId,
         });
-        console.log("existingItem00",existingItem)
         if (existingItem) {
           return { status: "error", message: "Item already exists in wishlist" };
         }
@@ -41,7 +37,6 @@ class WishListService {
           userId: userId !== "guestUser" ? userId : undefined,
         });
         const result=await wishlist.save();
-        console.log("result42",result)
         wishlistId = wishlist._id;
       }
 
@@ -61,7 +56,6 @@ class WishListService {
 
   async getWishlistItem(data) {
     try {
-      console.log("Fetching wishlist items for:", data);
       const { deviceId, userId } = data;
 
       // Find wishlist(s)
@@ -138,7 +132,6 @@ class WishListService {
       if (!wishlistIds.length) {
         return { status: "error", message: "No wishlist found" };
       }
-      console.log("wishlistIds141",wishlistIds[0],itemId)
       // Remove item from wishlist
       const result = await WishlistItem.deleteOne({
         wishlist: { $in: wishlistIds },
@@ -176,7 +169,6 @@ class WishListService {
   async removeWishlistItemById(data) {
     try {
       const { wishlistId } = data;
-      console.log("data179",data)
       const result = await WishlistItem.deleteOne({ _id: wishlistId });
 
       if (result.deletedCount === 0) {

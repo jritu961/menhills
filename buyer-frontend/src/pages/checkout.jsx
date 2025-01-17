@@ -93,7 +93,6 @@ const CheckoutPage = () => {
   const [deviceId, setDeviceId] = useState(null);
   const navigate = useNavigate();
   // const { address } = useContext(useMyContext);
-  // console.log("🚀 ~ CheckoutPage ~ address:", address)
   const token=localStorage.getItem('authToken')
   useEffect(() => {
     const fetchOrderItems = async () => {
@@ -116,7 +115,6 @@ const CheckoutPage = () => {
 
   const handleRazorpayPayment = async () => {
     try {
-      console.log("token117",token)
       // Check if orderItems are present
       if (!orderItems || orderItems.length === 0) {
         alert("No items in the order. Please add items to your cart before proceeding.");
@@ -150,7 +148,6 @@ const CheckoutPage = () => {
         return;
       }
   
-      console.log("🚀 ~ handleRazorpayPayment ~ order:", order);
   
       // Configure Razorpay payment options
       const options = {
@@ -174,7 +171,6 @@ const CheckoutPage = () => {
             );
   
             if (paymentVerification.data.success) {
-              console.log("🚀 ~ handler: ~ orderItems:", orderItems);
   
               const confirmOrderData = {
                 userId,

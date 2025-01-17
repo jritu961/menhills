@@ -84,7 +84,6 @@ const ItemDetails = () => {
     try {
       const deviceId=await getOrCreateDeviceId()
       const userId=checkUserLoginStatus()
-      console.log("cartData>>>>>>>>>>",cartData)
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL_Buyer}/cart/${userId}/${deviceId}`, cartData);
       if (response.status === 201 || response.status === 200) {
         // let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -136,7 +135,6 @@ const ItemDetails = () => {
     price: product.price,
   };
 
-   console.log("cartData112",cartData)
    const deviceId=await getOrCreateDeviceId()
 
     const response = await axios.post(

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import User from "../model/usermodel.js";
 import jwt from "jsonwebtoken"
-
+import mongoose from 'mongoose';
 export const registerUser = async (req, res) => {
   const { name, email, password, phone, addresses, wishlist, cart } = req.body;
 
@@ -112,3 +112,20 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: 'An error occurred during login' });
   }
 };
+
+export const userDetails= async (req,res) => {
+  const {uid}=req.user.decodedToken
+  console.log("🚀 ~ userDetails ~ req:", uid)
+  if(uid){
+    const objectId = new mongoose.Types.ObjectId(uid);
+  console.log("Converted ObjectId:", objectId);
+    const user=await User.findOne({_id:objectId})
+    if(user){
+      return res.status(200).json({sucess:true,data:user})
+    }
+    return res.status(404).json({sucess:false,data:"User Does not exits"})
+  }
+  return {
+}
+  
+}

@@ -6,6 +6,7 @@ import { createOrder,verifyPayment } from "../controller/payment.js";
 import { getOrdersHandler,getSingleOrdersHandler } from "../controller/order.js";
 import { confirmOrder } from "../controller/confirm.js";
 import {authentication} from "../authentication/authenticator.js"
+import { userDetails } from "../controller/user.js";
 const router=Router()
 
 
@@ -16,6 +17,8 @@ router.get('/v1/order/:id',authentication(), getSingleOrdersHandler);
 
 router.post('/v1/confirm', confirmOrder);
 router.post('/v1/register',registerUser)
+router.get('/v1/user/details',authentication(),userDetails)
+
 router.post('/v1/login',loginUser)
 router.post('/v1/otp',generateOtp)
 router.post('/v1/verify',verifyEmailOtp)

@@ -12,7 +12,6 @@ const MensWearPage = () => {
   const [products, setProducts] = useState([]); // Initialize state as an empty array
 
   const handleClick = (productId) => {
-    console.log("productId",productId)
     // Redirect to the item details page with the product id
     navigate(`/item-details/${productId}`);
   };
@@ -20,9 +19,7 @@ const MensWearPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log("🚀 Fetching Products:", process.env.REACT_APP_BASE_URL_Seller);
         const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products`);
-        console.log("Fetched Products:", result.data.products);
         setProducts(result.data.products); // Update the state with the fetched products
       } catch (error) {
         console.error("Error fetching products:", error);

@@ -1,184 +1,116 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import {
-  FaShoppingBag,
-  FaUndo,
-  FaTimesCircle,
-  FaBoxOpen,
-  FaHeart,
-  FaUser,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
-
-const slideIn = keyframes`
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-`;
-
-const SidebarContainer = styled.div`
-  width: ${(props) => (props.isOpen ? "250px" : "60px")};
-  height: 100vh;
-  background: linear-gradient(135deg, #1f2937, #4b5563);
-  padding: 20px;
-  box-shadow: 3px 0px 8px rgba(0, 0, 0, 0.3);
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: ${(props) => (props.isOpen ? "flex-start" : "center")};
-  color: #fff;
-  transition: width 0.4s ease;
-  z-index: 1000;
-  animation: ${slideIn} 0.5s ease;
-
-  @media (max-width: 768px) {
-    width: ${(props) => (props.isOpen ? "250px" : "0")};
-    overflow: hidden;
-  }
-`;
-
-const SidebarHeader = styled.div`
-  font-size: ${(props) => (props.isOpen ? "24px" : "0")};
-  font-weight: bold;
-  margin-bottom: ${(props) => (props.isOpen ? "20px" : "0")};
-  color: #fff;
-  transition: font-size 0.3s ease, margin-bottom 0.3s ease;
-  overflow: hidden;
-`;
-
-const SidebarItem = styled.div`
-  display: flex;
-  margin-top:40px;
-  align-items: center;
-  gap: ${(props) => (props.isOpen ? "15px" : "0")};
-  font-size: ${(props) => (props.isOpen ? "18px" : "0")};
-  font-weight: bold;
-  color: #fff;
-  cursor: pointer;
-  padding: ${(props) => (props.isOpen ? "12px 15px" : "12px 0")};
-  border-radius: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease, font-size 0.3s ease;
-  overflow: hidden;
-
-  &:hover {
-    background-color: #3b82f6;
-    transform: scale(1.05);
-  }
-
-  span {
-    display: ${(props) => (props.isOpen ? "inline" : "none")};
-    transition: display 0.3s ease;
-  }
-`;
-
-const SidebarIcon = styled.div`
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ToggleButton = styled.div`
-  position: fixed;
-  top: 10px;
-  left: 0px;
-  margin-bottom:10px;
-  z-index: 1100;
-  cursor: pointer;
-  font-size: 24px;
-  background-color: #1f2937;
-  padding: 7px;
-  border-radius: 50%;
-  color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background-color: #4b5563;
-  }
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-const Overlay = styled.div`
-  display: ${(props) => (props.isOpen ? "block" : "none")};
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 900;
-`;
+import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Box } from "@mui/material";
+import { Menu as MenuIcon, Home as HomeIcon, ShoppingCart as ShoppingCartIcon, Favorite as FavoriteIcon, AccountCircle as AccountCircleIcon, Logout as LogoutIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Sidebar = () => {
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  const handleNavigation = (path) => {
-    navigate(path);
-    setIsOpen(false);
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setIsDrawerOpen(open);
   };
+
+  const menuItems = [
+    { text: "Home", icon: <HomeIcon />, path: "/" },
+    { text: "Cart", icon: <ShoppingCartIcon />, path: "/cart" },
+    { text: "Orders", icon: <FavoriteIcon />, path: "/order" },
+    { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
+    // { text: "Logout", icon: <LogoutIcon />, path: "/login" },
+  ];
 
   return (
     <>
-      <ToggleButton onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? <FaTimes /> : <FaBars />}
-      </ToggleButton>
-      <Overlay isOpen={isOpen} onClick={() => setIsOpen(false)} />
-      <SidebarContainer isOpen={isOpen}>
-        <SidebarHeader isOpen={isOpen}></SidebarHeader>
-        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/order")}>
-          <SidebarIcon>
-            <FaShoppingBag />
-          </SidebarIcon>
-          <span>Order Details</span>
-        </SidebarItem>
-        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/returns")}>
-          <SidebarIcon>
-            <FaUndo />
-          </SidebarIcon>
-          <span>Active Returns</span>
-        </SidebarItem>
-        <SidebarItem
-          isOpen={isOpen}
-          onClick={() => handleNavigation("/cancellations")}
+      {/* AppBar */}
+      <AppBar 
+        position="fixed" 
+        sx={{ 
+          zIndex: (theme) => theme.zIndex.drawer + 1, 
+          backgroundColor: 'black' // Set background color to black
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+            sx={{ display: { md: "none" } }} // Show only on small screens
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {/* Responsive Sidebar */}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Temporary Drawer for Smaller Screens */}
+      <Drawer
+        variant="temporary"
+        open={isDrawerOpen}
+        onClose={toggleDrawer(false)}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: 240,
+          },
+          display: { md: "none" }, // Hide on larger screens
+        }}
+      >
+        <Box
+          sx={{ width: 240 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
         >
-          <SidebarIcon>
-            <FaTimesCircle />
-          </SidebarIcon>
-          <span>Pending Cancellations</span>
-        </SidebarItem>
-        <SidebarItem
-          isOpen={isOpen}
-          onClick={() => handleNavigation("/returned-items")}
-        >
-          <SidebarIcon>
-            <FaBoxOpen />
-          </SidebarIcon>
-          <span>Returned</span>
-        </SidebarItem>
-        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/wishlist")}>
-          <SidebarIcon>
-            <FaHeart />
-          </SidebarIcon>
-          <span>Wishlist</span>
-        </SidebarItem>
-        <SidebarItem isOpen={isOpen} onClick={() => handleNavigation("/my-info")}>
-          <SidebarIcon>
-            <FaUser />
-          </SidebarIcon>
-          <span>My Info</span>
-        </SidebarItem>
-      </SidebarContainer>
+          <List>
+            {menuItems.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => navigate(item.path)} // Use navigate to redirect
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+
+      {/* Persistent Drawer for Larger Screens */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: "none", md: "block" }, // Show only on larger screens
+          "& .MuiDrawer-paper": {
+            width: 240,
+          },
+        }}
+        open
+      >
+        <Box sx={{ width: 240, height: "100%" }}>
+          <Toolbar />
+          <List>
+            {menuItems.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => navigate(item.path)} // Use navigate to redirect
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
     </>
   );
 };

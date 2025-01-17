@@ -142,7 +142,6 @@ const Wishlist = () => {
   
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL_Buyer}/wishlist/${userId}/${deviceId}`);
       result=response.data.data
-      console.log("response.data.data",result)
       setWishlistItem(Array.isArray(response.data.data) ? response.data.data : []);
       setLoading(false); 
     } catch (err) {
@@ -162,7 +161,6 @@ const Wishlist = () => {
     fetchCartItems()  };
 
   const handleMoveToCart = async(id) => {
-    console.log("id",id)
     const result = await axios.get(`${process.env.REACT_APP_BASE_URL_Seller}/products/${id}`);
     const resultData=result.data.product
     const userId= checkUserLoginStatus()

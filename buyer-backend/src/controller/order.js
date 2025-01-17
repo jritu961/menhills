@@ -88,7 +88,6 @@ export async function getOrdersHandler(req, res) {
         //     };
         // }));
         const orderCount = await OrderModel.countDocuments({userId:query.customer_id});
-        console.log("🚀 ~ getOrdersHandler ~ orders:", orders)
 
         res.send({
             success: true,

@@ -22,7 +22,7 @@ export const NavbarComponent = () => {
     if (!token) {
       navigate("/login"); // Redirect to the login page
     } else {
-      navigate("/my-info"); // Redirect to the user info page
+      navigate("/profile"); // Redirect to the user info page
     }
   };
 

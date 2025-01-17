@@ -3,7 +3,6 @@ import User from "../model/signup.js"
 
 export const registerUser=async(req,res)=>{
  const {name,email,password,role}=req.body
- console.log("🚀 ~ registerUser ~ req.body:", req.body)
 
 try{
 
