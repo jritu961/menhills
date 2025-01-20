@@ -6,7 +6,7 @@ export const NavbarMainContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background: linear-gradient(90deg, #333, #555);
+  background: #2B2B2B;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -41,7 +41,6 @@ export const Navbar = styled.nav`
 display:flex;
   @media (max-width: 768px) {
     ${NavbarMainContainer} {
-      flex-direction: column;
       align-items: flex-start;
     }
     ${NavbarRight} {

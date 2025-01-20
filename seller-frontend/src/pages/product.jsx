@@ -267,13 +267,13 @@ const AddProduct = () => {
 >
   <option value="">Select Category</option>
 
-  <optgroup label="Formal Wear">
+  <optgroup label="Formal">
     <option value="Suits">Suits</option>
     <option value="Shirts">Shirts</option>
     <option value="Pants">Pants</option>
   </optgroup>
 
-  <optgroup label="Casual Wear">
+  <optgroup label="Casual">
     <option value="T-Shirts">T-Shirts</option>
     <option value="Jeans">Jeans</option>
     <option value="Shorts">Shorts</option>
@@ -281,7 +281,7 @@ const AddProduct = () => {
     <option value="Hoodies">Hoodies</option>
   </optgroup>
 
-  <optgroup label="Sportswear">
+  <optgroup label="Sports">
     <option value="Activewear">Activewear</option>
   </optgroup>
 
@@ -289,7 +289,7 @@ const AddProduct = () => {
     <option value="Jackets">Jackets</option>
   </optgroup>
 
-  <optgroup label="Party Wear">
+  <optgroup label="Party">
     <option value="Accessories">Accessories</option>
   </optgroup>
 

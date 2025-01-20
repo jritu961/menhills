@@ -1,6 +1,25 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Box } from "@mui/material";
-import { Menu as MenuIcon, Home as HomeIcon, ShoppingCart as ShoppingCartIcon, Favorite as FavoriteIcon, AccountCircle as AccountCircleIcon, Logout as LogoutIcon } from "@mui/icons-material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Box,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Home as HomeIcon,
+  ShoppingCart as ShoppingCartIcon,
+  Favorite as FavoriteIcon,
+  AccountCircle as AccountCircleIcon,
+  Logout as LogoutIcon,
+  FavoriteBorder as WishlistIcon,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Sidebar = () => {
@@ -21,6 +40,7 @@ const Sidebar = () => {
     { text: "Home", icon: <HomeIcon />, path: "/" },
     { text: "Cart", icon: <ShoppingCartIcon />, path: "/cart" },
     { text: "Orders", icon: <FavoriteIcon />, path: "/order" },
+    { text: "Wishlist", icon: <WishlistIcon />, path: "/wishlist" }, // Added Wishlist Option
     { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
     // { text: "Logout", icon: <LogoutIcon />, path: "/login" },
   ];
@@ -28,11 +48,11 @@ const Sidebar = () => {
   return (
     <>
       {/* AppBar */}
-      <AppBar 
-        position="fixed" 
-        sx={{ 
-          zIndex: (theme) => theme.zIndex.drawer + 1, 
-          backgroundColor: 'black' // Set background color to black
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          backgroundColor: "black", // Set background color to black
         }}
       >
         <Toolbar>

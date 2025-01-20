@@ -28,8 +28,8 @@ export const ShopButton = styled.button`
   position: absolute;
   bottom: 50px;
   padding: 15px 30px;
-  background-color: #ff5733;
-  color: #fff;
+  background-color: #000; /* Black background */
+  color: #fff; /* White text */
   font-size: 1.2rem;
   border: none;
   border-radius: 25px;
@@ -37,6 +37,7 @@ export const ShopButton = styled.button`
   z-index: 1;
   transition: background-color 0.3s ease;
   &:hover {
-    background-color: #c0392b;
+    background-color: #555; /* Darker gray for hover effect */
   }
 `;
+

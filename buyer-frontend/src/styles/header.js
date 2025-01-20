@@ -12,7 +12,7 @@ const scrollAnimation = keyframes`
 
 // Main container for the header
 export const HeaderMainContainer = styled.strong`
-  background-color: #dc6f00;
+  background-color: #2B2B2B;
   width: 100%;
   height: 50px;
   display: flex;

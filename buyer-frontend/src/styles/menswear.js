@@ -25,8 +25,9 @@ export const ProductGrid = styled.div`
 `;
 
 export const ProductCard = styled.div`
-  background: #ffffff; /* Clean white card */
+  background:#F5F5F5; /* Clean white card */
   border: 1px solid #ddd;
+
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -40,7 +41,7 @@ export const ProductCard = styled.div`
   &:hover {
     transform: translateY(-10px) scale(1.02); /* Slightly lift and enlarge */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
-    border-color: #007bff; /* Highlighted border on hover */
+    border-color: #2B2B2B; /* Highlighted border on hover */
   }
 
   img {
@@ -65,13 +66,13 @@ export const ProductCard = styled.div`
     transition: color 0.3s ease;
 
     &:hover {
-      color: #007bff; /* Professional blue accent on hover */
+      color: #2B2B2B; /* Professional blue accent on hover */
     }
   }
 
   p {
     font-size: 1.1rem;
-    color: #007bff; /* Consistent blue for pricing */
+    color: #2B2B2B; /* Consistent blue for pricing */
     font-weight: 700;
     margin-top: 5px;
   }

@@ -50,7 +50,6 @@ export const NavbarComponent = () => {
         <NavbarRight>
           <UserAddOutlined className="icon" onClick={handleUserClick} />
           <ShoppingCartOutlined className="icon" onClick={handleCartClick} />
-          <HeartOutlined className="icon" onClick={handleWishlistClick} />
           <SearchOutlined className="icon" />
         </NavbarRight>
         <NavbarRight>

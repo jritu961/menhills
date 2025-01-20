@@ -13,7 +13,7 @@ export const NavbarComponentData = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const { setcategory } = useMyContext(); 
+  const { setCategory } = useMyContext(); 
 
   const [deviceId, setDeviceId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,11 +43,11 @@ export const NavbarComponentData = () => {
   const handleCategoryClick = async (category) => {
     if (category === "All") {
       setSelectedCategory(null);  // Reset selected category to show all products
-      setcategory(null);  // Set category as null in context
+      setCategory(null);  // Set category as null in context
       await fetchProducts();  // Fetch all products
     } else {
       setSelectedCategory(category);  // Update selected category
-      setcategory(category); // Set category in context
+      setCategory(category); // Set category in context
       await fetchProducts(category);  // Fetch products of the selected category
     }
   };

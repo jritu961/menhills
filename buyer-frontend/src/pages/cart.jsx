@@ -144,7 +144,7 @@ const QuantityButton = styled.button`
 `;
 
 const RemoveButton = styled.button`
-  background: #e74c3c;
+  background: #2B2B2B;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -183,7 +183,7 @@ const TotalRow = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 1.2rem;
-  color: ${(props) => (props.highlight ? '#e74c3c' : '#444')};
+  color: ${(props) => (props.highlight ? '#2B2B2B' : '#444')};
   font-weight: ${(props) => (props.highlight ? '600' : '400')};
 
   @media (max-width: 480px) {
@@ -197,7 +197,7 @@ const HighlightText = styled.span`
 `;
 
 const CheckoutButton = styled.button`
-  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  background: #2B2B2B;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -227,7 +227,7 @@ const Divider = styled.div`
 
 const Badge = styled.span`
   display: inline-block;
-  background: ${(props) => props.color || '#f39c12'};
+  background: ${(props) => props.color || '#2B2B2B'};
   color: #fff;
   font-size: 0.9rem;
   padding: 5px 10px;

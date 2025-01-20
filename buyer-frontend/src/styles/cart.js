@@ -8,7 +8,7 @@ export const ProductContainer = styled.section`
   gap: 30px;
   padding: 40px;
   flex-wrap: wrap;
-  background-color: #f5f5f5; /* Soft background color */
+  background-color: #2B2B2B; /* Soft background color */
 `;
 
 // Individual product card
@@ -41,7 +41,7 @@ export const ProductImage = styled.img`
 // Product name
 export const ProductName = styled.h3`
   font-size: 1.5rem;
-  color: #2c3e50; /* Dark blue-gray for elegance */
+  color: #F5F5F5; /* Dark blue-gray for elegance */
   margin: 15px;
   text-align: center;
 `;
@@ -49,12 +49,11 @@ export const ProductName = styled.h3`
 // Product price
 export const ProductPrice = styled.p`
   font-size: 1.2rem;
-  color: #8e44ad; /* Stylish purple for pricing */
+  color: #F5F5F5; /* Stylish purple for pricing */
   margin: 10px 15px;
   text-align: center;
 `;
 
-// Add to cart button
 export const AddToCartButton = styled.button`
   display: block;
   width: 80%;
@@ -62,14 +61,14 @@ export const AddToCartButton = styled.button`
   padding: 10px 0;
   font-size: 1rem;
   font-weight: bold;
-  color: #fff;
-  background-color: #e74c3c; /* Eye-catching red */
+  color: #F5F5F5;
+  background-color: #2B2B2B; /* Eye-catching red */
   border: none;
   border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #c0392b; /* Darker red for hover */
+    background-color: #2B2B2B; /* Darker red for hover */
   }
 `;

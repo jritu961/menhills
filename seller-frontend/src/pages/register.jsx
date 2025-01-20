@@ -1,60 +1,90 @@
 import React, { useState } from 'react';
 import { Container, FormWrapper, Title, Label, Input, Button, ErrorMessage } from '../style/register';
-import axios from 'axios'; // Import axios for API calls
+import axios from 'axios';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'user',  // Default role as 'user'
+    phone: '',
+    addresses: [
+      {
+        street: '',
+        city: '',
+        state: '',
+        pincode: '',
+        country: 'India', // Default country
+        isDefault: false,
+      },
+    ],
+    wishlist: [],
+    cart: [],
+    orders: [],
+    role: 'user', // Default role
   });
 
   const [error, setError] = useState('');
 
-  // Handle input field changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    // Clear error message when user starts typing
     setError('');
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent form from submitting and page reload
+  const handleAddressChange = (e, index) => {
+    const { name, value } = e.target;
+    const updatedAddresses = [...formData.addresses];
+    updatedAddresses[index][name] = value;
+    setFormData({ ...formData, addresses: updatedAddresses });
+  };
 
-    const { name, email, password, role } = formData;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { name, email, password, phone, addresses, wishlist, cart, orders, role } = formData;
 
     // Basic validation
-    if (!name || !email || !password) {
-      setError('All fields are required');
+    if (!name || !email || !password || !phone) {
+      setError('Name, email, password, and phone are required');
       return;
     }
 
     try {
+      console.log("54>>>>>>>>>>",formData)
       const base_url = process.env.REACT_APP_BASE_URL_Seller;
-      // Make API call to register the user
-      const response = await axios.post(`${base_url}/signup`, { name, email, password, role });
+      const response = await axios.post(`${base_url}/signup`, {
+        name,
+        email,
+        password,
+        phone,
+        addresses,
+        wishlist,
+        cart,
+        orders,
+        role,
+      });
 
-      
       if (response.status === 201) {
         alert('User registered successfully');
-        setFormData({ name: '', email: '', password: '', role: 'user' });  // Clear form
-        setError('');  // Clear any errors
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          phone: '',
+          addresses: [
+            { street: '', city: '', state: '', pincode: '', country: 'India', isDefault: false },
+          ],
+          wishlist: [],
+          cart: [],
+          orders: [],
+          role: 'user',
+        });
+        setError('');
       }
     } catch (e) {
-      console.log("Error during registration:", e);
-
-      // Check if the error is due to the backend response
-      if (e.response) {
-        // Extract and set the error message from the backend response
-        setError(e.response.data.message || 'There was an error registering the user');
-      } else {
-        // If there's no response (e.g., network error), set a default error message
-        setError('There was an error with the registration request');
-      }
+      console.error('Error during registration:', e);
+      setError(e.response?.data?.message || 'There was an error registering the user');
     }
   };
 
@@ -89,6 +119,61 @@ const SignupPage = () => {
             onChange={handleInputChange}
             placeholder="Enter your password"
           />
+
+          <Label>Phone</Label>
+          <Input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            placeholder="Enter your phone number"
+          />
+
+          <Label>Address</Label>
+          {formData.addresses.map((address, index) => (
+            <div key={index}>
+              <Input
+                type="text"
+                name="street"
+                value={address.street}
+                onChange={(e) => handleAddressChange(e, index)}
+                placeholder="Street"
+              />
+              <Input
+                type="text"
+                name="city"
+                value={address.city}
+                onChange={(e) => handleAddressChange(e, index)}
+                placeholder="City"
+              />
+              <Input
+                type="text"
+                name="state"
+                value={address.state}
+                onChange={(e) => handleAddressChange(e, index)}
+                placeholder="State"
+              />
+              <Input
+                type="text"
+                name="pincode"
+                value={address.pincode}
+                onChange={(e) => handleAddressChange(e, index)}
+                placeholder="Pincode"
+              />
+              <Input
+                type="checkbox"
+                name="isDefault"
+                checked={address.isDefault}
+                onChange={(e) =>
+                  handleAddressChange(
+                    { target: { name: 'isDefault', value: e.target.checked } },
+                    index
+                  )
+                }
+              />
+              <Label>Set as Default</Label>
+            </div>
+          ))}
 
           <Button type="submit">Sign Up</Button>
         </form>

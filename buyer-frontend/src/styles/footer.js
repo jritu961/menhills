@@ -79,7 +79,7 @@ export const NewsletterButton = styled.button`
   border-radius: 5px;
   margin-left:5px;
 
-  background-color: #ff5733;
+  background-color: #2B2B2B;
   color: #fff;
   cursor: pointer;
   margin-top:10px;
