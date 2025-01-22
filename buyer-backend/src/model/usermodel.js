@@ -47,8 +47,9 @@ const UserSchema = new mongoose.Schema(
         country: { type: String, default: "India", required: true },
         isDefault: { type: Boolean, default: false }, // Default shipping address
       },
+      
     ],
-    wishlist: [
+    wishlist: [                                                                                                                                                                                                                                                                    
       {
         productId: { type: Schema.Types.ObjectId, ref: "Product" },
         addedAt: { type: Date, default: Date.now },
@@ -92,6 +93,10 @@ const UserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    image: {
+      type: String,
+      require:true
+    }
   },
   {
     timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields

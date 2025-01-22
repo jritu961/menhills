@@ -14,8 +14,7 @@ import {signInDAta} from "../controllers/signin.js"
 import { Category } from "../controllers/category.js";
 const router = express.Router();
 const storage = multer.memoryStorage();
-const 
-upload = multer({ storage });
+const upload = multer({ storage });
 router.post("/products",upload.array('images', 5), addProduct);  
 /////////////
 router.post("/signup", registerUser);  

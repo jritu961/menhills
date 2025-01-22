@@ -9,7 +9,6 @@ import {
   ShoppingCartOutlined,
   SearchOutlined,
   LogoutOutlined,
-  HeartOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";

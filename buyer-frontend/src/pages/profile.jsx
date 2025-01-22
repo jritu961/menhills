@@ -193,8 +193,8 @@ const UserProfile = () => {
       <MainContent>
         <ProfileHeader>
           <UserDetails>
-            <UserImage src="https://via.placeholder.com/100" alt="User Avatar" />
-            <UserName>{userData.name}</UserName>
+          <UserImage src={userData.image} alt="User Avatar" />
+          <UserName>{userData.name}</UserName>
           </UserDetails>
           <EditButton>Edit Profile</EditButton>
         </ProfileHeader>

@@ -191,10 +191,6 @@ const TotalRow = styled.div`
   }
 `;
 
-const HighlightText = styled.span`
-  color: ${(props) => (props.color ? props.color : '#27ae60')};
-  font-weight: bold;
-`;
 
 const CheckoutButton = styled.button`
   background: #2B2B2B;
@@ -225,16 +221,7 @@ const Divider = styled.div`
   margin: 10px 0;
 `;
 
-const Badge = styled.span`
-  display: inline-block;
-  background: ${(props) => props.color || '#2B2B2B'};
-  color: #fff;
-  font-size: 0.9rem;
-  padding: 5px 10px;
-  border-radius: 5px;
-  text-transform: uppercase;
-  margin-left: 10px;
-`;
+
 
 const TotalText = styled.h3`
   font-size: 1.5rem;

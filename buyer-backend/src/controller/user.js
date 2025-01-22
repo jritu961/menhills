@@ -2,34 +2,31 @@ import bcrypt from 'bcryptjs';
 import User from "../model/usermodel.js";
 import jwt from "jsonwebtoken"
 import mongoose from 'mongoose';
+import  cloudinary  from "../utils/cloudinary.js";
+import streamifier from "streamifier"; 
 export const registerUser = async (req, res) => {
   const { name, email, password, phone, addresses, wishlist, cart } = req.body;
+  const file = req.file;
+
+  console.log("🚀 ~ registerUser ~ addresses:", addresses);
 
   try {
-    // Validate required fields
-    if (!name || !email || !password || !phone) {
+    if (!name || !email || !password || !phone || !file || !addresses) {
       return res.status(400).json({ message: "Please enter all required fields." });
     }
-
-    // Validate email format using a regular expression
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: "Please enter a valid email address." });
     }
-
-    // Validate phone number format (10 digits)
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({ message: "Please enter a valid 10-digit phone number." });
     }
 
-    // Check if user already exists (either by email or phone)
     const user = await User.findOne({
       $or: [{ email }, { phone }],
     });
-
     if (user) {
-      // Check which field already exists
       if (user.email === email) {
         return res.status(400).json({ message: "Email already exists." });
       }
@@ -38,37 +35,55 @@ export const registerUser = async (req, res) => {
       }
     }
 
-    // Hash the password before saving it
     const salt = await bcrypt.genSalt(10);
-    
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create the new user with hashed password and dynamic fields
+    const uploadToCloudinary = () => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.v2.uploader.upload_stream(
+          { folder: "profile" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result.secure_url);
+          }
+        );
+
+        streamifier.createReadStream(file.buffer).pipe(uploadStream);
+      });
+    };
+
+    const image = await uploadToCloudinary();
+    console.log("🚀 ~ registerUser ~ image:", image);
+
+    // Ensure addresses is an array of objects
+    let parsedAddresses = Array.isArray(addresses) ? JSON.parse(addresses) : JSON.parse(addresses);
+    console.log("🚀 ~ registerUser ~ parsedAddresses:", parsedAddresses)
+
+    // Create the new user
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
       phone,
-      addresses,   // If provided, this will be added to the user document
-      wishlist,    // If provided, this will be added to the user document
-      cart,        // If provided, this will be added to the user document
+      addresses: parsedAddresses, 
+      wishlist,
+      cart,
+      image,
     });
 
-    // Save the new user to the database
     const result = await newUser.save();
-    
-    // Send the response with created user data (excluding password)
+
     res.status(201).json({
       data: result,
       message: "User has been successfully created.",
       status: true,
     });
-
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("Error in registerUser:", error.response);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 export const loginUser = async (req, res) => {
