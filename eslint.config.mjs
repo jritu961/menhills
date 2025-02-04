@@ -2,35 +2,40 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
 
-
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  {files: ["**/*.{js,mjs,cjs,jsx}"]},
-  {languageOptions: { globals: globals.browser }},
+  { files: ["**/*.{js,mjs,cjs,jsx}"] },
   {
-    "env": {
-      "browser": true,
-      "node": true,
-      "es2021": true
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node, // Add Node.js globals
+      },
     },
-    "extends": [
+  },
+  {
+    env: {
+      browser: true,
+      node: true,
+      es2021: true,
+    },
+    extends: [
       "eslint:recommended",
       "plugin:react/recommended",
-      "plugin:prettier/recommended"
+      "plugin:prettier/recommended",
     ],
-    "parserOptions": {
-      "ecmaVersion": 12,
-      "sourceType": "module"
+    parserOptions: {
+      ecmaVersion: 12,
+      sourceType: "module",
     },
-    "plugins": ["react", "prettier"],
-    "rules": {
+    plugins: ["react", "prettier"],
+    rules: {
       "prettier/prettier": "error",
       "no-unused-vars": "warn",
       "react/prop-types": "off",
-      "no-console": "warn"
-    }
+      "no-console": "warn",
+    },
   },
-  
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
 ];

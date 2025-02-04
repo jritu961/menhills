@@ -11,7 +11,6 @@ import {
 } from "../controllers/productController.js"; // Import controller functions
 import {registerUser} from "../controllers/signup.js"
 import {signInDAta} from "../controllers/signin.js"
-import { Category } from "../controllers/category.js";
 const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

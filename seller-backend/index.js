@@ -3,9 +3,6 @@ import dotenv from "dotenv";
 import connectDb from "./db/connect.js";  // Database connection file
 import productRoutes from "./routes/productRoutes.js";  // Product routes
 import cors from "cors"
-import path from "path"
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
 dotenv.config();  // Load environment variables
 
 const app = express();
